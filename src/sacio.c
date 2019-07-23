@@ -10,6 +10,8 @@
 #include "strip.h"
 #include "defs.h"
 
+#include "geodesic.h"
+
 #define ERROR_NOT_A_SAC_FILE                1317
 #define ERROR_OVERWRITE_FLAG_IS_OFF         1303
 #define ERROR_WRITING_FILE                  115
@@ -118,7 +120,31 @@
 
 void
 update_distaz(sac *s) {
-    UNUSED(s);
+    double lat1 = 0.0, lon1 = 0.0, lat2 = 0.0, lon2 = 0.0;
+    double degrees = 0.0, meters = 0.0, az1 = 0.0, az2 = 0.0;
+    double a = 6378137, f = 1/298.257223563; /* WGS84 */
+    struct geod_geodesic g;
+    if(!s->h->lcalda) {
+        return;
+    }
+    if(!sac_hdr_defined(s, SAC_STLA, SAC_STLO, SAC_EVLA, SAC_EVLO, NULL)) {
+        return;
+    }
+    geod_init(&g, a, f);
+    lat1 = s->h->evla;
+    lon1 = s->h->evlo;
+    lat2 = s->h->stla;
+    lon2 = s->h->stlo;
+    degrees = geod_geninverse(&g, lat1, lon1, lat2, lon2,
+                              &meters, &az1, &az2,
+                              0, 0, 0, 0);
+    s->h->gcarc = degrees;
+    s->h->dist  = meters / 1e3;
+    s->h->az    = az1;
+    s->h->baz   = az2 - 180.0;
+    if(s->h->baz <= 0.0) {
+        s->h->baz += 360.0;
+    }
 }
 
 int

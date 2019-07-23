@@ -135,10 +135,10 @@ check_sac_file_spec(char *file) {
         else if(i == SAC_CMPINC) { assert(v == 0.0); }
         else if(i == SAC_SDELTA) { assert(v == 0.00999999977648258209); }
         else if(i == SAC_SB)     { assert(v == 9.45999908447265625000); }
-        else if(i == SAC_GCARC)  { assert(v == 40.18594741821289062500); }
-        else if(i == SAC_BAZ)    { assert(v == 185.20465087890625000000); }
-        else if(i == SAC_AZ)     { assert(v == 0.27190548181533813477); }
-        else if(i == SAC_DIST)   { assert(v == 4461.05224609375000000000); }
+        else if(i == SAC_GCARC)  { assert(v == 40.09692764282226562500); }
+        else if(i == SAC_BAZ)    { assert(v == 185.20507812500000000000); }
+        else if(i == SAC_AZ)     { assert(v == 0.27151772379875183105); }
+        else if(i == SAC_DIST)   { assert(v == 4461.03564453125000000000); }
         else if(i == SAC_USER0)  { assert(v == 123.45600128173828125000); }
 
         else if(i == SAC_EVLA)   { assert(v == 47.99996948242187500000); }
