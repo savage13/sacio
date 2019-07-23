@@ -303,6 +303,9 @@ sac_check_time_precision(struct SACheader *h) {
     float values[] = {h->b, h->e, h->a, h->o,
                       h->t0,h->t1,h->t2,h->t3,h->t4, h->t5,h->t6,h->t7,h->t8,h->t9,
                       h->f};
+    if(h->delta == SAC_FLOAT_UNDEFINED) {
+        return;
+    }
     n = sizeof(values)/sizeof(float);
     for(i = 0; i < n; i++) {
         if(values[i] == SAC_FLOAT_UNDEFINED) {
@@ -311,7 +314,7 @@ sac_check_time_precision(struct SACheader *h) {
         if((df = check_precision(h->delta, values[i])) != 0) {
             printf("minimum precision > sampling rate: %s = %f\n"
                 "       sampling rate (delta):      %f\n"
-                "       32-bit minimum precision:   %f",
+                "       32-bit minimum precision:   %f\n",
                 names[i], values[i], h->delta, df);
             //outmsg();
             //clrmsg();
@@ -794,7 +797,7 @@ sac_set_int(sac *s, int hdr, int v) {
 }
 int
 sac_get_int(sac *s, int hdr, int *v) {
-    if(hdr < SAC_YEAR || hdr > SAC_UN105) {
+    if(hdr < SAC_YEAR || hdr > SAC_UN110) {
         return 0;
     }
     int *ip = (int *) (&(s->h->nzyear));
