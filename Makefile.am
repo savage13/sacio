@@ -1,4 +1,7 @@
 
+# Do not create dependencies while compiling
+AUTOMAKE_OPTIONS = no-dependencies
+
 EXTRA_DIST = License README.md
 
 AM_CFLAGS = -Wall -Wextra -Iinclude/
