@@ -3,7 +3,7 @@
 #define _TIMESPEC_H_
 
 #include <time.h>
-#include "time64.h"
+//#include "time64.h"
 
 typedef struct timespec64 timespec64;
 typedef struct duration duration;
@@ -19,9 +19,6 @@ int        timespec64_cmp(timespec64 *a, timespec64 *b);
 int        timespec64_parse(const char *buf, timespec64 *t);
 void       timespec64_print(timespec64 *t);
 
-char * strptime64(const char *buf, const char *fmt, struct TM *tm, int64_t *ns);
-size_t strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns);
-
 size_t strftime64t(char *dst, size_t n, const char *fmt, timespec64 *t);
 char * strptime64t(const char *buf, const char *fmt, timespec64 *t);
 
@@ -33,7 +30,7 @@ timespec64 timespec64_from_yjhmsf(int64_t year, int jday,
  * @ingroup time
  */
 struct timespec64 {
-    Time64_T tv_sec; /**< Number of seconds, epoch 1970/1/1 00:00:00 */
+    int64_t tv_sec; /**< Number of seconds, epoch 1970/1/1 00:00:00 */
     int64_t tv_nsec; /**< Number of nanoseconds */
 };
 

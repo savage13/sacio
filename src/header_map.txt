@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-#include "sacio.h"
+#include <sacio/sacio.h>
 %}
 struct hid { char *name; int  type; int  id; };
 

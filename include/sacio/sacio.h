@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 
-#include "timespec.h"
+#include <sacio/timespec.h>
 
 /** \cond NO_DOCS */
 #define SAC_STRING_LENGTH   -1

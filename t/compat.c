@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <sacio.h>
+#include <sacio/sacio.h>
 
 #define MAX 2000
 int
 main() {
-    char ty[16];
+    char ty[17];
     int nlen = 0, max = MAX, nerr = 0;
     float y[MAX], x[MAX];
     float beg = 0.0, del = 0.0, delta = 0.0;
@@ -17,9 +17,8 @@ main() {
 
     getfhv("b", &beg, &nerr, 0);
     assert(beg == 0.0);
-
+    memset(ty, 0, sizeof(ty));
     getihv("iftype", ty, &nerr, 0, 16);
-    //printf("'%s'\n", ty);
     assert(strcmp(ty, "ITIME           ") == 0);
 
     getkhv("kstnm", ty, &nerr, 0, 8);

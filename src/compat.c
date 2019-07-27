@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "sacio.h"
+#include <sacio/sacio.h>
+
 #include "defs.h"
 
 #define ERROR_SAC_FILE_NOT_EVENLY_SPACED     801 /**< @brief sac file not evenly spaced */

@@ -7,9 +7,14 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#include "time64.h"
-#include "timespec.h"
 
+#include <sacio/timespec.h>
+
+#include "time64.h"
+
+
+char * strptime64(const char *buf, const char *fmt, struct TM *tm, int64_t *ns);
+size_t strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns);
 
 /**
  * @defgroup time time

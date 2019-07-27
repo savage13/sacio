@@ -107,6 +107,12 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga7f03fbec7716db1289bcf749db878f5b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga7f03fbec7716db1289bcf749db878f5b">strptime64</a> (const char *buf, const char *fmt, struct TM *tm, int64_t *ns)</td></tr>
+<tr class="memdesc:ga7f03fbec7716db1289bcf749db878f5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a string into a TM value.  <a href="#ga7f03fbec7716db1289bcf749db878f5b">More...</a><br /></td></tr>
+<tr class="separator:ga7f03fbec7716db1289bcf749db878f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga0d27b6260ef13dc2d8ea2e14daab0d7d">strftime64</a> (char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns)</td></tr>
+<tr class="memdesc:ga0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a struct TM value.  <a href="#ga0d27b6260ef13dc2d8ea2e14daab0d7d">More...</a><br /></td></tr>
+<tr class="separator:ga0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab0464b8ec5341b8f6bb1e6e83e90fef3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtimespec64.html">timespec64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#gab0464b8ec5341b8f6bb1e6e83e90fef3">timespec64::timespec64_now</a> ()</td></tr>
 <tr class="memdesc:gab0464b8ec5341b8f6bb1e6e83e90fef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get now as a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> value.  <a href="#gab0464b8ec5341b8f6bb1e6e83e90fef3">More...</a><br /></td></tr>
 <tr class="separator:gab0464b8ec5341b8f6bb1e6e83e90fef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +243,79 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga0d27b6260ef13dc2d8ea2e14daab0d7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0d27b6260ef13dc2d8ea2e14daab0d7d">&#9670;&nbsp;</a></span>strftime64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t strftime64 </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>fmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct TM *&#160;</td>
+          <td class="paramname"><em>tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>ns</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Format a struct TM value. </p>
+<p>Format a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> according to the format specifiers</p><ul>
+<li><code>%%</code> &ndash; <code>%</code> character</li>
+<li><code>%Y</code> &ndash; Year, 4 digits, zero padded</li>
+<li><code>%j</code> &ndash; Day of the year, 3 digits, zero padded</li>
+<li><code>%m</code> &ndash; Month number, 2 digits, zero padded</li>
+<li><code>%d</code> &ndash; Day of the month, 2 digits, zero padded</li>
+<li><code>%H</code> &ndash; Hour, 2 digits, zero padded</li>
+<li><code>%M</code> &ndash; Minute, 2 digits, zero padded</li>
+<li><code>%S</code> &ndash; Seconds, 2 digits, zero padded</li>
+<li><code>%f</code> &ndash; partial seconds as nanoseconds, prefix digit defines the number of leading digits to show</li>
+<li><code>%F</code> &ndash; alias for <code>Y-m-d</code></li>
+<li><code>%T</code> &ndash; alias for <code>H:M:S</code></li>
+<li><code>%b</code> &ndash; Abbreviated Month Name</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dst</td><td>Output character string </td></tr>
+    <tr><td class="paramname">n</td><td>Length of dst </td></tr>
+    <tr><td class="paramname">fmt</td><td>Format for character string </td></tr>
+    <tr><td class="paramname">tm</td><td>input struct TM </td></tr>
+    <tr><td class="paramname">ns</td><td>input nanoseconds</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>length of output character string, 0 on failure </dd></dl>
+
+</div>
+</div>
 <a id="gabb5efe03abf0ea4c26e5d95092f10a3f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gabb5efe03abf0ea4c26e5d95092f10a3f">&#9670;&nbsp;</a></span>strftime64t()</h2>
 
@@ -300,6 +379,69 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>length of output character string, 0 on failure </dd></dl>
+
+</div>
+</div>
+<a id="ga7f03fbec7716db1289bcf749db878f5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7f03fbec7716db1289bcf749db878f5b">&#9670;&nbsp;</a></span>strptime64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * strptime64 </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>fmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct TM *&#160;</td>
+          <td class="paramname"><em>tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramname"><em>ns</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parse a string into a TM value. </p>
+<p>Parse a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> according to the format specifiers</p><ul>
+<li><code>%%</code> &ndash; <code>%</code> character</li>
+<li><code>%Y</code> &ndash; Year</li>
+<li><code>%j</code> &ndash; Day of the year, 1-366</li>
+<li><code>%m</code> &ndash; Month number, 1-12</li>
+<li><code>%d</code> &ndash; Day of the month, 1-31</li>
+<li><code>%H</code> &ndash; Hour, 0-23</li>
+<li><code>%M</code> &ndash; Minute, 0-59</li>
+<li><code>%S</code> &ndash; Seconds, 0-60</li>
+<li><code>%f</code> &ndash; partial seconds as nanoseconds</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>Input character string </td></tr>
+    <tr><td class="paramname">fmt</td><td>Format to interpret the charater string </td></tr>
+    <tr><td class="paramname">tm</td><td>struct TM to place values into </td></tr>
+    <tr><td class="paramname">ns</td><td>output for nanoseconds</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>first character not read based on the format during success, NULL on failure </dd></dl>
 
 </div>
 </div>

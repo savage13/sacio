@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include <sacio.h>
+#include <sacio/sacio.h>
 
 void
 check_sac_file_even(char *file) {
@@ -189,6 +189,7 @@ main() {
     check_sac_file_uneven("t/test_uneven_big.sac");
     check_sac_file_spec("t/test_spec_small.sac");
     check_sac_file_spec("t/test_spec_big.sac");
+
     int nerr = 0;
     char tmp[128] = {0};
     sac *s = sac_read("t/test_spec_small.sac", &nerr);;
@@ -226,7 +227,5 @@ main() {
     sac_get_string(s, SAC_AMARKER, tmp, sizeof(tmp));
     printf("%s\n", tmp);
 
-    
-    
     return 0;
 }

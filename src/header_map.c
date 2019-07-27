@@ -32,7 +32,7 @@
 #line 1 "src/header_map.txt"
 
 #include <stdio.h>
-#include "sacio.h"
+#include <sacio/sacio.h>
 #include <string.h>
 
 #define TOTAL_KEYWORDS 128

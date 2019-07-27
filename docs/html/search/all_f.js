@@ -209,6 +209,6 @@ var searchData=
   ['stlo',['stlo',['../structsac__hdr.html#a142e130331fad332c0d3940e6dfd2d24',1,'sac_hdr']]],
   ['strftime64',['strftime64',['../group__time.html#ga0d27b6260ef13dc2d8ea2e14daab0d7d',1,'timespec.c']]],
   ['strftime64t',['strftime64t',['../group__time.html#gabb5efe03abf0ea4c26e5d95092f10a3f',1,'timespec64']]],
-  ['strptime64',['strptime64',['../group__time.html#ga04bc1bf22bd8c602530fcfe3c10c8eda',1,'timespec.c']]],
+  ['strptime64',['strptime64',['../group__time.html#ga7f03fbec7716db1289bcf749db878f5b',1,'timespec.c']]],
   ['strptime64t',['strptime64t',['../group__time.html#ga2d1b466f97245f1f2fd39ad84566eb84',1,'timespec64']]]
 ];
