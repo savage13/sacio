@@ -16,7 +16,22 @@
  * @brief Long duration, high precision time manipulation
  */
 
+/**
+ * @private
+ */
+char *months_abbrev[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                         "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+
+/**
+ * @brief Convert year-month-day to year-day-of-the-year
+ * @private
+ */
 void ymd_from_yd(struct TM *tm);
+/**
+ * @brief Convert year-day-of-the-year to year-month-day
+ * @private
+ */
+void yd_from_ymd(struct TM *tm);
 
 static const char *fmts[] = {
     "%Y/%m/%dT%H:%M:%S.%fZ",
@@ -312,22 +327,33 @@ atoi64(char **p, int64_t *pval, int lower, int upper) {
     return atoi64v(p, pval, lower, upper, 0);
 }
 
-void ymd_from_yd(struct TM *tm);
-void yd_from_ymd(struct TM *tm);
 
-#define YEAR_SET 1<<0
-#define YDAY_SET 1<<1
-#define MON_SET  1<<2
-#define MDAY_SET 1<<3
-#define HOUR_SET 1<<4
-#define MIN_SET  1<<5
-#define SEC_SET  1<<6
+/** \cond NO_DOCS */
+#define YEAR_SET 1<<0 /**< @brief year bit @private */
+#define YDAY_SET 1<<1 /**< @brief day of the year bit @private */
+#define MON_SET  1<<2 /**< @brief month bit @private */
+#define MDAY_SET 1<<3 /**< @brief month day bit @private */
+#define HOUR_SET 1<<4 /**< @brief hour bit @private */
+#define MIN_SET  1<<5 /**< @brief minute bit @private */
+#define SEC_SET  1<<6 /**< @brief second bit @private */
+/** \endcond */
 
 /**
  * @brief Parse a string into a TM value
  *
  * @private
  * @ingroup  time
+ *
+ * @details Parse a timespec64 according to the format specifiers
+ *          - `%%` -- `%` character
+ *          - `%%Y` -- Year
+ *          - `%%j` -- Day of the year, 1-366
+ *          - `%%m` -- Month number, 1-12
+ *          - `%%d` -- Day of the month, 1-31
+ *          - `%%H` -- Hour, 0-23
+ *          - `%%M` -- Minute, 0-59
+ *          - `%%S` -- Seconds, 0-60
+ *          - `%%f` -- partial seconds as nanoseconds
  *
  * @param buf   Input character string
  * @param fmt   Format to interpret the charater string
@@ -430,6 +456,17 @@ strptime64(const char *buf, const char *fmt, struct TM *tm, int64_t *ns) {
  * @memberof timespec64
  * @ingroup  time
  *
+ * @details Parse a timespec64 according to the format specifiers
+ *          - `%%` -- `%` characters
+ *          - `%%Y` -- Year
+ *          - `%%j` -- Day of the year, 1-366
+ *          - `%%m` -- Month number, 1-12
+ *          - `%%d` -- Day of the month, 1-31
+ *          - `%%H` -- Hour, 0-23
+ *          - `%%M` -- Minute, 0-59
+ *          - `%%S` -- Seconds, 0-60
+ *          - `%%f` -- partial seconds as nanoseconds
+ *
  * @param buf  Input character string
  * @param fmt  Format to interpret the charater string
  * @param t    output timespec64 value to place values into
@@ -480,6 +517,21 @@ powi(int64_t a, int64_t b) {
  *
  * @private
  * @ingroup  time
+ *
+ * @details Format a timespec64 according to the format specifiers
+ *          - `%%` -- `%` character
+ *          - `%%Y` -- Year, 4 digits, zero padded
+ *          - `%%j` -- Day of the year, 3 digits, zero padded
+ *          - `%%m` -- Month number, 2 digits, zero padded
+ *          - `%%d` -- Day of the month, 2 digits, zero padded
+ *          - `%%H` -- Hour, 2 digits, zero padded
+ *          - `%%M` -- Minute, 2 digits, zero padded
+ *          - `%%S` -- Seconds, 2 digits, zero padded
+ *          - `%%f` -- partial seconds as nanoseconds, prefix digit defines
+ *                    the number of leading digits to show
+ *          - `%%F` -- alias for `%Y-%m-%d`
+ *          - `%%T` -- alias for `%H:%M:%S`
+ *          - `%%b` -- Abbreviated Month Name
  *
  * @param dst   Output character string
  * @param n     Length of dst
@@ -555,6 +607,9 @@ strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
         case 'T':
             strftime64(dst+i, n-i, "%H:%M:%S", tm, ns);
             break;
+        case 'b':
+            i = strlcat(dst, months_abbrev[tm->tm_mon], n);
+            break;
         }
         i = strlen(dst);
     }
@@ -567,6 +622,21 @@ strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
  *
  * @memberof timespec64
  * @ingroup  time
+ *
+ * @details Format a timespec64 according to the format specifiers
+ *          - `%%` -- `%` character
+ *          - `%%Y` -- Year, 4 digits, zero padded
+ *          - `%%j` -- Day of the year, 3 digits, zero padded
+ *          - `%%m` -- Month number, 2 digits, zero padded
+ *          - `%%d` -- Day of the month, 2 digits, zero padded
+ *          - `%%H` -- Hour, 2 digits, zero padded
+ *          - `%%M` -- Minute, 2 digits, zero padded
+ *          - `%%S` -- Seconds, 2 digits, zero padded
+ *          - `%%f` -- partial seconds as nanoseconds, prefix digit defines
+ *                    the number of leading digits to show
+ *          - `%%F` -- alias for `%%Y-%%m-%%d`
+ *          - `%%T` -- alias for `%%H:%%M:%%S`
+ *          - `%%b` -- Abbreviated Month Name
  *
  * @param dst   Output character string
  * @param n     Length of dst

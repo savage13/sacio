@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief sac I/O and manipulation
+ */
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -5,31 +9,51 @@
 #include <unistd.h>
 #include <math.h>
 
-#define SAC_NULL_HEADER_REQUIRED
+/** @cond NO_DOCS */
+#define SAC_NULL_HEADER_REQUIRED /**< @private Define a fully NULL sac header */
+/** @endcond */
 #include "sacio.h"
 #include "strip.h"
 #include "defs.h"
 
 #include "geodesic.h"
 
-#define ERROR_NOT_A_SAC_FILE                1317
-#define ERROR_OVERWRITE_FLAG_IS_OFF         1303
-#define ERROR_WRITING_FILE                  115
-#define ERROR_READING_FILE                  114
-#define ERROR_OPENING_FILE                  101
-#define SAC_OK                              0
+#define ERROR_NOT_A_SAC_FILE                1317 /**< @brief Not a sac file */
+#define ERROR_OVERWRITE_FLAG_IS_OFF         1303 /**< @brief Overwrite flag, lovrok is set to 0 */
+#define ERROR_WRITING_FILE                  115 /**< @brief Error writing sac file */
+#define ERROR_READING_FILE                  114 /**< @brief Error reading sac file */
+#define ERROR_OPENING_FILE                  101 /**< @brief Error opening sac file */
+#define SAC_OK                              0 /**< @brief Success, everything is ok */
 
-#define SAC_HEADER_SIZEOF_NUMBER          (sizeof(float))
-#define SAC_DATA_SIZE                     SAC_HEADER_SIZEOF_NUMBER
-#define SAC_HEADER_MAJOR_VERSION          6
-#define SAC_VERSION_LOCATION              76
+#define SAC_HEADER_SIZEOF_NUMBER          (sizeof(float))  /**< @brief Size of header values in bytes */
+#define SAC_DATA_SIZE                     SAC_HEADER_SIZEOF_NUMBER /**< @brief Size of data values in bytes */
+#define SAC_HEADER_MAJOR_VERSION          6 /**< @brief Current Major sac version number */
+#define SAC_VERSION_LOCATION              76 /**< @brief Offset in 4-byte words of the header version */
+
+/**
+ * @defgroup sac sac
+ * @brief sac file I/O and manipulation
+ *
+ */
+
+
+/** \cond NO_DOCS */
+sacmeta * sac_meta_new();
+sac * sac_read_internal(char *filename, int read_data, int *nerr);
+float calc_e_even(sac *s);
+void sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr);
+static float array_max(float *y, int n);
+static float array_min(float *y, int n);
+static float array_mean(float *y, int n);
+sac_hdr * sac_hdr_new();
+int sac_get_time_ref(sac *s, timespec64 *t);
+/** \endcond */
+
 
 /**
  * @param SAC_HEADER_FLOATS
  *    Number of Floating point values in the SAC Header
  *    Size: \p SAC_HEADER_SIZEOF_NUMBER bytes
- *
- * @date 2009 Feb 15
  *
  */
 #define SAC_HEADER_FLOATS                 70    /* 4 bytes  (real or float)    */
@@ -37,8 +61,6 @@
  * @param SAC_HEADER_INTEGERS
  *    Number of Integer values in the SAC Header
  *    Size: \p SAC_HEADER_SIZEOF_NUMBER bytes
- *
- * @date 2009 Feb 15
  *
  */
 #define SAC_HEADER_INTEGERS               15
@@ -48,16 +70,12 @@
  *    Number of Enumerated values in the SAC Header
  *    Size: \p SAC_HEADER_SIZEOF_NUMBER bytes
  *
- * @date 2009 Feb 15
- *
  */
 #define SAC_HEADER_ENUMS                  20
 /**
  * @param SAC_HEADER_LOGICALS
  *    Number of Logical values in the SAC Header
  *    Size: \p SAC_HEADER_SIZEOF_NUMBER bytes
- *
- * @date 2009 Feb 15
  *
  */
 #define SAC_HEADER_LOGICALS               5
@@ -67,40 +85,28 @@
  *      one less as the number below as of header version 6.  The second
  *      value, the event name is twice as long as any other characer string
  *
- * @see SAC_HEADER_STRING_LENGTH
- *
- * @date 2009 Feb 15
- *
  */
-#define SAC_HEADER_STRINGS                24    /* 9 bytes  (character or char)
-                                                 *   actually 23 + 1 */
-/**
- * @param SAC_HEADER_STRINGS_SIZE_FILE
- *    Size of file character header data block in four byte increments
- *    @size (8) * \p SAC_HEADER_STRINGS
- *
- * @date 2009 Feb 15
- *
- */
-#define SAC_HEADER_STRINGS_SIZE_FILE    ( 2 * SAC_HEADER_STRINGS )
+#define SAC_HEADER_STRINGS                24    /* 9 bytes (characters) actually 23 + 1 */
 
 /**
  * @param SAC_HEADER_NUMBERS
  *    Number of numeric values in the SAC Header
  *    Size: \p SAC_HEADER_SIZEOF_NUMBER bytes
  *
- * @date 2009 Feb 15
- *
  */
-#define SAC_HEADER_NUMBERS                ( SAC_HEADER_FLOATS +   \
-              SAC_HEADER_INTEGERS + \
-              SAC_HEADER_ENUMS +    \
-              SAC_HEADER_LOGICALS )
+#define SAC_HEADER_NUMBERS                ( SAC_HEADER_FLOATS + SAC_HEADER_INTEGERS + SAC_HEADER_ENUMS + SAC_HEADER_LOGICALS )
+/** @cond NO_DOCS */
+/**
+ * @param SAC_HEADER_STRINGS_SIZE_FILE
+ *    Size of file character header data block in four byte increments
+ * @note 8 * \p SAC_HEADER_STRINGS
+ */
+#define SAC_HEADER_STRINGS_SIZE_FILE    ( 2 * SAC_HEADER_STRINGS )
+
 /**
  * @param SAC_HEADER_STRING_LENGTH_FILE
  *    Size of a character string stored on disk for a SAC header
  *    Strings are stored without the C string termination character
- *
  */
 #define SAC_HEADER_STRING_LENGTH_FILE     8
 /**
@@ -116,8 +122,201 @@
  *     SAC_HEADER_NUMBERS * SAC_HEADER_SIZEOF_NUMBER
  */
 #define SAC_HEADER_NUMBERS_SIZE_BYTES_FILE ( SAC_HEADER_NUMBERS * SAC_HEADER_SIZEOF_NUMBER )
+/** \endcond */
+
+/**
+ * @brief      Read a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Read a sac file, data and header
+ *
+ * @param      filename   file to read data and header from
+ * @param      nerr       status code, 0 on success, non-zero on header
+ *
+ * @return     sac file structure, NULL on failure
+ */
+sac *
+sac_read(char *filename, int *nerr) {
+    return sac_read_internal(filename, 1, nerr);
+}
 
 
+/**
+ * @brief      Read a sac file header
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Read a sac file header
+ *
+ * @param      filename    file to read sac header from
+ * @param      nerr        status code, 0 on success, non-zero on failure
+ *
+ * @return     sac file structure, NULL on failure
+ */
+sac *
+sac_read_header(char *filename, int *nerr) {
+    return sac_read_internal(filename, 0, nerr);
+}
+
+
+
+/**
+ * @brief      write a sac file to disk
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    write a sac file to dist, header and data
+ *
+ * @param      s         sac file to write to disk
+ * @param      filename  file to write to
+ * @param      nerr      status code, 0 on success, non-zero on error
+ *
+ */
+void
+sac_write(sac *s, char *filename, int *nerr) {
+    sac_write_internal(s, filename, SAC_WRITE_HEADER_AND_DATA, s->m->swap, nerr);
+}
+
+
+
+/**
+ * @brief      create a new sac file structure
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    create a new sac file structure. Header and meta data are allocated.
+ *             Data components are not allocated and should be done with sac_alloc()
+ *             after setting \p the type of file and the number of data points
+ *
+ * @return     newly created sac file structure
+ */
+sac *
+sac_new() {
+    sac *s;
+    s = (sac *) malloc(sizeof(sac));
+    if (s) {
+        s->h = sac_hdr_new();
+        if (!s->h) {
+            goto ERROR;
+        }
+        s->m = sac_meta_new();
+        if (!s->m) {
+            goto ERROR;
+        }
+        s->n = 1;
+        s->y = NULL;
+        s->x = NULL;
+        s->sddhdr = NULL;
+    }
+
+    return s;
+  ERROR:
+    sac_free(s);
+    return NULL;
+}
+
+
+/**
+ * @brief      free a sac file structure
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    free a sac file structure.  Free any data components, meta
+ *             data, header and other associated components
+ *
+ * @param      s   sac file struture to free
+ *
+ */
+void
+sac_free(sac * s) {
+    if (s) {
+        FREE(s->h);
+        FREE(s->x);
+        FREE(s->y);
+        if (s->m) {
+            FREE(s->m->filename);
+        }
+        FREE(s->m);
+        FREE(s->sddhdr);
+        FREE(s);
+    }
+}
+
+/**
+ * @brief      allocate the sac data portion of a sac strucutre
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    allocate the sac data poriton of a sac structure.  The memory
+ *             size the data and components are determined by sac_comps() and
+ *             the number of points \p npts. Any previous data is freed 
+ *             before allocation
+ *
+ * @param      s   sac file to allocate the data for
+ *
+ */
+void
+sac_alloc(sac * s) {
+    if (!s) {
+        return;
+    }
+    FREE(s->y);
+    FREE(s->x);
+    s->y = (float *) malloc(sizeof(float) * s->h->npts);
+    memset(s->y, 0, s->h->npts * sizeof(float));
+    if (sac_comps(s) == 2) {
+        s->x = (float *) malloc(sizeof(float) * s->h->npts);
+        memset(s->x, 0, s->h->npts * sizeof(float));
+    }
+}
+
+/**
+ * @brief      Set the beginning and end time for a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Set the beginning and end time for a sac file
+ *
+ * @param      s   sac file
+ *
+ */
+void
+sac_be(sac *s) {
+    if(s->h->leven) {
+        s->h->e = calc_e_even(s);
+    } else {
+        if(s->x) {
+            s->h->b = array_min(s->x, s->h->npts);
+            s->h->e = array_max(s->x, s->h->npts);
+        }
+    }
+}
+
+/**
+ * @brief      Update the dist, az, gcarc, baz header fields
+ *
+ * @details    Update the dist, az, gcarc, baz header fields of a sac file
+ *             using the geographiclib v 1.49.  Header updates are performed
+ *             if stlo, stla, evlo, evla are defined. Radius and flattening
+ *             used are defined from WGS84:
+ *             - radius:     6378137 m
+ *             - flattening: 1.0 / 298.257223563
+ *             See https://geographiclib.sourceforge.io/
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @param      s  sac file to update
+ *
+ */
 void
 update_distaz(sac *s) {
     double lat1 = 0.0, lon1 = 0.0, lat2 = 0.0, lon2 = 0.0;
@@ -147,6 +346,20 @@ update_distaz(sac *s) {
     }
 }
 
+/**
+ * @brief      Check the number of npts in a sac file
+ *
+ * @details    Check the number of npts in a sac file
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @param      npts   Number of points
+ *
+ * @return     - 0 if  npts > 0
+ *             - 115 if the npts <= 0
+ */
 int
 sac_check_npts(int npts) {
     if (npts <= 0) {
@@ -154,12 +367,44 @@ sac_check_npts(int npts) {
     }
     return SAC_OK;
 }
+
+/**
+ * @brief Size of header
+ */
+#define SAC_HEADER_SIZE 632
+
+/**
+ * @brief      Get the size of a sac file in bytes
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Get the size of a sac file in bytes if stored on disk
+ *
+ * @param      s    sac file
+ *
+ * @return     size of file in bytes
+ */
 size_t
 sac_size(sac *s) {
-    #define SAC_HEADER_SIZE 632
-    return SAC_HEADER_SIZE + (4 * s->h->npts);
+    return SAC_HEADER_SIZE + (4 * s->h->npts * sac_comps(s));
 }
 
+
+/**
+ * @brief      Check the overwrite flag
+ *
+ * @details    Check the overwrite flat
+ *
+ * @param      lovrok  - overwrite flag (L - Logical, ovr - OVerwRite, ok - OK)
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @return     - 0 if overwrite flag is != 0
+ *             - 1303 if overwrite flag is 0
+ */
 int
 sac_check_lovrok(int lovrok) {
     if (!lovrok) {
@@ -167,6 +412,23 @@ sac_check_lovrok(int lovrok) {
     }
     return SAC_OK;
 }
+
+/**
+ * @brief      Get the number of data components
+ *
+ * @details    Get the number of data components:
+ *             1 - Evenly spaced time (ITIME), general xy (IXY)
+ *                 or unknown (IUKN), xyz (IXYZ)
+ *             2 - Unevenly spcaed time (ITIME), real-imag (IRLIM),
+ *                 amp-phase (IAMPH)
+ *
+ * @param      s   sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @return     Number of data components
+ */
 int
 sac_comps(sac * s) {
     int n = 0;
@@ -190,6 +452,22 @@ sac_comps(sac * s) {
     }
     return n;
 }
+
+/**
+ * @brief      Get the minimum value in an array
+ *
+ * @details    Get the minimum value in an array
+ *
+ * @param      y   array
+ * @param      n   length of \p y
+ *
+ * @return     min value in array
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ */
 static float
 array_min(float *y, int n) {
     float v = y[0];
@@ -198,6 +476,20 @@ array_min(float *y, int n) {
     }
     return v;
 }
+/**
+ * @brief      Get the maximum value in an array
+ *
+ * @details    Get the maximum value in an array
+ *
+ * @param      y   array
+ * @param      n   length of \p y
+ *
+ * @return     max value in array
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ */
 static float
 array_max(float *y, int n) {
     float v = y[0];
@@ -206,6 +498,21 @@ array_max(float *y, int n) {
     }
     return v;
 }
+/**
+ * @brief      Get the mean value in an array
+ *
+ * @details    Get the mean value in an array
+ *
+ * @param      y   array
+ * @param      n   length of \p y
+ *
+ * @return     mean value in array
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ */
+
 static float
 array_mean(float *y, int n) {
     double v = 0.0;
@@ -215,7 +522,18 @@ array_mean(float *y, int n) {
     return v / n;
 }
 
-
+/**
+ * @brief      check if min and max values are valid floating point numbers
+ *
+ * @details    check if min and max values are valid floating point numbers
+ *
+ * @param      vmin    miniumum value
+ * @param      vmax    maxiumum value
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ */
 static void
 check_value(float vmin, float vmax) {
     if(! isfinite(vmin) || ! isfinite(vmax)) {
@@ -224,6 +542,25 @@ check_value(float vmin, float vmax) {
         printf("  Max value: %g\n", vmax);
     }
 }
+
+/**
+ * @brief      compute depmin, depmax, and depmen in sac header
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    compute depmin, depmax and depmen value for the sac header
+ *             report if any of the values are not finite numbers, i.e.
+ *             inf or nan
+ *
+ * @param      s   sac file
+ *
+ * @note       This sets the following sac header values:
+ *             - depmin
+ *             - depmax
+ *             - depmen
+ *
+ */
 void
 sac_extrema(sac * s) {
     s->h->depmin = array_min(s->y, s->h->npts);
@@ -232,6 +569,45 @@ sac_extrema(sac * s) {
     check_value(s->h->depmin, s->h->depmax);
 }
 
+/**
+ * @brief      Get a reference to a character string sac header value
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Return a pointer to the first character of a particular
+ *             sac header value.
+ *
+ * @param      s   sac file
+ * @param      k   character string header id. Conversion from header id
+ *                 is done by \f$kid = hid - SAC_STA + 1\f$
+ *                 - kstnm  = 1
+ *                 - kevnm  = 2
+ *                 - khole  = 4
+ *                 - ko     = 5
+ *                 - ka     = 6
+ *                 - kt0    = 7
+ *                 - kt1    = 8
+ *                 - kt2    = 9
+ *                 - kt3    = 10
+ *                 - kt4    = 11
+ *                 - kt5    = 12
+ *                 - kt6    = 13
+ *                 - kt7    = 14
+ *                 - kt8    = 15
+ *                 - kt9    = 16
+ *                 - kf     = 17
+ *                 - kuser0 = 18
+ *                 - kuser1 = 19
+ *                 - kuser2 = 20
+ *                 - kcmpnm = 21
+ *                 - knetwk = 22
+ *                 - kdatrd = 23
+ *                 - kinst  = 24
+ *
+ * @return     return type
+ */
 char *
 khdr(sac * s, int k) {
     char *p;
@@ -313,6 +689,26 @@ khdr(sac * s, int k) {
     return p;
 }
 
+/**
+ * @brief      check the precision of a value against the time sampling
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    check the precision of a value against the time sampling
+ *             Check is made by computing the difference between \p val
+ *             and the next floating value and that difference to the
+ *             time sampling.  Uses the nextafterf from
+ *             https://en.cppreference.com/w/c/numeric/math/nextafter
+ *
+ * @param      dt   time sampling
+ * @param      val  value to check
+ *
+ * @return     difference between floating point values if larger than
+ *             time sampling, 0.0 otherwise
+ *
+ */
 double
 check_precision(float dt, float val) {
     float df = val - nextafterf(val,0.0);
@@ -321,15 +717,33 @@ check_precision(float dt, float val) {
     }
     return 0.0;           // Otherwise return 0.0
 }
+
+/**
+ * @brief      check the time precision of all timing values in the sac header
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    check all time related values in the sac header for loss of
+ *             precision.  If the delta is undefined of the file type is
+ *             \p ITIME, the function returns immediately. This routine only
+ *             prints out a message if precision loss is detected.  Header
+ *             values checked are b, e, a, o, f, t0 - t9
+ *
+ * @param      h     pointer to the sac header
+ *
+ *
+ */
 void
-sac_check_time_precision(struct SACheader *h) {
+sac_check_time_precision(sac_hdr *h) {
     int i, n;
     double df;
     char *names[] = {"b","e","a","o","t0","t1","t2","t3","t4","t5","t6","t7","t8","t9","f"};
     float values[] = {h->b, h->e, h->a, h->o,
                       h->t0,h->t1,h->t2,h->t3,h->t4, h->t5,h->t6,h->t7,h->t8,h->t9,
                       h->f};
-    if(h->delta == SAC_FLOAT_UNDEFINED) {
+    if(h->delta == SAC_FLOAT_UNDEFINED || h->iftype != ITIME) {
         return;
     }
     n = sizeof(values)/sizeof(float);
@@ -347,6 +761,20 @@ sac_check_time_precision(struct SACheader *h) {
         }
     }
 }
+
+/**
+ * @brief      byteswap data
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    byteswap data of 2, 4, or 8 bytes in place
+ *
+ * @param      v    data to be swapped
+ * @param      n    size of data
+ *
+ */
 static void
 byteswap_bsd(void *v, size_t n) {
     char t = 0;
@@ -360,16 +788,18 @@ byteswap_bsd(void *v, size_t n) {
 }
 
 /**
- * Swap the Sac Header
+ * @brief Swap the Sac Header
  *
- * @param hdr
- *    Sac Header to Swap, packed
+ * @details Swap all floating point and integer values of the sac header
  *
- * @bug Unexpected and compiler packing of the structure
- *    will cause problems swapping the header, each value
- *    should be swapped individually, it is the safest way
+ * @private
+ * @memberof sac
+ * @ingroup  sac
+ *
+ * @param hdr    Sac Header to Swap, packed
  *
  * @date July 01, 2007 Initial Version -- B. Savage
+ *
  */
 void
 sac_header_swap(void *hdr) {
@@ -379,6 +809,21 @@ sac_header_swap(void *hdr) {
         byteswap_bsd(ptr, SAC_HEADER_SIZEOF_NUMBER);
     }
 }
+
+/**
+ * @brief      Swap an array of data in place
+ *
+ * @details    Swap an array of data in place,
+ *             typically the data component of a sac file
+ *
+ * @private
+ * @memberof sac
+ * @ingroup  sac
+ *
+ * @param      y   array to to be swapped in place
+ * @param      n   length of \p y
+ *
+ */
 void
 sac_data_swap(float *y, int n) {
     int i;
@@ -388,6 +833,24 @@ sac_data_swap(float *y, int n) {
     }
 }
 
+/**
+ * @brief      Copy strings from a sac file to a sac structure in memory
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Copy character string from a sac file to a sac structure
+ *             in memory, appending C-termination characters at the end
+ *             This is the inverse of sac_copy_strings_strip_terminator().
+ *             Input \p src data is assumed to be concatenated unterminated
+ *             character strings as exists for a sac file saved to disk
+ *
+ *
+ * @param      s     Where to place the character strings with terminators
+ * @param      src   Packed Input character strings without terminators
+ *
+ */
 void
 sac_copy_strings_add_terminator(sac *s, char *src) {
     void *p = src;
@@ -403,6 +866,24 @@ sac_copy_strings_add_terminator(sac *s, char *src) {
     }
 }
 
+/**
+ * @brief      Copy strings from a sac file to a packed string
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Copy character strings from a sac structure in memory
+ *             to a concatenated character string as would exist in a sac
+ *             file on disk.  Terminators are removed and strings are appended
+ *             in order as they appear on disk.  This is the inverse operation
+ *             of sac_copy_strings_add_terminator().  Order is important.
+ *
+ * @param      s     sac file to take strings from
+ * @param      dst   concatenated character string to place unterminated
+ *                   character string into.  
+ *
+ */
 void
 sac_copy_strings_strip_terminator(sac *s, char *dst) {
     void *p = dst;
@@ -417,14 +898,14 @@ sac_copy_strings_strip_terminator(sac *s, char *dst) {
 }
 
 /**
- * Write a Sac Header
+ * @brief Write a Sac Header
  *
- * @param nun
- *    Logical file unite to write SAC Header To
- * @param nerr
- *    Error return Flag
- *    - SAC_OK
- *    - Non-Zero on Error
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @param nun   Logical file unite to write SAC Header To
+ * @param nerr  Statue code, 0 on success, non-zero on failure
  *
  * @date November 7, 2010
  */
@@ -454,6 +935,23 @@ sac_header_write(sac *s, int nun, int swap, int *nerr) {
         return;
     }
 }
+
+/**
+ * @brief      Write a single data component
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Write a single data component to a file descriptor
+ *
+ * @param      nun    File descriptor to write to
+ * @param      data   Data to write
+ * @param      npts   Length of data to write
+ * @param      swap   To swap dat before writing
+ * @param      nerr   Status code, 0 on success, non-zero on error
+ *
+ */
 void
 sac_data_write1(int nun, float *data, int npts, int swap, int *nerr) {
     int n;
@@ -465,7 +963,29 @@ sac_data_write1(int nun, float *data, int npts, int swap, int *nerr) {
         *nerr = ERROR_WRITING_FILE;
         return;
     }
+    if(swap) {
+        sac_data_swap(data, npts);
+    }
 }
+
+/**
+ * @brief      Write two data components to a file descriptor
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Write two data components to a file descriptor,
+ *             calls sac_data_write1()
+ *
+ * @param      nun    file descriptor to write to
+ * @param      y      first data component to write
+ * @param      x      second data component to write
+ * @param      npts   length of \p y and \p x
+ * @param      swap   to swap data before writing
+ * @param      nerr   status code, 0 on succes, non-zero on failure
+ *
+ */
 void
 sac_data_write2(int nun, float *y, float *x, int npts, int swap, int *nerr) {
     sac_data_write1(nun, y, npts, swap, nerr);
@@ -474,6 +994,26 @@ sac_data_write2(int nun, float *y, float *x, int npts, int swap, int *nerr) {
     }
     sac_data_write1(nun, x, npts, swap, nerr);
 }
+
+/**
+ * @brief      Write data components to a file descriptor
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Write 1 or 2 data components to a file descriptor, calls
+ *             sac_data_write1() or sac_data_write2()
+ *
+ * @param      nun    file descriptor to write to
+ * @param      y      first data component to write
+ * @param      x      second data component to write, maybe NULL
+ * @param      comps  number of data components to write
+ * @param      npts   length of \p y and \p x
+ * @param      swap   to swap data before writing
+ * @param      nerr   status code, 0 on success, non-zero on failure
+ *
+ */
 void
 sac_data_write(int nun, float *y, float *x, int comps, int npts, int swap,
                int *nerr) {
@@ -487,6 +1027,31 @@ sac_data_write(int nun, float *y, float *x, int comps, int npts, int swap,
     return;
 }
 
+/**
+ * @brief      internal sac data writing function
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    internal sac data writing function.
+ *             - Checks the number of points
+ *             - checks if the overwrite flag is "ok"
+ *             - updates the extra values (depmin, depmax, depmen)
+ *             - updates the distance fields (dist, az, baz, gcarc)
+ *             - checks and reports any time precison issues
+ *             - create a new file if writing data or update the header of
+ *               and existing file
+ *             - write the header
+ *             - write the data
+ *
+ * @param      s           sac file to write
+ * @param      filename    filename to write to
+ * @param      write_data  whether to write data or just the header
+ * @param      swap        whether to swap the data and header before writing
+ * @param      nerr        status code, 0 on success, non-zero on failure
+ *
+ */
 void
 sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) {
     int nin = 0;
@@ -525,28 +1090,23 @@ sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) 
     }
     close(nin);
 }
-
-void
-sac_write(sac *s, char *filename, int *nerr) {
-    sac_write_internal(s, filename, SAC_WRITE_HEADER_AND_DATA, s->m->swap, nerr);
-}
-void
-sac_alloc(sac * s) {
-    if (!s) {
-        return;
-    }
-    FREE(s->y);
-    FREE(s->x);
-    s->y = (float *) malloc(sizeof(float) * s->h->npts);
-    memset(s->y, 0, s->h->npts * sizeof(float));
-    if (sac_comps(s) == 2) {
-        s->x = (float *) malloc(sizeof(float) * s->h->npts);
-        memset(s->x, 0, s->h->npts * sizeof(float));
-    }
-}
-
+/**
+ * @brief      read sac data from a file pointer
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    read sac data from a file pointer.  Memory should already
+ *             be allocated and data will be swapped if the \p swap flag
+ *             is defined in the meta data
+ *
+ * @param      s    sac data to read data into
+ * @param      fp   file pointer to read data from
+ *
+ */
 int
-sac_data_read_new(sac *s, FILE *fp) {
+sac_data_read(sac *s, FILE *fp) {
     float *p;
     int i;
     size_t n;
@@ -564,21 +1124,24 @@ sac_data_read_new(sac *s, FILE *fp) {
 }
 
 /**
- * Check the Sac Header Version
+ * @brief Check the Sac Header Version
  *
- * @param hdr
- *   Sac Header to Check
- * @param nerr
- *   Error return Flag
- *   - SAC_OK
- *   - SAC_ERROR_NOT_A_SAC_FILE
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
  *
- * @return
- *    - TRUE if file needs to be swapped
- *    - FALSE if file does not need to be swapped
+ * @details This routine checks the header version for a number between
+ *          1 and \p SAC_HEADER_MAJOR_VERSION.  It check both the swapped
+ *          and non-swapped version to determine the byte-order of the file
+ *
+ * @param hdr    Sac Header to Check
+ * @param nerr   status code, 0 on success, non-zero on failure
+ *
+ * @return if header needs to be swapped or not or is not a sac file
+ *    - 1 if file needs to be swapped
+ *    - 0 if file does not need to be swapped
  *    - -1 if there was an error checking the header
  *
- * @date July 01, 2007 Initial Version -- B. Savage
  */
 int
 sac_check_header_version(float *hdr, int *nerr) {
@@ -605,8 +1168,23 @@ sac_check_header_version(float *hdr, int *nerr) {
     return lswap;
 }
 
+
+/**
+ * @brief      Read a sac header from a file pointer
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Read a sac header from a file pointer
+ *
+ * @param      s   sac file to place header into
+ * @param      fp  file pointer to read header from
+ *
+ * @return     status code, 0 on success, non-zero on failure
+ */
 int
-sac_header_read_new(sac *s, FILE *fp) {
+sac_header_read(sac *s, FILE *fp) {
     int nerr;
     size_t n;
     char str[SAC_HEADER_STRINGS * 8];
@@ -633,7 +1211,23 @@ sac_header_read_new(sac *s, FILE *fp) {
     return 0;
 }
 
-
+/**
+ * @brief      Read a sac file
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Read a sac file. Header values b, e, dist, az, baz, gcarc
+ *             updated after read.  Data is read from either byte order
+ *             and converted to the system's byte order
+ *
+ * @param      filename   file to read sac file from
+ * @param      read_data  whether to read the header and data or just the header
+ * @param      nerr       status code, 0 on success, non-zero on failure
+ *
+ * @return     sac file structure, NULL on failure
+ */
 sac *
 sac_read_internal(char *filename, int read_data, int *nerr) {
     FILE *fp;
@@ -653,7 +1247,7 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
     s = sac_new();
 
     s->m->filename = strdup(filename);
-    *nerr = sac_header_read_new(s, fp);
+    *nerr = sac_header_read(s, fp);
     if(*nerr) {
         goto ERROR;
     }
@@ -665,7 +1259,7 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
         s->m->ntotal = s->h->npts;
         s->m->nfillb = 0;
         s->m->nfille = 0;
-        if((*nerr = sac_data_read_new(s, fp))) {
+        if((*nerr = sac_data_read(s, fp))) {
             goto ERROR;
         }
     }
@@ -687,16 +1281,25 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
     return NULL;
 }
 
-sac *
-sac_read_header(char *filename, int *nerr) {
-    return sac_read_internal(filename, 0, nerr);
-}
-
-sac *
-sac_read(char *filename, int *nerr) {
-    return sac_read_internal(filename, 1, nerr);
-}
-
+/**
+ * @brief      initialize / fill a sac header
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    initialize / fill a sac header with default values
+ *             - nvhdr  = \p SAC_HEADER_MAJOR_VERSION
+ *             - level  = TRUE
+ *             - lpspol = FALSE
+ *             - lovrok = TRUE
+ *             - lcalda = TRUE
+ *             - level  = ITIME
+ *             - all other values are set to undefined, -12345
+ *
+ * @param      sh   pointer sac header
+ *
+ */
 void
 sac_hdr_init(sac_hdr *sh) {
     if (sh) {
@@ -711,21 +1314,18 @@ sac_hdr_init(sac_hdr *sh) {
         sh->iftype = ITIME;
     }
 }
-void
-sac_free(sac * s) {
-    if (s) {
-        FREE(s->h);
-        FREE(s->x);
-        FREE(s->y);
-        if (s->m) {
-            FREE(s->m->filename);
-        }
-        FREE(s->m);
-        FREE(s->sddhdr);
-        FREE(s);
-    }
-}
 
+/**
+ * @brief      Create a new sac meta component
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Create and initialize a new sac meta component
+ *
+ * @return     sac meta component
+ */
 sacmeta *
 sac_meta_new() {
     sacmeta *m;
@@ -743,6 +1343,22 @@ sac_meta_new() {
     return m;
 }
 
+/**
+ * @brief      Calculate the end time for an evenly spaced file
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Calculate the end time for an evenly spaced file.
+ *             For a time domain file, \f$ e = b + dt * (npts-1) \f$
+ *             For a frequency domain file, \f$ e = b + nfreq * df\f$
+ *             where nfreq = npts/2 or (npts-1)/2 if npts is even or odd
+ *
+ * @param      s   sac file
+ *
+ * @return     end time
+ */
 float
 calc_e_even(sac *s) {
     switch (s->h->iftype) {
@@ -768,11 +1384,24 @@ calc_e_even(sac *s) {
     return SAC_FLOAT_UNDEFINED;
 }
 
-
+/**
+ * @brief      Set a character string in a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Set a character stirng in a sac file
+ *
+ * @param      s     sac file
+ * @param      hdr   Header ID
+ * @param      v     character string to set
+ *
+ * @return     success code, 1 on success, 0 on failure
+ */
 int
 sac_set_string(sac *s, int hdr, char *v) {
     char *k = NULL;
-    if(hdr < SAC_STA || hdr > SAC_INST) {
+    if(!s || hdr < SAC_STA || hdr > SAC_INST || !v) {
         return 0;
     }
     if(!(k = khdr(s, hdr-SAC_STA+1))) {
@@ -781,49 +1410,191 @@ sac_set_string(sac *s, int hdr, char *v) {
     strlcpy(k, v, (hdr == SAC_EVENT) ? 17 : 9);
     return 1;
 }
+
+/**
+ * @brief      format a timing mark with name
+ *
+ * @details    format a timing mark with its name
+ *
+ * @param      s         sac file
+ * @param      time_id   time mark id
+ * @param      name_id   name id
+ * @param      dst       output character string
+ * @param      n         length of \p dst
+ *
+ * @private
+ * @memberof sac
+ * @ingroup sac
+ */
+void
+sac_timing_mark(sac *s, int time_id, int name_id, char *dst, size_t n) {
+    if(sac_hdr_defined(s, time_id, NULL)) {
+        float time = 0.0;
+        char name[32] = {0};
+        sac_get_float(s, time_id, &time);
+        if(sac_hdr_defined(s, name_id, NULL)) {
+            sac_get_string(s, name_id, name, sizeof(name));
+            snprintf(dst, n, "%16.5g (%s)", time, name);
+        } else {
+            snprintf(dst, n, "%16.5g", time);
+        }
+    }
+}
+
+/**
+ * @brief      Get a character string from a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Get a character string from a sac file
+ *
+ * @param      s    sac file
+ * @param      hdr  Header ID
+ * @param      v    output character string
+ * @param      n    length of \p v
+ *
+ * @return     status code, 0 on failure, 1 on success
+ */
 int
 sac_get_string(sac *s, int hdr, char *v, size_t n) {
     char *k = NULL;
-    if(hdr < SAC_STA || hdr > SAC_INST) {
+    if(!s || hdr < SAC_STA || hdr > SAC_T9MARKER || !v) {
         return 0;
     }
-    if(!(k = khdr(s, hdr-SAC_STA+1))) {
-        return 0;
+    if(hdr >= SAC_STA && hdr <= SAC_INST) {
+        if(!(k = khdr(s, hdr-SAC_STA+1))) {
+            return 0;
+        }
+        strlcpy(v, k, n);
+    } else {
+        switch(hdr) {
+        case SAC_DATE: {
+            timespec64 t = {0,0};
+            sac_get_time_ref(s, &t);
+            strftime64t(v, n, "%b %d (%j), %Y", &t);
+        } break;
+        case SAC_TIME: {
+            timespec64 t = {0,0};
+            sac_get_time_ref(s, &t);
+            strftime64t(v, n, "%H:%M:%S.%03f", &t);
+        } break;
+        case SAC_FILENAME:
+            strlcpy(v, s->m->filename, n);
+            break;
+        case SAC_AMARKER: sac_timing_mark(s, SAC_A, SAC_KA, v, n); break;
+        case SAC_OMARKER: sac_timing_mark(s, SAC_O, SAC_KO, v, n); break;
+        case SAC_T0MARKER: sac_timing_mark(s, SAC_T0, SAC_KT0, v, n); break;
+        case SAC_T1MARKER: sac_timing_mark(s, SAC_T1, SAC_KT1, v, n); break;
+        case SAC_T2MARKER: sac_timing_mark(s, SAC_T2, SAC_KT2, v, n); break;
+        case SAC_T3MARKER: sac_timing_mark(s, SAC_T3, SAC_KT3, v, n); break;
+        case SAC_T4MARKER: sac_timing_mark(s, SAC_T4, SAC_KT4, v, n); break;
+        case SAC_T5MARKER: sac_timing_mark(s, SAC_T5, SAC_KT5, v, n); break;
+        case SAC_T6MARKER: sac_timing_mark(s, SAC_T6, SAC_KT6, v, n); break;
+        case SAC_T7MARKER: sac_timing_mark(s, SAC_T7, SAC_KT7, v, n); break;
+        case SAC_T8MARKER: sac_timing_mark(s, SAC_T8, SAC_KT8, v, n); break;
+        case SAC_T9MARKER: sac_timing_mark(s, SAC_T9, SAC_KT9, v, n); break;
+        case SAC_STCMP:
+            if(!sac_hdr_defined(s, SAC_STA, NULL)) {
+                strlcpy(v, "UNDEFINED", n);
+            }
+            if(sac_hdr_defined(s, SAC_CHA, NULL)) {
+                sac_fmt(v, n, "%S %C", s);
+            } else {
+                sac_fmt(v, n, "%S %c", s);
+            }
+            break;
+        }
     }
-    strlcpy(v, k, n);
     return 1;
 }
 
+/**
+ * @brief      Set a floating point value in a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Set a flaoting point value in a sac file
+ *
+ * @param      s     sac file
+ * @param      hdr   Header ID
+ * @param      v     floating point to set
+ *
+ * @return     success code, 1 on success, 0 on failure
+ */
 int
 sac_set_float(sac *s, int hdr, float v) {
-    if(hdr < SAC_DELTA || hdr > SAC_UN70) {
+    if(!s || hdr < SAC_DELTA || hdr > SAC_UN70) {
         return 0;
     }
     float *fp = (float *) (&(s->h->delta));
     fp[hdr - SAC_DELTA] = v;
     return 1;
 }
+/**
+ * @brief      Get a floating point value from a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Get a floating point value from a sac file
+ *
+ * @param      s    sac file
+ * @param      hdr  Header ID
+ * @param      v    output floating point value
+ *
+ * @return     status code, 0 on failure, 1 on success
+ */
 int
 sac_get_float(sac *s, int hdr, float *v) {
-    if(hdr < SAC_DELTA || hdr > SAC_UN70) {
+    if(!s || hdr < SAC_DELTA || hdr > SAC_UN70 || !v) {
         return 0;
     }
     float *fp = (float *) (&(s->h->delta));
     *v = fp[hdr - SAC_DELTA];
     return 1;
 }
+/**
+ * @brief      Set a integer value in a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Set a integer in a sac file
+ *
+ * @param      s     sac file
+ * @param      hdr   Header ID
+ * @param      v     integer value to set
+ *
+ * @return     success code, 1 on success, 0 on failure
+ */
 int
 sac_set_int(sac *s, int hdr, int v) {
-    if(hdr < SAC_YEAR || hdr > SAC_UN105) {
+    if(!s || hdr < SAC_YEAR || hdr > SAC_UN105) {
         return 0;
     }
     int *ip = (int *) (&(s->h->nzyear));
     ip[hdr - SAC_YEAR] = v;
     return 1;
 }
+/**
+ * @brief      Get a integer value from a sac file
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Get a integer value from a sac file
+ *
+ * @param      s    sac file
+ * @param      hdr  Header ID
+ * @param      v    output integer value
+ *
+ * @return     status code, 0 on failure, 1 on success
+ */
 int
 sac_get_int(sac *s, int hdr, int *v) {
-    if(hdr < SAC_YEAR || hdr > SAC_UN110) {
+    if(!s || hdr < SAC_YEAR || hdr > SAC_UN110 || !v) {
         return 0;
     }
     int *ip = (int *) (&(s->h->nzyear));
@@ -831,10 +1602,25 @@ sac_get_int(sac *s, int hdr, int *v) {
     return 1;
 }
 
+/** \cond NO_DOCS */
 #define is_float(x) ( x >= SAC_DELTA && h <= SAC_UN70 )
 #define is_int(x)   ( x >= SAC_YEAR && h <= SAC_UN105 )
 #define is_str(x)   ( x >= SAC_STA && h <= SAC_INST )
+/** \endcond */
 
+/**
+ * @brief      Check if multiple header values are defined
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Check if mulutple header values are defined
+ *
+ * @param      s    sac file
+ * @param      ...  Header id, NULL terminatated
+ *
+ * @return     0 if any are undefined, 1 if all are defined
+ */
 int
 sac_hdr_defined(sac *s, ...) {
     int h = 0;
@@ -870,6 +1656,8 @@ sac_hdr_defined(sac *s, ...) {
                     return 0;
                 }
             }
+        } else {
+            printf("Warning: unknown header id: %d\n", h);
         }
     }
     va_end(ap);
@@ -877,15 +1665,18 @@ sac_hdr_defined(sac *s, ...) {
 }
 
 /**
- * Get the reference time from a sac file
+ * @brief     Get the reference time from a sac file
  *
- * @memberof sac
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details   Get the refereence time from a sac file
  *
  * @param s   sac file
  * @param t   timespec64 output value
  *
  * @return 1 on success, 0 in failure
- *
  */
 int
 sac_get_time_ref(sac *s, timespec64 *t) {
@@ -900,15 +1691,19 @@ sac_get_time_ref(sac *s, timespec64 *t) {
 }
 
 /**
- * Get time value from sac file
+ * @brief      Get time value from sac file
  *
- * @memberof sac
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Get time value from sac file
+ *
  *
  * @param s    sac file
  * @param hdr  header index value
  * @param t    timespec64 output value
  *
- * @reutrn 1 in success, 0 on failure
+ * @return 1 in success, 0 on failure
  *
  */
 int
@@ -927,12 +1722,11 @@ sac_get_time(sac *s, int hdr, timespec64 *t) {
     return 1;
 }
 
-
-
 /**
  * Set the reference time for a sac file, assumed to be the origin time
  *
  * @memberof sac
+ * @ingroup  sac
  *
  * @param s   sac file
  * @param t   origin time
@@ -978,29 +1772,54 @@ sac_set_time(sac *s, timespec64 t) {
     return 1;
 }
 
-void
-sac_be(sac *s) {
-    if(s->h->leven) {
-        s->h->e = calc_e_even(s);
-    } else {
-        if(s->x) {
-            s->h->b = array_min(s->x, s->h->npts);
-            s->h->e = array_max(s->x, s->h->npts);
-        }
-    }
-}
+
+/**
+ * @brief      Copy a sac character string or "" if undefined
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Copy a sac character string or "" if undefined.
+ *             If the \p src value is defined, not "-12345   "
+ *             then \p src is copied to \dst and trailing whitespace
+ *             is removed
+ *
+ * @param      dst  Ouptut character string
+ * @param      src  Input charater string
+ * @param      n    Length of \p dst
+ *
+ * @return     full length of output dst
+ */
 size_t
 sac_strlcat(char *dst, char *src, size_t n) {
-#define NT 20
-    char tmp[NT] = {0};
+    char tmp[20] = {0};
     if(strcmp(src, SAC_CHAR_UNDEFINED) != 0) {
-        strlcpy(tmp, src, NT);
+        strlcpy(tmp, src, sizeof(tmp));
         rstrip(tmp);
         return strlcat(dst, tmp, n);
     }
     return strlen(dst);
 }
 
+/**
+ * @brief      Copy an absolute time value to a string, if defined
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Copy an absolute time value in the form of
+ *             1994/06/09T00:33:16.123 if a refernce time is defined in
+ *             the sac file 
+ *
+ * @param      dst    Output character string
+ * @param      s      sac file to get time value from
+ * @param      hdr    header ID
+ * @param      n      length of output \p dst
+ *
+ * @return     full length of \p dst
+ */
 size_t
 sac_timelcat(char *dst, sac *s, int hdr, size_t n) {
     char tmp[64] = {0};
@@ -1011,6 +1830,23 @@ sac_timelcat(char *dst, sac *s, int hdr, size_t n) {
     }
     return strlen(dst);
 }
+
+/**
+ * @brief      Copy a floating point value to a string
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    Copy a floating point value to a string using '%g'
+ *
+ * @param      dst   Output character string
+ * @param      s     sac file to get header value from
+ * @param      hdr   Header ID
+ * @param      n     Length of \p dst
+ *
+ * @return     full length of \p dst
+ */
 size_t
 sac_floatlcat(char *dst, sac *s, int hdr, size_t n) {
     float v = 0.0;
@@ -1022,6 +1858,18 @@ sac_floatlcat(char *dst, sac *s, int hdr, size_t n) {
     return strlcat(dst, tmp, n);
 }
 
+
+/**
+ * @brief      create a new sac header
+ *
+ * @private
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    create and initialize a new sac header
+ *
+ * @return     newly created sac header
+ */
 sac_hdr *
 sac_hdr_new() {
     sac_hdr *sh;
@@ -1032,6 +1880,45 @@ sac_hdr_new() {
     return sh;
 }
 
+/**
+ * @brief      format sac values into a string
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ *
+ * @details    format sac values into a string
+ *             - %%  Output the '%' character
+ *             - %%E Event Name (kevnm)
+ *             - %%I Instrument (kinst)
+ *             - %%N Network (knetwk)
+ *             - %%S Station (kstnm)
+ *             - %%C Channel (kcmpnm)
+ *             - %%H Location or Hole (khole)
+ *             - %%L Location or Hole (khole), if value is "" or undefined, use "--".
+ *             - %%t Relative time formatting (seconds from reference) `12.64` .
+ *               All relative timing uses lowercase characters
+ *               - %%tb begin time
+ *               - %%te end time
+ *               - %%to origin time
+ *               - %%ta arrival time
+ *               - %%t0 .. %%t9 time picks 0 to 9
+ *             - %%T Absolute time formatting, e.g. `1994/06/09T00:33:16.123` .
+ *               All absolute timing uses uppercase characters
+ *               - %%tB begin time
+ *               - %%tE end time
+ *               - %%tO origin time
+ *               - %%tA arrival time
+ *               - %%t0 .. %%t9 time picks 0 to 9
+ *             - %%Z alias for `%%N.%%S.%%H.%%C`  net.sta.loc.cha
+ *             - %%R alias for `%%N %%S %%L %%C %%TB %%TE` similar to a data request
+ *
+ * @param      dst  Output character string
+ * @param      n    Length of \p dst
+ * @param      fmt  Formatting string
+ * @param      s    sac file to get values from
+ *
+ * @return     full length of \p dst, -1 on error
+ */
 size_t
 sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
     size_t i = 0, j = 0;
@@ -1065,6 +1952,30 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
             i = j;
             break;
         }
+        case 'c': {
+            if(s->h->cmpinc == 0.0) {
+                i = sac_strlcat(dst, "VERT", n);
+            } else if(s->h->cmpinc == 90.0) {
+                float az = fmodf(s->h->cmpaz + 360.0, 360.0);
+                if(az < 0.0) { az += 360.0; }
+
+                if(fabs(az - 0.0) < 0.1) {
+                    i = sac_strlcat(dst, "NORTH", n);
+                } else if(fabs(az - 90.0) < 0.1) {
+                    i = sac_strlcat(dst, "EAST", n);
+                } else if(fabs(az - 180.0) < 0.1) {
+                    i = sac_strlcat(dst, "SOUTH", n);
+                } else if(fabs(az - 270.0) < 0.1) {
+                    i = sac_strlcat(dst, "WEST", n);
+                } else if(sac_hdr_defined(s, SAC_CMPAZ, SAC_CMPINC, NULL)) {
+                    snprintf(dst, n, "%s %4d %4d", dst, (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
+                    i = strlen(dst);
+                }
+            } else if(sac_hdr_defined(s, SAC_CMPAZ, SAC_CMPINC, NULL)) {
+                snprintf(dst, n, "%s %4d %4d", dst, (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
+                i = strlen(dst);
+            }
+        } break;
         case 't': {
             if(*fmt == 0) {
                 printf("Unexpected end of format, expected time specifier\n");
@@ -1132,31 +2043,6 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
     return i;
 }
 
-
-sac *
-sac_new() {
-    sac *s;
-    s = (sac *) malloc(sizeof(sac));
-    if (s) {
-        s->h = sac_hdr_new();
-        if (!s->h) {
-            goto ERROR;
-        }
-        s->m = sac_meta_new();
-        if (!s->m) {
-            goto ERROR;
-        }
-        s->n = 1;
-        s->y = NULL;
-        s->x = NULL;
-        s->sddhdr = NULL;
-    }
-
-    return s;
-  ERROR:
-    sac_free(s);
-    return NULL;
-}
 
 
 #ifdef __TESTING__

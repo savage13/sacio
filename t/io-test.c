@@ -189,5 +189,44 @@ main() {
     check_sac_file_uneven("t/test_uneven_big.sac");
     check_sac_file_spec("t/test_spec_small.sac");
     check_sac_file_spec("t/test_spec_big.sac");
+    int nerr = 0;
+    char tmp[128] = {0};
+    sac *s = sac_read("t/test_spec_small.sac", &nerr);;
+    sac_get_string(s, SAC_DATE, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+    sac_get_string(s, SAC_TIME, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+    sac_get_string(s, SAC_STCMP, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+    sac_set_string(s, SAC_CHA, SAC_CHAR_UNDEFINED);
+    sac_set_float(s, SAC_CMPINC, SAC_FLOAT_UNDEFINED);
+    sac_set_float(s, SAC_CMPAZ, SAC_FLOAT_UNDEFINED);
+    sac_get_string(s, SAC_STCMP, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+    for(int i = -360*2; i <= 360.0; i += 90) {
+        sac_set_float(s, SAC_CMPINC, 90.0);
+        sac_set_float(s, SAC_CMPAZ, (float)i);
+        sac_get_string(s, SAC_STCMP, tmp, sizeof(tmp));
+        printf("%s\n", tmp);
+    }
+    sac_set_float(s, SAC_CMPINC, 45.0);
+    sac_set_float(s, SAC_CMPAZ, 45.0);
+    sac_get_string(s, SAC_STCMP, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+
+    sac_get_string(s, SAC_AMARKER, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+
+    sac_set_string(s, SAC_KA, SAC_CHAR_UNDEFINED);
+    sac_get_string(s, SAC_AMARKER, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+
+    memset(tmp, 0, sizeof(tmp));
+    sac_set_float(s, SAC_A, SAC_FLOAT_UNDEFINED);
+    sac_get_string(s, SAC_AMARKER, tmp, sizeof(tmp));
+    printf("%s\n", tmp);
+
+    
+    
     return 0;
 }
