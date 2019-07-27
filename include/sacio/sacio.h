@@ -469,7 +469,7 @@ int sac_set_int(sac *s, int hdr, int v);
 /** @brief  Check if sac header values are defined */
 int sac_hdr_defined(sac *s, ...);
 /** @brief  Format a string with sac header values */
-size_t sac_fmt(char *dst, size_t n, const char *fmt, sac *s);
+int sac_fmt(char *dst, size_t n, const char *fmt, sac *s);
 /** @brief  Get an absolute time from a sac object */
 int sac_get_time(sac *s, int hdr, timespec64 *t);
 /** @brief  Set the reference time for a sac object */

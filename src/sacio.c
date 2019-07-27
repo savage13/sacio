@@ -472,8 +472,9 @@ sac_comps(sac * s) {
  */
 static float
 array_min(float *y, int n) {
+    int i = 0;
     float v = y[0];
-    for(int i = 0; i < n; i++) {
+    for(i = 0; i < n; i++) {
         v = fmin(v, y[i]);
     }
     return v;
@@ -494,8 +495,9 @@ array_min(float *y, int n) {
  */
 static float
 array_max(float *y, int n) {
+    int i = 0;
     float v = y[0];
-    for(int i = 0; i < n; i++) {
+    for(i = 0; i < n; i++) {
         v = fmax(v, y[i]);
     }
     return v;
@@ -517,8 +519,9 @@ array_max(float *y, int n) {
 
 static float
 array_mean(float *y, int n) {
+    int i = 0;
     double v = 0.0;
-    for(int i = 0; i < n; i++) {
+    for(i = 0; i < n; i++) {
         v += y[i];
     }
     return v / n;
@@ -779,9 +782,10 @@ sac_check_time_precision(sac_hdr *h) {
  */
 static void
 byteswap_bsd(void *v, size_t n) {
+    size_t i = 0;
     char t = 0;
     char *p = v;
-    for(size_t i = 0; i < n/2; i++) {
+    for(i = 0; i < n/2; i++) {
         size_t j = n-i-1;
         t = p[i];
         p[i] = p[j];
@@ -855,8 +859,9 @@ sac_data_swap(float *y, int n) {
  */
 void
 sac_copy_strings_add_terminator(sac *s, char *src) {
+    int i = 0;
     void *p = src;
-    for(int i = SAC_STA; i <= SAC_INST; i++) {
+    for(i = SAC_STA; i <= SAC_INST; i++) {
         if(i == SAC_EVENT2) {
             continue;
         }
@@ -888,8 +893,9 @@ sac_copy_strings_add_terminator(sac *s, char *src) {
  */
 void
 sac_copy_strings_strip_terminator(sac *s, char *dst) {
+    int i = 0;
     void *p = dst;
-    for(int i = SAC_STA; i <= SAC_INST; i++) {
+    for(i = SAC_STA; i <= SAC_INST; i++) {
         if(i == SAC_EVENT2) {
             continue;
         }
@@ -956,12 +962,12 @@ sac_header_write(sac *s, int nun, int swap, int *nerr) {
  */
 void
 sac_data_write1(int nun, float *data, int npts, int swap, int *nerr) {
-    int n;
+    size_t n;
     if (swap) {
         sac_data_swap(data, npts);
     }
     n = write(nun, data, npts * SAC_DATA_SIZE);
-    if (n != npts * SAC_DATA_SIZE) {
+    if (n != (size_t) npts * SAC_DATA_SIZE) {
         *nerr = ERROR_WRITING_FILE;
         return;
     }
@@ -1747,6 +1753,7 @@ sac_get_time(sac *s, int hdr, timespec64 *t) {
  */
 int
 sac_set_time(sac *s, timespec64 t) {
+    int j = 0;
     struct TM tm = {0};
     timespec64 t0;
     float dt = 0.0;
@@ -1764,7 +1771,7 @@ sac_set_time(sac *s, timespec64 t) {
     s->h->nzsec  = tm.tm_sec;
     s->h->nzmsec = t.tv_nsec / 1000000;
     s->h->o = dt;
-    for(int j = SAC_B; j <= SAC_F; j++) {
+    for(j = SAC_B; j <= SAC_F; j++) {
         float v = 0.0;
         sac_get_float(s, j, &v);
         if(v != SAC_FLOAT_UNDEFINED) {
@@ -1921,9 +1928,10 @@ sac_hdr_new() {
  *
  * @return     full length of \p dst, -1 on error
  */
-size_t
+int 
 sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
-    size_t i = 0, j = 0;
+    int i = 0;
+    int j = 0;
     unsigned char c = 0;
     if(!dst || !fmt || n == 0) {
         return -1;
@@ -2092,3 +2100,4 @@ main() {
 }
 
 #endif
+
