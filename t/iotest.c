@@ -7,6 +7,7 @@
 
 void
 check_sac_file_even(char *file) {
+    int i = 0;
     int nerr;
     sac *s = sac_read(file, &nerr);
     assert(nerr == 0);
@@ -20,7 +21,7 @@ check_sac_file_even(char *file) {
     assert(strcmp(s->h->kstnm,  "sta     ") == 0);
     assert(strcmp(s->h->kcmpnm, "Q       ") == 0);
     assert(strcmp(s->h->kevnm, "FUNCGEN: IMPULSE") == 0);
-    for(int i = SAC_STA; i <= SAC_INST; i++) {
+    for(i = SAC_STA; i <= SAC_INST; i++) {
         if(i == SAC_STA || i == SAC_CHA ||
            i == SAC_EVENT || i == SAC_EVENT2) {
             continue;
@@ -29,7 +30,7 @@ check_sac_file_even(char *file) {
         sac_get_string(s, i, tmp, sizeof(tmp));
         assert(strcmp(tmp, "-12345  ") == 0);
     }
-    for(int i = SAC_DELTA; i <= SAC_UN70; i++) {
+    for(i = SAC_DELTA; i <= SAC_UN70; i++) {
         float v = 0.0;
         sac_get_float(s, i, &v);
         if(i == SAC_DELTA) { assert(v == 1.0); }
@@ -40,7 +41,7 @@ check_sac_file_even(char *file) {
         else if(i == SAC_DEPMEN) { assert(v == 0.009999999776482582); }
         else { assert(v == SAC_FLOAT_UNDEFINED); }
     }
-    for(int i = SAC_YEAR; i <= SAC_UN110; i++) {
+    for(i = SAC_YEAR; i <= SAC_UN110; i++) {
         int v = 0;
         sac_get_int(s, i, &v);
         if(i == SAC_HDR) { assert(v == 6); }
@@ -57,13 +58,14 @@ check_sac_file_even(char *file) {
 
 void
 check_sac_file_uneven(char *file) {
+    int i = 0;
     int nerr = 0;
     sac *s = sac_read(file, &nerr);
     assert(nerr == 0);
     assert(strcmp(s->h->kstnm,  "sta     ") == 0);
     assert(strcmp(s->h->kcmpnm, "Q       ") == 0);
 
-    for(int i = SAC_STA; i <= SAC_INST; i++) {
+    for(i = SAC_STA; i <= SAC_INST; i++) {
         if(i == SAC_STA || i == SAC_CHA){
             continue;
         }
@@ -71,7 +73,7 @@ check_sac_file_uneven(char *file) {
         sac_get_string(s, i, tmp, sizeof(tmp));
         assert(strcmp(tmp, "-12345  ") == 0);
     }
-    for(int i = SAC_DELTA; i <= SAC_UN70; i++) {
+    for(i = SAC_DELTA; i <= SAC_UN70; i++) {
         float v = 0.0;
         sac_get_float(s, i, &v);
         if(i == SAC_DEPMIN) { assert(v == 0.0); }
@@ -81,7 +83,7 @@ check_sac_file_uneven(char *file) {
         else if(i == SAC_DEPMEN) { assert(v == 0.080867879092693329); }
         else { assert(v == SAC_FLOAT_UNDEFINED); }
     }
-    for(int i = SAC_YEAR; i <= SAC_UN110; i++) {
+    for(i = SAC_YEAR; i <= SAC_UN110; i++) {
         int v = 0;
         sac_get_int(s, i, &v);
         if(i == SAC_HDR) { assert(v == 6); }
@@ -98,6 +100,7 @@ check_sac_file_uneven(char *file) {
 
 void
 check_sac_file_spec(char *file) {
+    int i = 0;
     int nerr = 0;
     sac *s = sac_read(file, &nerr);
     assert(nerr == 0);
@@ -111,7 +114,7 @@ check_sac_file_spec(char *file) {
     assert(strcmp(s->h->ko,     "HOLE    ") == 0);
     assert(strcmp(s->h->kevnm,  "K8108838        ") == 0);
 
-    for(int i = SAC_STA; i <= SAC_INST; i++) {
+    for(i = SAC_STA; i <= SAC_INST; i++) {
         if(i == SAC_STA || i == SAC_CHA || i == SAC_EVENT || i == SAC_EVENT2 ||
            i == SAC_KO || i == SAC_KA || i == SAC_KT0 || i == SAC_KT2 ||
            i == SAC_KUSER1 || i == SAC_KUSER0 ){
@@ -121,7 +124,7 @@ check_sac_file_spec(char *file) {
         sac_get_string(s, i, tmp, sizeof(tmp));
         assert(strcmp(tmp, "-12345  ") == 0);
     }
-    for(int i = SAC_DELTA; i <= SAC_UN70; i++) {
+    for(i = SAC_DELTA; i <= SAC_UN70; i++) {
         float v = 0.0;
 
         sac_get_float(s, i, &v);
@@ -152,7 +155,7 @@ check_sac_file_spec(char *file) {
         else if(i == SAC_O)      { assert(v == 0.0); }
         else                     { assert(v == SAC_FLOAT_UNDEFINED); }
     }
-    for(int i = SAC_YEAR; i <= SAC_UN110; i++) {
+    for(i = SAC_YEAR; i <= SAC_UN110; i++) {
         int v = 0;
         sac_get_int(s, i, &v);
         if(i == SAC_HDR) { assert(v == 6); }
@@ -183,6 +186,7 @@ check_sac_file_spec(char *file) {
 
 int
 main() {
+    int i = 0;
     check_sac_file_even("t/test_io_small.sac");
     check_sac_file_even("t/test_io_big.sac");
     check_sac_file_uneven("t/test_uneven_small.sac");
@@ -204,7 +208,7 @@ main() {
     sac_set_float(s, SAC_CMPAZ, SAC_FLOAT_UNDEFINED);
     sac_get_string(s, SAC_STCMP, tmp, sizeof(tmp));
     printf("%s\n", tmp);
-    for(int i = -360*2; i <= 360.0; i += 90) {
+    for(i = -360*2; i <= 360.0; i += 90) {
         sac_set_float(s, SAC_CMPINC, 90.0);
         sac_set_float(s, SAC_CMPAZ, (float)i);
         sac_get_string(s, SAC_STCMP, tmp, sizeof(tmp));
