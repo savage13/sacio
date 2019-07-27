@@ -7,9 +7,10 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 #include <sacio/timespec.h>
-
+#include "strip.h"
 #include "time64.h"
 
 
@@ -176,8 +177,9 @@ timespec64_from_yjhmsf(int64_t year, int jday, int hour, int min, int sec, int64
  */
 int
 timespec64_parse(const char *buf, timespec64 *t) {
+    size_t i = 0;
     char *p = NULL;
-    for(size_t i = 0; i < sizeof(fmts) / sizeof(char *); i++) {
+    for(i = 0; i < sizeof(fmts) / sizeof(char *); i++) {
         if((p = strptime64t(buf, fmts[i], t)) && *p == 0) {
             return 1;
         }
@@ -504,6 +506,7 @@ strptime64t(const char *buf, const char *fmt, timespec64 *t) {
  */
 static int64_t
 powi(int64_t a, int64_t b) {
+    int i = 0;
     int64_t v = 1;
     if(b == 0) {
         return 1;
@@ -511,7 +514,7 @@ powi(int64_t a, int64_t b) {
     if(b < 0) {
         return 1;
     }
-    for(int i = 0; i < labs(b); i++) {
+    for(i = 0; i < labs(b); i++) {
         v *= a;
     }
     return v;
@@ -579,13 +582,13 @@ strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
             dst[i++] = c;
             break;
         case 'Y':
-            snprintf(dst+i, n-i, "%04lld", tm->tm_year + 1900);
+            snprintf(dst+i, n-i, "%04" PRId64, tm->tm_year + 1900);
             break;
         case 'f':
             if(len == 0) {
-                snprintf(dst+i, n-i, "%09lld", ns);
+                snprintf(dst+i, n-i, "%09" PRId64, ns);
             } else {
-                snprintf(dst+i, n-i, "%0*lld", len, ns/powi(10, 9-len));
+                snprintf(dst+i, n-i, "%0*" PRId64, len, ns/powi(10, 9-len));
             }
             break;
         case 'j':
@@ -705,6 +708,7 @@ duration_init(duration *d) {
  */
 int
 duration_parse(char *in, duration *d) {
+    size_t i = 0;
     int sign = 1;
     char *p = in;
     int n = 0;
@@ -749,7 +753,7 @@ duration_parse(char *in, duration *d) {
 
     size_t m = strlen(p);
     size_t nkeys =  sizeof(key)/sizeof(char*);
-    for(size_t i = 0; i < nkeys; i++) {
+    for(i = 0; i < nkeys; i++) {
         if(strncasecmp(p, key[i], m) == 0) {
             d->n = sign * n;
             d->type = T[i];
