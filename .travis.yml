@@ -1,4 +1,6 @@
 language: c
 
+script: ./build.sh
+
 os:
   - linux
