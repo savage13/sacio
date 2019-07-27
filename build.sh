@@ -1,4 +1,5 @@
 #!/bin/bash
 set -ev
-touch aclocal.m4
+touch configure.ac aclocal.m4 configure Makefile.am Makefile.in
+ls -lrt
 ./configure && make && make check
