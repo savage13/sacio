@@ -29,8 +29,8 @@ t_compat_SOURCES = t/compat.c
 
 t_iotest_CFLAGS = -Iinclude
 t_compat_CFLAGS = -Iinclude
-t_iotest_LDADD = libsacio_bsd.a
-t_compat_LDADD = libsacio_bsd.a
+t_iotest_LDADD = libsacio_bsd.a -lm
+t_compat_LDADD = libsacio_bsd.a -lm
 
 CLEANFILES = t/test*.tmp
 
