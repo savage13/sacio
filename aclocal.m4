@@ -1,4 +1,4 @@
-# generated automatically by aclocal 1.16.1 -*- Autoconf -*-
+# generated automatically by aclocal 1.16.1 -*- Autoconf -*- 
 
 # Copyright (C) 1996-2018 Free Software Foundation, Inc.
 
