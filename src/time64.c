@@ -873,10 +873,11 @@ char *ctime64( const Time64_T* time ) {
 
 void
 yd_from_ymd(struct TM *tm) {
+    int i = 0;
     const int year = tm->tm_year + 1900;
 		const int *dim = days_in_month[IS_LEAP(year)];
     tm->tm_yday = tm->tm_mday - 1;
-    for (int i = 0; i < tm->tm_mon; i++) {
+    for (i = 0; i < tm->tm_mon; i++) {
 				tm->tm_yday += dim[i];
     }
 }

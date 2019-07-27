@@ -553,7 +553,6 @@ powi(int64_t a, int64_t b) {
 size_t
 strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
     int len = 0;
-    int zero = 0;
     size_t i = 0;
     unsigned char c = 0;
 
@@ -562,7 +561,6 @@ strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
     }
     memset(dst, 0, n);
     while((c = *fmt) != 0) {
-        zero = 0;
         len = 0;
         // Regular Character
         if((c = *fmt++) != '%') {
@@ -570,9 +568,6 @@ strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
             continue;
         }
         // Format Character
-        if(*fmt == '0') {
-            zero = 1;
-        }
         while(*fmt >= '0' && *fmt <= '9') {
             len = (len * 10) + *fmt - '0';
             fmt++;

@@ -7,6 +7,7 @@
 
 #include <sacio/sacio.h>
 
+#include "strip.h"
 #include "defs.h"
 
 #define ERROR_SAC_FILE_NOT_EVENLY_SPACED     801 /**< @brief sac file not evenly spaced */
@@ -890,6 +891,7 @@ setkhv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
  */
 void
 setihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    size_t i = 0;
     size_t n = 0;
     sac *s = NULL;
     struct hid *h = NULL;
@@ -910,7 +912,7 @@ setihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
     v[8] = 0;
     n = (kvalue_s < 8) ? kvalue_s : 8;
     memcpy(v, kvalue, n);
-    for(size_t i = 0; i < sizeof(enum_values)/sizeof(char *); i++) {
+    for(i = 0; i < sizeof(enum_values)/sizeof(char *); i++) {
         if(strcasecmp(v, enum_values[i]) == 0) {
             sac_set_int(s, h->id, i+1);
             return;
