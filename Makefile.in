@@ -1229,6 +1229,8 @@ distclean-local:
 src/header_map.c: src/header_map.txt
 	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
 
+test: check
+
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

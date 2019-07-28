@@ -44,3 +44,5 @@ distclean-local:
 
 src/header_map.c: src/header_map.txt
 	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
+
+test: check
