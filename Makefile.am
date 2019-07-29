@@ -2,7 +2,7 @@
 # Do not create dependencies while compiling
 AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = License README.md
+EXTRA_DIST = License README.md t/*.sac
 
 AM_CFLAGS = -Wall -Wextra -Iinclude/
 
@@ -10,13 +10,14 @@ saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
 
 saciolib_LIBRARIES = libsacio_bsd.a
-sacioinc_HEADERS   = include/sacio/sacio.h include/sacio/timespec.h
+sacioinc_HEADERS   = sacio/sacio.h sacio/timespec.h
 
-libsacio_bsd_a_SOURCES = src/sacio.c src/geodesic.c src/timespec.c \
-												 src/time64.c src/strip.c src/compat.c \
-												 src/header_map.c src/defs.h src/sacio.h src/time64.h \
-												 src/timespec.h src/geodesic.h src/strip.h \
-												 src/time64_limits.h
+libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
+												 time64.c strip.c compat.c \
+												 header_map.c defs.h \
+												 time64.h geodesic.h strip.h \
+												 time64_limits.h \
+												 sacio/sacio.h sacio/timespec.h
 
 # TESTS
 
@@ -38,7 +39,6 @@ CLEANFILES = t/test*.tmp
 doc:
 	doxygen docs/Doxyfile
 
-
 distclean-local:
 	-rm -rf autom4te.cache
 
@@ -46,3 +46,13 @@ src/header_map.c: src/header_map.txt
 	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
 
 test: check
+
+disttest:
+	make clean
+	make
+	make test
+	tar -zxf $(PACKAGE)-$(VERSION).tar.gz
+	cd $(PACKAGE)-$(VERSION)
+	./configure
+	make
+	make test

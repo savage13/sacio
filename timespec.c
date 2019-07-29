@@ -611,7 +611,7 @@ strftime64(char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns) {
             strftime64(dst+i, n-i, "%H:%M:%S", tm, ns);
             break;
         case 'b':
-            i = strlcat(dst, months_abbrev[tm->tm_mon], n);
+            i = sacio_strlcat(dst, months_abbrev[tm->tm_mon], n);
             break;
         }
         i = strlen(dst);

@@ -8,8 +8,6 @@ AC_PROG_CC
 AM_PROG_AR
 AC_PROG_RANLIB
 
-AC_CHECK_FUNCS([strlcpy strlcat])
-
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 

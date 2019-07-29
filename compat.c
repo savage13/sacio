@@ -50,13 +50,13 @@ void
 fstrcpy(char *dst, int ndst, char *src, int nsrc) {
     size_t n = 0;
     if(nsrc <= 0) { // Likely C Path
-        strlcpy(dst, src, ndst);
+        sacio_strlcpy(dst, src, ndst);
     } else { // Likely Fortran Path
         n = (nsrc < ndst) ? nsrc : ndst - 1;
         memset(dst, 0, sizeof(ndst));
         memcpy(dst, src, n);
     }
-    rstrip(dst);
+    sacio_rstrip(dst);
 }
 
 /**

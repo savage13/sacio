@@ -4,8 +4,9 @@
 
 #include "strip.h"
 
+
 char *
-rstrip(char *s) {
+sacio_rstrip(char *s) {
     char *back;
     if (*s == 0) {
         return s;
@@ -19,7 +20,7 @@ rstrip(char *s) {
 }
 
 char *
-lstrip(char *s) {
+sacio_lstrip(char *s) {
     if (*s == 0) {
         return s;
     }
@@ -29,13 +30,8 @@ lstrip(char *s) {
     return s;
 }
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifndef HAVE_STRLCPY
 size_t
-strlcpy(char *dst, const char *src, size_t size) {
+sacio_strlcpy(char *dst, const char *src, size_t size) {
     size_t length, copy;
 
     length = strlen(src);
@@ -46,11 +42,8 @@ strlcpy(char *dst, const char *src, size_t size) {
     }
     return length;
 }
-#endif
-
-#ifndef HAVE_STRLCAT
 size_t
-strlcat(char *dst, const char *src, size_t size) {
+sacio_strlcat(char *dst, const char *src, size_t size) {
   size_t    srclen;         /* Length of source string */
   size_t    dstlen;         /* Length of destination string */
 
@@ -74,5 +67,5 @@ strlcat(char *dst, const char *src, size_t size) {
 
   return (dstlen + srclen);
 }
-#endif
+
 

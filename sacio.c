@@ -1415,7 +1415,7 @@ sac_set_string(sac *s, int hdr, char *v) {
     if(!(k = khdr(s, hdr-SAC_STA+1))) {
         return 0;
     }
-    strlcpy(k, v, (hdr == SAC_EVENT) ? 17 : 9);
+    sacio_strlcpy(k, v, (hdr == SAC_EVENT) ? 17 : 9);
     return 1;
 }
 
@@ -1474,7 +1474,7 @@ sac_get_string(sac *s, int hdr, char *v, size_t n) {
         if(!(k = khdr(s, hdr-SAC_STA+1))) {
             return 0;
         }
-        strlcpy(v, k, n);
+        sacio_strlcpy(v, k, n);
     } else {
         switch(hdr) {
         case SAC_DATE: {
@@ -1488,7 +1488,7 @@ sac_get_string(sac *s, int hdr, char *v, size_t n) {
             strftime64t(v, n, "%H:%M:%S.%03f", &t);
         } break;
         case SAC_FILENAME:
-            strlcpy(v, s->m->filename, n);
+            sacio_strlcpy(v, s->m->filename, n);
             break;
         case SAC_AMARKER: sac_timing_mark(s, SAC_A, SAC_KA, v, n); break;
         case SAC_OMARKER: sac_timing_mark(s, SAC_O, SAC_KO, v, n); break;
@@ -1504,7 +1504,7 @@ sac_get_string(sac *s, int hdr, char *v, size_t n) {
         case SAC_T9MARKER: sac_timing_mark(s, SAC_T9, SAC_KT9, v, n); break;
         case SAC_STCMP:
             if(!sac_hdr_defined(s, SAC_STA, NULL)) {
-                strlcpy(v, "UNDEFINED", n);
+                sacio_strlcpy(v, "UNDEFINED", n);
             }
             if(sac_hdr_defined(s, SAC_CHA, NULL)) {
                 sac_fmt(v, n, "%S %C", s);
@@ -1804,9 +1804,9 @@ size_t
 sac_strlcat(char *dst, char *src, size_t n) {
     char tmp[20] = {0};
     if(strcmp(src, SAC_CHAR_UNDEFINED) != 0) {
-        strlcpy(tmp, src, sizeof(tmp));
-        rstrip(tmp);
-        return strlcat(dst, tmp, n);
+        sacio_strlcpy(tmp, src, sizeof(tmp));
+        sacio_rstrip(tmp);
+        return sacio_strlcat(dst, tmp, n);
     }
     return strlen(dst);
 }
@@ -1835,7 +1835,7 @@ sac_timelcat(char *dst, sac *s, int hdr, size_t n) {
     timespec64 t = {0,0};
     if(sac_get_time(s, hdr, &t)) {
         strftime64t(tmp, sizeof(tmp), "%FT%T.%3f", &t);
-        return strlcat(dst, tmp, n);
+        return sacio_strlcat(dst, tmp, n);
     }
     return strlen(dst);
 }
@@ -1864,7 +1864,7 @@ sac_floatlcat(char *dst, sac *s, int hdr, size_t n) {
     if(v != SAC_FLOAT_UNDEFINED) {
         snprintf(tmp, sizeof(dst), "%g", v);
     }
-    return strlcat(dst, tmp, n);
+    return sacio_strlcat(dst, tmp, n);
 }
 
 

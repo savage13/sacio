@@ -139,12 +139,11 @@ am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
 libsacio_bsd_a_AR = $(AR) $(ARFLAGS)
 libsacio_bsd_a_LIBADD =
-am__dirstamp = $(am__leading_dot)dirstamp
-am_libsacio_bsd_a_OBJECTS = src/sacio.$(OBJEXT) src/geodesic.$(OBJEXT) \
-	src/timespec.$(OBJEXT) src/time64.$(OBJEXT) \
-	src/strip.$(OBJEXT) src/compat.$(OBJEXT) \
-	src/header_map.$(OBJEXT)
+am_libsacio_bsd_a_OBJECTS = sacio.$(OBJEXT) geodesic.$(OBJEXT) \
+	timespec.$(OBJEXT) time64.$(OBJEXT) strip.$(OBJEXT) \
+	compat.$(OBJEXT) header_map.$(OBJEXT)
 libsacio_bsd_a_OBJECTS = $(am_libsacio_bsd_a_OBJECTS)
+am__dirstamp = $(am__leading_dot)dirstamp
 am_t_compat_OBJECTS = t/compat-compat.$(OBJEXT)
 t_compat_OBJECTS = $(am_t_compat_OBJECTS)
 t_compat_DEPENDENCIES = libsacio_bsd.a
@@ -503,17 +502,18 @@ top_srcdir = @top_srcdir@
 
 # Do not create dependencies while compiling
 AUTOMAKE_OPTIONS = no-dependencies
-EXTRA_DIST = License README.md
+EXTRA_DIST = License README.md t/*.sac
 AM_CFLAGS = -Wall -Wextra -Iinclude/
 saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
 saciolib_LIBRARIES = libsacio_bsd.a
-sacioinc_HEADERS = include/sacio/sacio.h include/sacio/timespec.h
-libsacio_bsd_a_SOURCES = src/sacio.c src/geodesic.c src/timespec.c \
-												 src/time64.c src/strip.c src/compat.c \
-												 src/header_map.c src/defs.h src/sacio.h src/time64.h \
-												 src/timespec.h src/geodesic.h src/strip.h \
-												 src/time64_limits.h
+sacioinc_HEADERS = sacio/sacio.h sacio/timespec.h
+libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
+												 time64.c strip.c compat.c \
+												 header_map.c defs.h \
+												 time64.h geodesic.h strip.h \
+												 time64_limits.h \
+												 sacio/sacio.h sacio/timespec.h
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
@@ -609,16 +609,6 @@ uninstall-saciolibLIBRARIES:
 
 clean-saciolibLIBRARIES:
 	-test -z "$(saciolib_LIBRARIES)" || rm -f $(saciolib_LIBRARIES)
-src/$(am__dirstamp):
-	@$(MKDIR_P) src
-	@: > src/$(am__dirstamp)
-src/sacio.$(OBJEXT): src/$(am__dirstamp)
-src/geodesic.$(OBJEXT): src/$(am__dirstamp)
-src/timespec.$(OBJEXT): src/$(am__dirstamp)
-src/time64.$(OBJEXT): src/$(am__dirstamp)
-src/strip.$(OBJEXT): src/$(am__dirstamp)
-src/compat.$(OBJEXT): src/$(am__dirstamp)
-src/header_map.$(OBJEXT): src/$(am__dirstamp)
 
 libsacio_bsd.a: $(libsacio_bsd_a_OBJECTS) $(libsacio_bsd_a_DEPENDENCIES) $(EXTRA_libsacio_bsd_a_DEPENDENCIES) 
 	$(AM_V_at)-rm -f libsacio_bsd.a
@@ -640,7 +630,6 @@ t/iotest$(EXEEXT): $(t_iotest_OBJECTS) $(t_iotest_DEPENDENCIES) $(EXTRA_t_iotest
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f src/*.$(OBJEXT)
 	-rm -f t/*.$(OBJEXT)
 
 distclean-compile:
@@ -1119,7 +1108,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f src/$(am__dirstamp)
 	-rm -f t/$(am__dirstamp)
 
 maintainer-clean-generic:
@@ -1230,6 +1218,16 @@ src/header_map.c: src/header_map.txt
 	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
 
 test: check
+
+disttest:
+	make clean
+	make
+	make test
+	tar -zxf $(PACKAGE)-$(VERSION).tar.gz
+	cd $(PACKAGE)-$(VERSION)
+	./configure
+	make
+	make test
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

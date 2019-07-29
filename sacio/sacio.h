@@ -451,9 +451,6 @@ void  sac_extrema(sac *s);
 /** @brief Get the number of components from a sac string */
 int   sac_comps(sac * s);
 
-/** @brief Remove trailing whitespace from a C string */
-char *rstrip(char *s);
-
 /** @brief Get a float value from a sac object */
 int sac_get_float(sac *s, int hdr, float *v);
 /** @brief SEt a float value from a sac object */
@@ -872,3 +869,4 @@ static struct sac_hdr NullSacHeader = {
 
 
 #endif /* __SACIO_H__ */
+
