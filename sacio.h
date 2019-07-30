@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 
-#include <sacio/timespec.h>
+#include "timespec.h"
 
 /** \cond NO_DOCS */
 #define SAC_STRING_LENGTH   -1
@@ -679,7 +679,7 @@ enum SacHeaderTypes {
 /** \cond NO_DOCS */
 /** @brief Convert a keyword to a header ID*/
 struct hid * sac_keyword_to_header(register const char *str,
-                                   register size_t len);
+                                   register unsigned int len);
 /** \endcond */
 
 #define SAC_KSTNM  SAC_STA   /**< @brief Alias for Station */

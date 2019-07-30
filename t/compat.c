@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <sacio/sacio.h>
+#include "sacio.h"
 
 #define MAX 2000
 int

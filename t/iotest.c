@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include <sacio/sacio.h>
+#include "sacio.h"
 
 void
 check_sac_file_even(char *file) {

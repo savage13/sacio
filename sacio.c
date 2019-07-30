@@ -12,7 +12,7 @@
 /** @cond NO_DOCS */
 #define SAC_NULL_HEADER_REQUIRED /**< @private Define a fully NULL sac header */
 /** @endcond */
-#include <sacio/sacio.h>
+#include <sacio.h>
 
 #include "time64.h"
 #include "strip.h"

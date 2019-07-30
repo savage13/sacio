@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <inttypes.h>
 
-#include <sacio/timespec.h>
+#include "timespec.h"
 #include "strip.h"
 #include "time64.h"
 

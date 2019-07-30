@@ -10,14 +10,14 @@ saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
 
 saciolib_LIBRARIES = libsacio_bsd.a
-sacioinc_HEADERS   = sacio/sacio.h sacio/timespec.h
+sacioinc_HEADERS   = sacio.h timespec.h
 
 libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 												 time64.c strip.c compat.c \
 												 header_map.c defs.h \
 												 time64.h geodesic.h strip.h \
 												 time64_limits.h \
-												 sacio/sacio.h sacio/timespec.h
+												 sacio.h timespec.h
 
 # TESTS
 
@@ -42,7 +42,7 @@ doc:
 distclean-local:
 	-rm -rf autom4te.cache
 
-src/header_map.c: src/header_map.txt
+header_map.c: header_map.txt
 	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
 
 test: check

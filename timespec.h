@@ -2,6 +2,7 @@
 #ifndef _TIMESPEC_H_
 #define _TIMESPEC_H_
 
+#include <stdint.h>
 #include <time.h>
 //#include "time64.h"
 

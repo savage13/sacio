@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <sacio/sacio.h>
+#include "sacio.h"
 
 #include "strip.h"
 #include "defs.h"
