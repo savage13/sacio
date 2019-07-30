@@ -502,7 +502,7 @@ top_srcdir = @top_srcdir@
 
 # Do not create dependencies while compiling
 AUTOMAKE_OPTIONS = no-dependencies
-EXTRA_DIST = License README.md t/*.sac
+EXTRA_DIST = License README.md t config docs
 AM_CFLAGS = -Wall -Wextra -Iinclude/
 saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
@@ -513,7 +513,8 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 												 header_map.c defs.h \
 												 time64.h geodesic.h strip.h \
 												 time64_limits.h \
-												 sacio.h timespec.h
+												 sacio.h timespec.h \
+                         header_map.txt
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
@@ -1223,11 +1224,9 @@ disttest:
 	make clean
 	make
 	make test
+	make dist
 	tar -zxf $(PACKAGE)-$(VERSION).tar.gz
-	cd $(PACKAGE)-$(VERSION)
-	./configure
-	make
-	make test
+	cd $(PACKAGE)-$(VERSION) && ./configure && make && make test
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

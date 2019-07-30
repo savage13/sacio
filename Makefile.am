@@ -2,7 +2,7 @@
 # Do not create dependencies while compiling
 AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = License README.md t/*.sac
+EXTRA_DIST = License README.md t config docs
 
 AM_CFLAGS = -Wall -Wextra -Iinclude/
 
@@ -17,7 +17,8 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 												 header_map.c defs.h \
 												 time64.h geodesic.h strip.h \
 												 time64_limits.h \
-												 sacio.h timespec.h
+												 sacio.h timespec.h \
+                         header_map.txt
 
 # TESTS
 
@@ -51,8 +52,6 @@ disttest:
 	make clean
 	make
 	make test
+	make dist
 	tar -zxf $(PACKAGE)-$(VERSION).tar.gz
-	cd $(PACKAGE)-$(VERSION)
-	./configure
-	make
-	make test
+	cd $(PACKAGE)-$(VERSION) && ./configure && make && make test
