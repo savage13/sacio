@@ -1,6 +1,8 @@
 libsacio Documentation
 ======================
 
+[![Build Status](https://travis-ci.com/savage13/sacio.svg?branch=master)](https://travis-ci.com/savage13/sacio)
+
 Overview
 --------
 
