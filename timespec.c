@@ -703,6 +703,19 @@ duration_init(duration *d) {
  *
  * @return 1 on success, 0 in failure
  *
+ * Format for a duration is `[-+]###unit` where:
+ *    - `###` is a integer
+ *    - `unit` is one of the following
+ *      - s, sec, secs, seconds
+ *      - m, min, mins, minutes
+ *      - h, hrs, hours
+ *      - d, days
+ *      - w, wk, wks, weeks
+ *      - mon, months
+ *      - y, yr, yrs, years
+ *      - dec, decades
+ *      - cent, centuries
+ *    - durations are allowed to be positive or negative
  */
 int
 duration_parse(char *in, duration *d) {

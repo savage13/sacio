@@ -238,8 +238,23 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 in failure </dd></dl>
-<p>Check for a starting '+' sign </p>
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 in failure</dd></dl>
+<p>Format for a duration is <code>[-+]###unit</code> where:</p><ul>
+<li><code>###</code> is a integer</li>
+<li><code>unit</code> is one of the following<ul>
+<li>s, sec, secs, seconds</li>
+<li>m, min, mins, minutes</li>
+<li>h, hrs, hours</li>
+<li>d, days</li>
+<li>w, wk, wks, weeks</li>
+<li>mon, months</li>
+<li>y, yr, yrs, years</li>
+<li>dec, decades</li>
+<li>cent, centuries</li>
+</ul>
+</li>
+<li>durations are allowed to be positive or negative </li>
+</ul>
 
 </div>
 </div>
