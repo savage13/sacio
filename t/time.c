@@ -199,56 +199,56 @@ main() {
     p = strptime64t("1970-1T00:00:01.1", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 100000000);
 
     p = strptime64t("1970-1T00:00:01.12", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 120000000);
 
     p = strptime64t("1970-1T00:00:01.123", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 123000000);
 
     p = strptime64t("1970-1T00:00:01.01", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 10000000);
 
     p = strptime64t("1970-1T00:00:01.001", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 1000000);
 
     p = strptime64t("1970-1T00:00:01.0001", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 100000);
 
     p = strptime64t("1970-1T00:00:01.00000001", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 10);
 
     p = strptime64t("1970-1T00:00:01.000000001", "%Y-%jT%H:%M:%S.%f", &t);
     assert(p != NULL);
     assert(*p == 0);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 1);
     assert(t.tv_nsec == 1);
 
@@ -288,8 +288,8 @@ main() {
     t.tv_sec = 0;
     t.tv_nsec = 0;
     p = strptime64t("1970 2 hi there end of times", "%Y %j", &t);
-    printf("%p\n", p);
-    printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
+    //printf("%p\n", p);
+    //printf("%lld %lld\n", t.tv_sec, t.tv_nsec);
     assert(t.tv_sec == 24*60*60);
     assert(t.tv_nsec == 0);
     assert(strcmp(p, " hi there end of times") == 0);
@@ -351,7 +351,86 @@ main() {
         assert(t.tv_sec == ys[i].sec);
         assert(t.tv_nsec == 0);
     }
-    
+
+    timespec64 a = { 1,0};
+    timespec64 b = {-1,0};
+    assert(timespec64_cmp(&a,&b) > 0);
+    assert(timespec64_cmp(&a,&a) == 0);
+    assert(timespec64_cmp(&b,&a) < 0);
+
+    a.tv_sec = 1;
+    a.tv_nsec = 2;
+    b.tv_sec = a.tv_sec;
+    a.tv_nsec = 1;
+    assert(timespec64_cmp(&a,&b) > 0);
+    assert(timespec64_cmp(&a,&a) == 0);
+    assert(timespec64_cmp(&b,&a) < 0);
+
+    t = timespec64_from_yjhmsf(1970, 1, 0, 0, -1, 0);
+    assert(t.tv_sec == -1);
+    assert(t.tv_nsec == 0);
+
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1969 365 12 31 23 59 59 000 000000 000000000 000000000 DEC 1969-12-31 23:59:59") == 0);
+
+    t = timespec64_from_yjhmsf(1970, 1, 0, 0, 0, -1);
+    assert(t.tv_sec == -1);
+    assert(t.tv_nsec == 999999999);
+
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1969 365 12 31 23 59 59 999 999999 999999999 999999999 DEC 1969-12-31 23:59:59") == 0);
+
+    t.tv_sec = -62135596800;
+    t.tv_nsec = 0;
+
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "0001 001 01 01 00 00 00 000 000000 000000000 000000000 JAN 0001-01-01 00:00:00") == 0);
+
+    strptime64t("1996-02-29", "%Y-%m-%d", &t);
+    assert(t.tv_sec == 825552000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1996 060 02 29 00 00 00 000 000000 000000000 000000000 FEB 1996-02-29 00:00:00") == 0);
+
+    strptime64t("1995-02-29", "%Y-%m-%d", &t);
+    assert(t.tv_sec == 794016000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1995 060 03 01 00 00 00 000 000000 000000000 000000000 MAR 1995-03-01 00:00:00") == 0);
+
+    strptime64t("1995-03-01", "%Y-%m-%d", &t);
+    assert(t.tv_sec == 794016000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T %%", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1995 060 03 01 00 00 00 000 000000 000000000 000000000 MAR 1995-03-01 00:00:00 %") == 0);
+
+    timespec64_parse("1995-03-01", &t);
+    assert(t.tv_sec == 794016000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T %%", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1995 060 03 01 00 00 00 000 000000 000000000 000000000 MAR 1995-03-01 00:00:00 %") == 0);
+
+    timespec64_parse("1995-02-29", &t);
+    assert(t.tv_sec == 794016000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T %%", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1995 060 03 01 00 00 00 000 000000 000000000 000000000 MAR 1995-03-01 00:00:00 %") == 0);
+
+    timespec64_parse("1996-02-29", &t);
+    assert(t.tv_sec == 825552000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1996 060 02 29 00 00 00 000 000000 000000000 000000000 FEB 1996-02-29 00:00:00") == 0);
+
+    timespec64_parse("199660000", &t);
+    assert(t.tv_sec == 825552000);
+    strftime64t(dst, sizeof(dst), "%Y %j %m %d %H %M %S %3f %6f %9f %f %b %F %T", &t);
+    //printf("%s\n", dst);
+    assert(strcmp(dst, "1996 060 02 29 00 00 00 000 000000 000000000 000000000 FEB 1996-02-29 00:00:00") == 0);
+
 
     return 0;
 }
