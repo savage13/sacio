@@ -9,6 +9,9 @@
 #include <ctype.h>
 #include <inttypes.h>
 
+#include <errno.h>
+#include <limits.h>
+
 #include "timespec.h"
 #include "strip.h"
 #include "time64.h"
@@ -704,23 +707,18 @@ duration_init(duration *d) {
 int
 duration_parse(char *in, duration *d) {
     size_t i = 0;
-    int sign = 1;
     char *p = in;
-    int n = 0;
+    int64_t n = 0;
+    char *endptr = NULL;
     if(!d) {
         return 0;
     }
-    /// Check for a starting '+' sign
-    if(*p != '+' && *p != '-') {
+    n = strtoll(p, &endptr, 10);
+    if(endptr == p ||
+       ((n == LLONG_MIN || n == LLONG_MAX) && errno == ERANGE)) {
         return 0;
     }
-    sign = (*p == '+') ? +1 : -1;
-    p++;
-    // Read in Duration number
-    while(p && isdigit(*p)) {
-        n = 10 * n + (*p - '0');
-        p++;
-    }
+    p = endptr;
     if(!p) {
         return 0;
     }
@@ -750,7 +748,7 @@ duration_parse(char *in, duration *d) {
     size_t nkeys =  sizeof(key)/sizeof(char*);
     for(i = 0; i < nkeys; i++) {
         if(strncasecmp(p, key[i], m) == 0) {
-            d->n = sign * n;
+            d->n = n;
             d->type = T[i];
             return 1;
         }

@@ -87,8 +87,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT)
-check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT)
+TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT)
+check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -149,6 +149,11 @@ t_compat_OBJECTS = $(am_t_compat_OBJECTS)
 t_compat_DEPENDENCIES = libsacio_bsd.a
 t_compat_LINK = $(CCLD) $(t_compat_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_t_dur_OBJECTS = t/dur-dur.$(OBJEXT)
+t_dur_OBJECTS = $(am_t_dur_OBJECTS)
+t_dur_DEPENDENCIES = libsacio_bsd.a
+t_dur_LINK = $(CCLD) $(t_dur_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am_t_iotest_OBJECTS = t/iotest-iotest.$(OBJEXT)
 t_iotest_OBJECTS = $(am_t_iotest_OBJECTS)
 t_iotest_DEPENDENCIES = libsacio_bsd.a
@@ -186,9 +191,9 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_iotest_SOURCES)
+	$(t_dur_SOURCES) $(t_iotest_SOURCES)
 DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_iotest_SOURCES)
+	$(t_dur_SOURCES) $(t_iotest_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -518,10 +523,13 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
+t_dur_SOURCES = t/dur.c
 t_iotest_CFLAGS = -Iinclude
 t_compat_CFLAGS = -Iinclude
+t_dur_CFLAGS = -Iinclude
 t_iotest_LDADD = libsacio_bsd.a -lm
 t_compat_LDADD = libsacio_bsd.a -lm
+t_dur_LDADD = libsacio_bsd.a -lm
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -623,6 +631,11 @@ t/compat-compat.$(OBJEXT): t/$(am__dirstamp)
 t/compat$(EXEEXT): $(t_compat_OBJECTS) $(t_compat_DEPENDENCIES) $(EXTRA_t_compat_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/compat$(EXEEXT)
 	$(AM_V_CCLD)$(t_compat_LINK) $(t_compat_OBJECTS) $(t_compat_LDADD) $(LIBS)
+t/dur-dur.$(OBJEXT): t/$(am__dirstamp)
+
+t/dur$(EXEEXT): $(t_dur_OBJECTS) $(t_dur_DEPENDENCIES) $(EXTRA_t_dur_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/dur$(EXEEXT)
+	$(AM_V_CCLD)$(t_dur_LINK) $(t_dur_OBJECTS) $(t_dur_LDADD) $(LIBS)
 t/iotest-iotest.$(OBJEXT): t/$(am__dirstamp)
 
 t/iotest$(EXEEXT): $(t_iotest_OBJECTS) $(t_iotest_DEPENDENCIES) $(EXTRA_t_iotest_DEPENDENCIES) t/$(am__dirstamp)
@@ -647,6 +660,12 @@ t/compat-compat.o: t/compat.c
 
 t/compat-compat.obj: t/compat.c
 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_compat_CFLAGS) $(CFLAGS) -c -o t/compat-compat.obj `if test -f 't/compat.c'; then $(CYGPATH_W) 't/compat.c'; else $(CYGPATH_W) '$(srcdir)/t/compat.c'; fi`
+
+t/dur-dur.o: t/dur.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dur_CFLAGS) $(CFLAGS) -c -o t/dur-dur.o `test -f 't/dur.c' || echo '$(srcdir)/'`t/dur.c
+
+t/dur-dur.obj: t/dur.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dur_CFLAGS) $(CFLAGS) -c -o t/dur-dur.obj `if test -f 't/dur.c'; then $(CYGPATH_W) 't/dur.c'; else $(CYGPATH_W) '$(srcdir)/t/dur.c'; fi`
 
 t/iotest-iotest.o: t/iotest.c
 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_iotest_CFLAGS) $(CFLAGS) -c -o t/iotest-iotest.o `test -f 't/iotest.c' || echo '$(srcdir)/'`t/iotest.c
@@ -885,6 +904,13 @@ t/iotest.log: t/iotest$(EXEEXT)
 t/compat.log: t/compat$(EXEEXT)
 	@p='t/compat$(EXEEXT)'; \
 	b='t/compat'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+t/dur.log: t/dur$(EXEEXT)
+	@p='t/dur$(EXEEXT)'; \
+	b='t/dur'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
