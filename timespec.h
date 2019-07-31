@@ -25,6 +25,8 @@ char * strptime64t(const char *buf, const char *fmt, timespec64 *t);
 
 timespec64 timespec64_from_yjhmsf(int64_t year, int jday,
                                   int hour, int min, int sec, int64_t ns);
+timespec64 timespec64_from_ymdhmsf(int64_t year, int month, int day,
+                                   int hour, int min, int sec, int64_t ns);
 
 /**
  * @brief High-precision, long duration time value

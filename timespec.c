@@ -156,12 +156,62 @@ timespec64
 timespec64_from_yjhmsf(int64_t year, int jday, int hour, int min, int sec, int64_t ns) {
     struct TM tm = {0};
     timespec64 t = {0,0};
+    while(ns < 0) {
+        ns += 1000000000;
+        sec -= 1;
+    }
+    while(ns >= 1000000000) {
+        ns -= 1000000000;
+        sec += 1;
+    }
+
     tm.tm_sec  = sec;
     tm.tm_min  = min;
     tm.tm_hour = hour;
     tm.tm_year = year - 1900;
     tm.tm_yday = jday - 1;
+
     ymd_from_yd(&tm);
+    t.tv_sec  = timegm64(&tm);
+    t.tv_nsec = ns;
+    return t;
+}
+
+/**
+ * @brief Crate a timespec64 value from Year, Month, Day, Hour, Minute, Second, Nanosecond
+ *
+ * @memberof timespec64
+ * @ingroup time
+ *
+ * @param year   Year
+ * @param jday   Month
+ * @param jday   Month Day
+ * @param hour   Hour
+ * @param min    Minute
+ * @param sec    Second
+ * @param ns     Nanosecond
+ *
+ * @return new timespec64 value
+ *
+ */
+timespec64
+timespec64_from_ymdhmsf(int64_t year, int month, int day, int hour, int min, int sec, int64_t ns) {
+    struct TM tm = {0};
+    timespec64 t = {0,0};
+    while(ns < 0) {
+        ns += 1000000000;
+        sec -= 1;
+    }
+    while(ns >= 1000000000) {
+        ns -= 1000000000;
+        sec += 1;
+    }
+    tm.tm_sec  = sec;
+    tm.tm_min  = min;
+    tm.tm_hour = hour;
+    tm.tm_year = year - 1900;
+    tm.tm_mon  = month - 1;
+    tm.tm_mday = day;
     t.tv_sec  = timegm64(&tm);
     t.tv_nsec = ns;
     return t;
@@ -455,7 +505,15 @@ strptime64(const char *buf, const char *fmt, struct TM *tm, int64_t *ns) {
         }
         if(set & YDAY_SET) {
             ymd_from_yd(tm);
+            set |= MON_SET;
+            set |= MDAY_SET;
         }
+        if(!(set & MON_SET) && !(set & MDAY_SET) && !(set & YDAY_SET)) {
+            // No Date Set
+            return NULL;
+        }
+    } else {
+        return NULL;
     }
     return b;
 }
