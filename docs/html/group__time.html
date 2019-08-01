@@ -119,6 +119,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gad177be50dbba74a92c7c64e390aaf3a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtimespec64.html">timespec64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#gad177be50dbba74a92c7c64e390aaf3a0">timespec64::timespec64_from_yjhmsf</a> (int64_t year, int jday, int hour, int min, int sec, int64_t ns)</td></tr>
 <tr class="memdesc:gad177be50dbba74a92c7c64e390aaf3a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crate a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> value from Year, Day of Year, Hour, Minute, Second, Nanosecond.  <a href="#gad177be50dbba74a92c7c64e390aaf3a0">More...</a><br /></td></tr>
 <tr class="separator:gad177be50dbba74a92c7c64e390aaf3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9ab66d38e97f85c3cc20002b488625e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtimespec64.html">timespec64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga9ab66d38e97f85c3cc20002b488625e8">timespec64::timespec64_from_ymdhmsf</a> (int64_t year, int month, int day, int hour, int min, int sec, int64_t ns)</td></tr>
+<tr class="memdesc:ga9ab66d38e97f85c3cc20002b488625e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crate a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> value from Year, Month, Day, Hour, Minute, Second, Nanosecond.  <a href="#ga9ab66d38e97f85c3cc20002b488625e8">More...</a><br /></td></tr>
+<tr class="separator:ga9ab66d38e97f85c3cc20002b488625e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5785dce1a99b1cb77784303751fa1900"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga5785dce1a99b1cb77784303751fa1900">timespec64::timespec64_parse</a> (const char *buf, <a class="el" href="structtimespec64.html">timespec64</a> *t)</td></tr>
 <tr class="memdesc:ga5785dce1a99b1cb77784303751fa1900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a string into a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> value.  <a href="#ga5785dce1a99b1cb77784303751fa1900">More...</a><br /></td></tr>
 <tr class="separator:ga5785dce1a99b1cb77784303751fa1900"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -652,6 +655,79 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">year</td><td>Year </td></tr>
     <tr><td class="paramname">jday</td><td>Day of the year </td></tr>
+    <tr><td class="paramname">hour</td><td>Hour </td></tr>
+    <tr><td class="paramname">min</td><td>Minute </td></tr>
+    <tr><td class="paramname">sec</td><td>Second </td></tr>
+    <tr><td class="paramname">ns</td><td>Nanosecond</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>new <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> value </dd></dl>
+
+</div>
+</div>
+<a id="ga9ab66d38e97f85c3cc20002b488625e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9ab66d38e97f85c3cc20002b488625e8">&#9670;&nbsp;</a></span>timespec64_from_ymdhmsf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structtimespec64.html">timespec64</a> timespec64_from_ymdhmsf </td>
+          <td>(</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>year</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>month</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>day</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>hour</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>ns</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Crate a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> value from Year, Month, Day, Hour, Minute, Second, Nanosecond. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">year</td><td>Year </td></tr>
+    <tr><td class="paramname">jday</td><td>Month </td></tr>
+    <tr><td class="paramname">jday</td><td>Month Day </td></tr>
     <tr><td class="paramname">hour</td><td>Hour </td></tr>
     <tr><td class="paramname">min</td><td>Minute </td></tr>
     <tr><td class="paramname">sec</td><td>Second </td></tr>
