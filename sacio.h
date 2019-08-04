@@ -583,11 +583,11 @@ enum HeaderID {
     SAC_WFID         = 82, /**< @brief waveform id */
     SAC_NX           = 83, /**< @brief nx */
     SAC_NY           = 84, /**< @brief ny */
-    SAC_UN84         = 85, /**< @brief un @private */
+    SAC_UN85         = 85, /**< @brief un @private */
     SAC_FILE_TYPE    = 86, /**< @brief file type, iftype */
     SAC_DEP_TYPE     = 87, /**< @brief dependent variable type, idep */
     SAC_ZERO_TIME    = 88, /**< @brief zero time equivalent, iztype */
-    SAC_UN88         = 89, /**< @brief un @private */
+    SAC_UN89         = 89, /**< @brief un @private */
     SAC_INST_TYPE    = 90, /**< @brief instrument type, iinst */
     SAC_STREG        = 91, /**< @brief station region */
     SAC_EVREG        = 92, /**< @brief event region  */
@@ -679,7 +679,7 @@ enum SacHeaderTypes {
 /** \cond NO_DOCS */
 /** @brief Convert a keyword to a header ID*/
 struct hid * sac_keyword_to_header(register const char *str,
-                                   register unsigned int len);
+                                   register size_t len);
 /** \endcond */
 
 #define SAC_KSTNM  SAC_STA   /**< @brief Alias for Station */
@@ -867,6 +867,7 @@ static struct sac_hdr NullSacHeader = {
 };
 #endif /* SAC_NULL_HEADER_REQUIRED */
 
+#define REGCONV    100
 
 #endif /* __SACIO_H__ */
 
