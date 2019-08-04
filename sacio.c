@@ -8,6 +8,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
+#include <float.h>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 /** @cond NO_DOCS */
 #define SAC_NULL_HEADER_REQUIRED /**< @private Define a fully NULL sac header */
@@ -24,6 +29,7 @@
 #define ERROR_OVERWRITE_FLAG_IS_OFF         1303 /**< @brief Overwrite flag, lovrok is set to 0 */
 #define ERROR_WRITING_FILE                  115 /**< @brief Error writing sac file */
 #define ERROR_READING_FILE                  114 /**< @brief Error reading sac file */
+#define ERROR_FILE_DOES_NOT_EXIST           108
 #define ERROR_OPENING_FILE                  101 /**< @brief Error opening sac file */
 #define SAC_OK                              0 /**< @brief Success, everything is ok */
 
@@ -302,6 +308,8 @@ sac_be(sac *s) {
     }
 }
 
+#ifdef USE_GEOGRAPHICLIB
+
 /**
  * @brief      Update the dist, az, gcarc, baz header fields
  *
@@ -347,6 +355,48 @@ update_distaz(sac *s) {
         s->h->baz += 360.0;
     }
 }
+#else
+void distaz(double the, double phe, float *ths, float *phs,
+            int ns, float *dist, float *az, float *baz, float *xdeg,
+            int *nerr);
+void
+update_distaz(sac * s) {
+    float d,a,b,g;
+    int ndaerr = 0;
+    //DEBUG("\n");
+    if (s->h->lcalda && s->h->stla != SAC_FLOAT_UNDEFINED &&
+        s->h->stlo != SAC_FLOAT_UNDEFINED && s->h->evla != SAC_FLOAT_UNDEFINED
+        && s->h->evlo != SAC_FLOAT_UNDEFINED) {
+        //DEBUG("compute\n");
+        /* These temporary values are necessary as distaz() will not
+         * calculate an output if the input is < 0
+         */
+        d = a = b = g = 0;
+        distaz(s->h->evla, s->h->evlo,
+               (float *) &s->h->stla, (float *) &s->h->stlo,
+               1,
+               (float *) &d, (float *) &a, (float *) &b, (float *) &g,
+               &ndaerr);
+                s->h->dist  = d;
+        s->h->gcarc = g;
+        s->h->az    = a;
+        s->h->baz   = b;
+        //DEBUG("done\n");
+        //DEBUG("dist: %.2f gcarc: %.2f\n", s->h->dist, s->h->gcarc);
+        if (s->h->evla == s->h->stla && s->h->evlo == s->h->stlo) {
+            s->h->az = 0;
+            s->h->baz = 0;
+        }
+        if (ndaerr) {
+            s->h->dist = SAC_FLOAT_UNDEFINED;
+            s->h->az = SAC_FLOAT_UNDEFINED;
+            s->h->baz = SAC_FLOAT_UNDEFINED;
+            s->h->gcarc = SAC_FLOAT_UNDEFINED;
+        }
+    }
+    return;
+}
+#endif
 
 /**
  * @brief      Check the number of npts in a sac file
@@ -541,10 +591,10 @@ array_mean(float *y, int n) {
  */
 static void
 check_value(float vmin, float vmax) {
-    if(! isfinite(vmin) || ! isfinite(vmax)) {
-        printf("Non-finite floating point value encountered\n");
-        printf("  Min value: %g ", vmin);
-        printf("  Max value: %g\n", vmax);
+    if(! isfinite(vmin) || ! isfinite(vmax) || vmin < -3.40282e38 || vmax > 3.40282e38) {
+        printf(" WARNING: Data value outside system storage bounds\n");
+        printf(" Maxvalue = %.5g ", vmax);
+        printf(" Minvalue = %.5g\n", vmin);
     }
 }
 
@@ -757,7 +807,7 @@ sac_check_time_precision(sac_hdr *h) {
             continue;
         }
         if((df = check_precision(h->delta, values[i])) != 0) {
-            printf("minimum precision > sampling rate: %s = %f\n"
+            printf(" WARNING:  minimum precision > sampling rate: %s = %f\n"
                 "       sampling rate (delta):      %f\n"
                 "       32-bit minimum precision:   %f\n",
                 names[i], values[i], h->delta, df);
@@ -1083,7 +1133,11 @@ sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) 
         swap = s->m->swap;
     }
     if(nin < 0) {
-        *nerr = ERROR_OPENING_FILE;
+        if(!write_data) {
+            *nerr = ERROR_FILE_DOES_NOT_EXIST;
+        } else {
+            *nerr = ERROR_OPENING_FILE;
+        }
         return;
     }
     sac_header_write(s, nin, swap, nerr);
@@ -1249,7 +1303,7 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
     }
 
     if(!(fp = fopen(filename, "rb"))) {
-        *nerr = 101;
+        *nerr = ERROR_FILE_DOES_NOT_EXIST;
         return NULL;
     }
     s = sac_new();
@@ -1579,7 +1633,7 @@ sac_get_float(sac *s, int hdr, float *v) {
  */
 int
 sac_set_int(sac *s, int hdr, int v) {
-    if(!s || hdr < SAC_YEAR || hdr > SAC_UN105) {
+    if(!s || hdr < SAC_YEAR || hdr > SAC_UN110) {
         return 0;
     }
     int *ip = (int *) (&(s->h->nzyear));

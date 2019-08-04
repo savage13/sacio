@@ -16,7 +16,10 @@
 #define ERROR_ILLEGAL_DATA_FILE_LIST_NUMBER 1301 /**< @brief no sac file was defined for operation */
 #define ERROR_ILLEGAL_HEADER_FIELD_NAME     1337 /**< @brief unknown header keyword */
 #define ERROR_UNDEFINED_HEADER_FIELD_VALUE  1336 /**< @brief header value was undefined */
-static sac *current = NULL;
+#define ERROR_ILLEGAL_ENUMERATED_VALUE      1365 /**< @brief illegal enumerated value */
+
+sac *current = NULL;
+
 
 /**
  * @defgroup sac-iris sac-iris
@@ -46,10 +49,10 @@ struct sac_iris {};
  *                    otherwise assume a fortran string with length
  *
  */
-void
+static void
 fstrcpy(char *dst, int ndst, char *src, int nsrc) {
     size_t n = 0;
-    if(nsrc <= 0) { // Likely C Path
+    if(nsrc < 0) { // Likely C Path
         sacio_strlcpy(dst, src, ndst);
     } else { // Likely Fortran Path
         n = (nsrc < ndst) ? nsrc : ndst - 1;
@@ -75,12 +78,19 @@ fstrcpy(char *dst, int ndst, char *src, int nsrc) {
  * @param      nsrc   Length of src
  *
  */
-void
-fstrput(char *dst, int ndst, char *src, int nsrc) {
+static void
+fstrput(char *dst, int ndst, char *src, int nsrc, int null_terminate) {
     size_t n = 0;
+    if(ndst <= 0 || nsrc <= 0) {
+        return;
+    }
     memset(dst, ' ', ndst);
     n = (nsrc < ndst) ? nsrc : ndst;
     memcpy(dst, src, n);
+    if(null_terminate) {
+        n = (nsrc < ndst-1) ? nsrc : ndst-1;
+        dst[n] = 0;
+    }
 }
 
 /**
@@ -104,8 +114,7 @@ get_hid(char *kname, int *nerr, int kname_s) {
     char name[32] = {0};
     *nerr = 0;
     fstrcpy(name, sizeof(name), kname, kname_s);
-
-    if(!(h = sac_keyword_to_header(name, strlen(kname)))) {
+    if(!(h = sac_keyword_to_header(name, strlen(name)))) {
         *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
     }
     return h;
@@ -184,8 +193,6 @@ rsac1(char      *kname,
         *nerr = -ERROR_SAC_DATA_TRUNCATED_ON_READ;
     }
     memcpy(yarray, s->y, *nlen * sizeof(float));
-    s->h->npts = *nlen;
-    sac_be(s);
     current = s;
 }
 
@@ -328,6 +335,16 @@ wsac0(char   *kname,
     s->x = x;
     s->y = y;
 }
+
+void
+wsac3(char   *kname,
+      float  *xarray,
+      float  *yarray,
+      int    *nerr,
+      int     kname_s) {
+    wsac0(kname, xarray, yarray, nerr, kname_s);
+}
+
 
 /**
  * @brief      Write an evenly spaced sac file
@@ -565,6 +582,58 @@ char *enum_values[] = {
  *
  * @ingroup    sac-iris
  * @memberof   sac_iris
+ * @private
+ *
+ * @param      kname    Name of header value
+ * @param      kvalue   Output enumerated value as a string
+ * @param      nerr     Status, 0 on success, non-zero on failure
+ * @param      kname_s  Length of kname
+ * @param      kvalue_s Length of kvalue
+ *
+ * @note This routine requires an internal, global sac file from
+ *       rsac1(), rsac2() or newhdr()
+ */
+void
+getihv_internal(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s, int null_terminate) {
+    sac *s = NULL;
+    int n = 0;
+    struct hid *h = NULL;
+    int ivalue = -1;
+
+    *nerr = 0;
+    if(kvalue_s <= 0) {
+        *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
+        return;
+    }
+    if((s = get_current(nerr)) == NULL) {
+        return;
+    }
+    if((h = get_hid(kname, nerr, kname_s)) == NULL) {
+        memset(kvalue, 0, kvalue_s);
+        fstrput(kvalue, kvalue_s, "ILLEGAL", 7, null_terminate);
+        return;
+    }
+    if(h->type != SAC_ENUM_TYPE) {
+        *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
+        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8, null_terminate);
+    }
+    sac_get_int(current, h->id, &ivalue);
+    if(ivalue == SAC_INT_UNDEFINED) {
+        *nerr = ERROR_UNDEFINED_HEADER_FIELD_VALUE;
+        fstrput(kvalue, kvalue_s, "UNDEFINED", 9, null_terminate);
+        return;
+    }
+    memset(kvalue, ' ', kvalue_s);
+    n = strlen(enum_values[ivalue-1]);
+    fstrput(kvalue, kvalue_s, enum_values[ivalue-1], n, null_terminate);
+}
+/**
+ * @brief      Get a enumerated header value
+ *
+ * @details    Get a enumerated header value from the sac header
+ *
+ * @ingroup    sac-iris
+ * @memberof   sac_iris
  *
  * @param      kname    Name of header value
  * @param      kvalue   Output enumerated value as a string
@@ -577,29 +646,15 @@ char *enum_values[] = {
  */
 void
 getihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
-    sac *s = NULL;
-    struct hid *h = NULL;
-    int ivalue = -1;
-
-    *nerr = 0;
-    if((s = get_current(nerr)) == NULL) {
-        return;
-    }
-    if((h = get_hid(kname, nerr, kname_s)) == NULL) {
-        return;
-    }
-    if(h->type != SAC_ENUM_TYPE) {
-        *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
-        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8);
-        return;
-    }
-    sac_get_int(current, h->id, &ivalue);
-    if(ivalue == SAC_INT_UNDEFINED) {
-        *nerr = ERROR_UNDEFINED_HEADER_FIELD_VALUE;
-        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8);
-        return;
-    }
-    fstrput(kvalue, kvalue_s, enum_values[ivalue-1], strlen(enum_values[ivalue-1]));
+    getihv_internal(kname, kvalue, nerr, kname_s, kvalue_s, 1);
+}
+void
+getihv_(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    getihv_internal(kname, kvalue, nerr, kname_s, kvalue_s, 0);
+}
+void
+getihv__(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    getihv_internal(kname, kvalue, nerr, kname_s, kvalue_s, 0);
 }
 
 /**
@@ -620,11 +675,15 @@ getihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
  *       rsac1(), rsac2() or newhdr()
  */
 void
-getkhv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+getkhv_internal(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s, int null_terminate) {
     sac *s = NULL;
     struct hid *h = NULL;
     char v[32] = {0};
 
+    if(kvalue_s <= 0) {
+        *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
+        return;
+    }
     *nerr = 0;
     if((s = get_current(nerr)) == NULL) {
         return;
@@ -634,17 +693,29 @@ getkhv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
     }
     if(h->type != SAC_STRING_TYPE && h->type != SAC_LONG_STRING_TYPE) {
         *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
-        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8);
+        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8, null_terminate);
         return;
     }
     sac_get_string(current, h->id, v, sizeof(v));
     if((h->type == SAC_STRING_TYPE && strcmp(v, SAC_CHAR_UNDEFINED) == 0) ||
        (h->type == SAC_LONG_STRING_TYPE && strcmp(v, SAC_CHAR_UNDEFINED_2) == 0)) {
         *nerr = ERROR_UNDEFINED_HEADER_FIELD_VALUE;
-        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8);
+        fstrput(kvalue, kvalue_s, SAC_CHAR_UNDEFINED, 8, null_terminate);
         return;
     }
-    fstrput(kvalue, kvalue_s, v, strlen(v));
+    fstrput(kvalue, kvalue_s, v, strlen(v), null_terminate);
+}
+void
+getkhv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    getkhv_internal(kname, kvalue, nerr, kname_s, kvalue_s, 1);
+}
+void
+getkhv_(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    getkhv_internal(kname, kvalue, nerr, kname_s, kvalue_s, 0);
+}
+void
+getkhv__(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    getkhv_internal(kname, kvalue, nerr, kname_s, kvalue_s, 0);
 }
 
 /**
@@ -865,8 +936,12 @@ setkhv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
         *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
         return;
     }
-    memset(v, 0, sizeof(v));
+    memset(v, ' ', sizeof(v));
+    v[sizeof(v)-1] = 0;
     n = (h->type == SAC_STRING_TYPE) ? 8 : 16;
+    if(kvalue_s <= 0) {
+        kvalue_s = strlen(kvalue);
+    }
     n = (kvalue_s < n) ? kvalue_s : n;
     memcpy(v, kvalue, n);
     sac_set_string(s, h->id, v);
@@ -905,11 +980,13 @@ setihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
         return;
     }
     if(h->type != SAC_ENUM_TYPE) {
-        *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
         return;
     }
     memset(v, ' ', sizeof(v));
     v[8] = 0;
+    if(kvalue_s <= 0) {
+        kvalue_s = strlen(kvalue);
+    }
     n = (kvalue_s < 8) ? kvalue_s : 8;
     memcpy(v, kvalue, n);
     for(i = 0; i < sizeof(enum_values)/sizeof(char *); i++) {
@@ -918,7 +995,7 @@ setihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
             return;
         }
     }
-    *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
+    *nerr = ERROR_ILLEGAL_ENUMERATED_VALUE;
     return;
 }
 
@@ -935,5 +1012,137 @@ void getfhv_(char *kname, float *fvalue, int *nerr, int kname_s) {
  */
 void getfhv__(char *kname, float *fvalue, int *nerr, int kname_s) {
     getfhv_(kname, fvalue, nerr, kname_s);
+}
+
+void
+wsac0_(char *kname, float *xarray, float *yarray, int *nerr, int kname_s) {
+    wsac0(kname, xarray, yarray, nerr, kname_s);
+}
+void
+wsac0__(char *kname, float *xarray, float *yarray, int *nerr, int kname_s) {
+    wsac0(kname, xarray, yarray, nerr, kname_s);
+}
+
+void
+getlhv_(char *kname, int *nvalue, int *nerr, int kname_s) {
+    getlhv(kname, nvalue, nerr, kname_s);
+}
+void
+getlhv__(char *kname, int *nvalue, int *nerr, int kname_s) {
+    getlhv(kname, nvalue, nerr, kname_s);
+}
+void
+getnhv_(char *kname, int *nvalue, int *nerr, int kname_s) {
+    getnhv(kname, nvalue, nerr, kname_s);
+}
+void
+getnhv__(char *kname, int *nvalue, int *nerr, int kname_s) {
+    getnhv(kname, nvalue, nerr, kname_s);
+}
+void
+setnhv_(char *kname, int *nvalue, int *nerr, int kname_s) {
+    setnhv(kname, nvalue, nerr, kname_s);
+}
+void
+setnhv__(char *kname, int *nvalue, int *nerr, int kname_s) {
+    setnhv(kname, nvalue, nerr, kname_s);
+}
+void
+setlhv_(char *kname, int *nvalue, int *nerr, int kname_s) {
+    setlhv(kname, nvalue, nerr, kname_s);
+}
+void
+setlhv__(char *kname, int *nvalue, int *nerr, int kname_s) {
+    setlhv(kname, nvalue, nerr, kname_s);
+}
+void
+setkhv_(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    setkhv(kname, kvalue, nerr, kname_s, kvalue_s);
+}
+void
+setkhv__(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    setkhv(kname, kvalue, nerr, kname_s, kvalue_s);
+}
+void
+setihv_(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    setihv(kname, kvalue, nerr, kname_s, kvalue_s);
+}
+void
+setihv__(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
+    setihv(kname, kvalue, nerr, kname_s, kvalue_s);
+}
+void
+setfhv_(char *kname, float *fvalue, int *nerr, int kname_s) {
+    setfhv(kname, fvalue, nerr, kname_s);
+}void
+setfhv__(char *kname, float *fvalue, int *nerr, int kname_s) {
+    setfhv(kname, fvalue, nerr, kname_s);
+}
+void
+newhdr_() {
+    newhdr();
+}
+void
+newhdr__() {
+    newhdr();
+}
+
+void
+rsac1_(char *kname, float yarray[], int *nlen, float *beg, float *del, int *max_, int *nerr, int kname_s) {
+    rsac1(kname, yarray, nlen, beg, del, max_, nerr, kname_s);
+}
+void
+rsac1__(char *kname, float yarray[], int *nlen, float *beg, float *del, int *max_, int *nerr, int kname_s) {
+    rsac1(kname, yarray, nlen, beg, del, max_, nerr, kname_s);
+}
+
+void
+rsac2_(char *kname, float *yarray, int *nlen, float *xarray, int *max_, int *nerr, int kname_s) {
+    rsac2(kname, yarray, nlen, xarray, max_, nerr, kname_s);
+}
+void
+rsac2__(char *kname, float *yarray, int *nlen, float *xarray, int *max_, int *nerr, int kname_s) {
+    rsac2(kname, yarray, nlen, xarray, max_, nerr, kname_s);
+}
+void
+wsac1_(char *kname, float *yarray, int *nlen, float *beg, float *del, int *nerr,  int kname_s) {
+    wsac1(kname, yarray, nlen, beg, del, nerr,  kname_s);
+}
+void
+wsac1__(char *kname, float *yarray, int *nlen, float *beg, float *del, int *nerr,  int kname_s) {
+    wsac1(kname, yarray, nlen, beg, del, nerr,  kname_s);
+}
+void
+wsac2_(char *kname, float *yarray, int *nlen, float *xarray, int *nerr, int kname_s) {
+    wsac2(kname, yarray, nlen, xarray, nerr, kname_s);
+}
+void
+wsac2__(char *kname, float *yarray, int *nlen, float *xarray, int *nerr, int kname_s) {
+    wsac2(kname, yarray, nlen, xarray, nerr, kname_s);
+}
+void
+wsac3_(char *kname, float *xarray, float *yarray, int *nerr, int kname_s) {
+    wsac3(kname, xarray, yarray, nerr, kname_s);
+}
+void
+wsac3__(char *kname, float *xarray, float *yarray, int *nerr, int kname_s) {
+    wsac3(kname, xarray, yarray, nerr, kname_s);
+}
+
+
+void sac_data_read_new() {}
+void sac_header_read_new() {}
+void sacio_message(int nerr, char *name) {
+    UNUSED(nerr);
+    UNUSED(name);
+}
+void sacio_message_control() {}
+void sacio_char_to_keyword(char *in, char out[9]) {
+    UNUSED(in);
+    UNUSED(out);
+}
+int hdr_len(int index) {
+    UNUSED(index);
+    return 0;
 }
 
