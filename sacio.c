@@ -35,7 +35,10 @@
 
 #define SAC_HEADER_SIZEOF_NUMBER          (sizeof(float))  /**< @brief Size of header values in bytes */
 #define SAC_DATA_SIZE                     SAC_HEADER_SIZEOF_NUMBER /**< @brief Size of data values in bytes */
-#define SAC_HEADER_MAJOR_VERSION          6 /**< @brief Current Major sac version number */
+#define SAC_HEADER_VERSION_6              6 /**< @brief Sac version no 6 */
+#define SAC_HEADER_VERSION_7              7 /**< @brief Sac version no 7 */
+#define SAC_HEADER_MAJOR_VERSION          SAC_HEADER_VERSION_6 /**< @brief Current Major sac version number */
+#define SAC_HEADER_MAX_VERSION            SAC_HEADER_VERSION_7 /**< @brief Current Maximum sac version number */
 #define SAC_VERSION_LOCATION              76 /**< @brief Offset in 4-byte words of the header version */
 
 /**
@@ -1251,6 +1254,70 @@ sac_data_write(int nun, float *y, float *x, int comps, int npts, int swap,
     return;
 }
 
+static int v7_keys[] = {
+#define X(name,key) SAC_##name ,
+    SAC_F64
+#undef X
+};
+static size_t v7_keys_length = sizeof(v7_keys) / sizeof(int);
+/**
+ * Write the sac header version 7
+ *
+ * # Arguments
+ * - `nun` - Negative file id number (yes, it is negative)
+ * - `s` - sac file structure to write out
+ * - `nerr` - Error reporting value
+ *
+ * V7 of the header is a additional set of data at the end of the file
+ * following the data.  This routine only reads the this "footer" of
+ * metadata, the v6 header I/O routines are still required
+ *
+ */
+void
+sac_header_write_v7(int nun, sac *s, int *nerr) {
+    size_t n;
+    double buffer[v7_keys_length];
+    *nerr = SAC_OK;
+
+    for(size_t i = 0; i < v7_keys_length; i++) {
+        sac_get_f64(s, v7_keys[i], &buffer[i]);
+    }
+
+    n = write(nun, buffer, sizeof(buffer));
+    if(n != sizeof(buffer)) {
+        *nerr = ERROR_WRITING_FILE;
+    }
+}
+
+/**
+ * Read the sac header version 7
+ * 
+ * # Arguments
+ * - `nun` - Negative file id number (yes, it is negative)
+ * - `s` - sac file structure to fill
+ * - `nerr` - Error reporting value
+ *
+ * V7 of the header is a additional set of data at the end of the file
+ * following the data.  This routine only reads the this "footer" of
+ * metadata, the v6 header I/O routines are still required
+ *
+ */
+void
+sac_header_read_v7(FILE *fp, sac *s, int *nerr) {
+    size_t n;
+    double buffer[v7_keys_length];
+    *nerr = SAC_OK;
+
+    n = fread(buffer, sizeof(double), v7_keys_length, fp);
+    if(n != v7_keys_length) {
+        *nerr = ERROR_READING_FILE;
+        return;
+    }
+    for(size_t i = 0; i < v7_keys_length; i++) {
+        sac_set_f64(s, v7_keys[i], buffer[i]);
+    }
+}
+
 /**
  * @brief      internal sac data writing function
  *
@@ -1317,6 +1384,10 @@ sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) 
             return;
         }
     }
+    if(s->h->nvhdr == SAC_HEADER_VERSION_7) {
+        sac_header_write_v7(nin, s, nerr);
+    }
+
     close(nin);
 }
 /**
@@ -1381,10 +1452,10 @@ sac_check_header_version(float *hdr, int *nerr) {
     *nerr = SAC_OK;
     /* determine if the data needs to be swapped. */
     ver = (int *) (hdr + SAC_VERSION_LOCATION);
-    if (*ver < 1 || *ver > SAC_HEADER_MAJOR_VERSION) {
+    if (*ver < 1 || *ver > SAC_HEADER_MAX_VERSION) {
         byteswap_bsd((void *) ver, SAC_HEADER_SIZEOF_NUMBER);
 
-        if (*ver < 1 || *ver > SAC_HEADER_MAJOR_VERSION) {
+        if (*ver < 1 || *ver > SAC_HEADER_MAX_VERSION) {
             *nerr = ERROR_NOT_A_SAC_FILE;
             printf("not in sac format, nor byteswapped sac format.");
             return -1;
@@ -1492,13 +1563,18 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
             goto ERROR;
         }
     }
+    if(s->h->nvhdr == SAC_HEADER_VERSION_7) {
+        sac_header_read_v7(fp, s, nerr);
+    } else {
+        sac_copy_f32_to_f64(s);
+    }
+
     sac_be(s);
     update_distaz(s);
     if(read_data) {
         sac_extrema(s);
     }
 
-    sac_copy_f32_to_f64(s);
 
     fclose(fp);
     return s;
