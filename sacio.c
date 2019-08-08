@@ -221,7 +221,7 @@ sac_set_f32(sac *s, int n, double value) {
 int
 sac_set_f64(sac *s, int n, double value) {
     switch(n) {
-#define X(name,key)  case SAC_##name: s->z->key = value; break;
+#define X(name,key)  case SAC_##name: s->z->key = value; s->h->key = value; break;
         SAC_F64
 #undef X
     default:
@@ -310,6 +310,15 @@ sac_get_pick(sac *s, int n, double *t) {
         break;
     }
     return 0;
+}
+
+void
+sac_set_v7(sac *s) {
+    s->h->nvhdr = SAC_HEADER_VERSION_7;
+}
+void
+sac_set_v6(sac *s) {
+    s->h->nvhdr = SAC_HEADER_VERSION_6;
 }
 
 /**
@@ -1365,7 +1374,10 @@ sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) 
         }
         return;
     }
-    sac_copy_f64_to_f32(s);
+    switch(s->h->nvhdr) {
+    case SAC_HEADER_VERSION_7:  sac_copy_f64_to_f32(s); break;
+    case SAC_HEADER_VERSION_6:  sac_copy_f32_to_f64(s); break;
+    }
     sac_header_write(s, nin, swap, nerr);
     if(*nerr != SAC_OK) {
         return;
@@ -1555,10 +1567,14 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
             goto ERROR;
         }
     }
-    if(s->h->nvhdr == SAC_HEADER_VERSION_7) {
+    switch(s->h->nvhdr) {
+    case SAC_HEADER_VERSION_7:
         sac_header_read_v7(fp, s, nerr);
-    } else {
+        sac_copy_f64_to_f32(s);
+        break;
+    case SAC_HEADER_VERSION_6:
         sac_copy_f32_to_f64(s);
+        break;
     }
 
     sac_be(s);
@@ -1566,7 +1582,6 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
     if(read_data) {
         sac_extrema(s);
     }
-
 
     fclose(fp);
     return s;
