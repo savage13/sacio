@@ -206,7 +206,7 @@ sac_f64_new() {
     return z;
 }
 int
-sac_set_f32(sac *s, int n, float value) {
+sac_set_f32(sac *s, int n, double value) {
     switch(n) {
 #define X(name,key)  case SAC_##name: s->h->key = value; break;
   SAC_F32
@@ -233,7 +233,7 @@ sac_set_f64(sac *s, int n, double value) {
 }
 
 int
-sac_get_f32(sac *s, int n, float *v) {
+sac_get_f32(sac *s, int n, double *v) {
     switch(n) {
 #define X(name,key) case SAC_##name: *v = s->h->key; break;
         SAC_F32
@@ -245,22 +245,14 @@ sac_get_f32(sac *s, int n, float *v) {
     return 1;
 }
 
-#define QUOTE(str) #str
-#define EXPAND_AND_QUOTE(str) QUOTE(str)
-
 int
 sac_get_f64(sac *s, int n, double *v) {
-    float f = SAC_FLOAT_UNDEFINED;
     switch(n) {
-#define X(name,key)  case SAC_##name: *v = s->z->key; fprintf(stderr, "%d %s %s %e\n", n, EXPAND_AND_QUOTE(name), EXPAND_AND_QUOTE(key), s->z->key ); break;
+#define X(name,key)  case SAC_##name: *v = s->z->key; break;
         SAC_F64
 #undef X
     default:
-        if(!sac_get_f32(s, n, &f)) {
-            return 0;
-        }
-        *v = f;
-        //fprintf(stderr, "Error in sac_get_f64(): Unknown type: %d\n", n);
+        return sac_get_f32(s, n, v);
         break;
     }
     return 1;
@@ -1838,7 +1830,14 @@ sac_set_float(sac *s, int hdr, double v) {
     if(!s || hdr < SAC_DELTA || hdr > SAC_UN70) {
         return 0;
     }
-    return sac_set_f64(s, hdr, v);
+    switch(s->h->nvhdr) {
+    case SAC_HEADER_VERSION_6: return sac_set_f32(s, hdr, v); break;
+    case SAC_HEADER_VERSION_7: return sac_set_f64(s, hdr, v); break;
+    default:
+        printf("Unknown header version: %d, expected 6 or 7\n", s->h->nvhdr);
+        break;
+    }
+    return 0;
 }
 /**
  * @brief      Get a floating point value from a sac file
@@ -1859,8 +1858,14 @@ sac_get_float(sac *s, int hdr, double *v) {
     if(!s || hdr < SAC_DELTA || hdr > SAC_UN70 || !v) {
         return 0;
     }
-    fprintf(stderr, "hdr: %d\n", hdr);
-    return sac_get_f64(s, hdr, v);
+    switch(s->h->nvhdr) {
+    case SAC_HEADER_VERSION_6: return sac_get_f32(s, hdr, v); break;
+    case SAC_HEADER_VERSION_7: return sac_get_f64(s, hdr, v); break;
+    default:
+        printf("Unknown header version: %d, expected 6 or 7\n", s->h->nvhdr);
+        break;
+    }
+    return 0;
 }
 /**
  * @brief      Set a integer value in a sac file
