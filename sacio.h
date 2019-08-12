@@ -267,8 +267,8 @@ struct sac_hdr {
     float az;                   /**< @brief      event-station azimuth      */
     float baz;                  /**< @brief      station-event azimuth      */
     float gcarc;                /**< @brief      station-event dist, degrees */
-    float sb;                   /**< @brief      saved b value, for spectral files           */
-    float sdelta;               /**< @brief      saved delta, for spectral files    */
+    float _sb;                  /**< @brief      saved b value, for spectral files           */
+    float _sdelta;              /**< @brief      saved delta, for spectral files    */
     float depmen;               /**< @brief      mean value, amplitude  */
     float cmpaz;                /**< @brief    component azimuth  <b>available from SEED</b>
                                  * - 0: North
@@ -427,6 +427,8 @@ struct _sac_f64 {
     double _evla;
     double _stlo;
     double _stla;
+    double _sb;
+    double _sdelta;
 };
 
 
@@ -480,6 +482,13 @@ sac * sac_copy(sac *s);
 void  sac_extrema(sac *s);
 /** @brief Get the number of components from a sac string */
 int   sac_comps(sac * s);
+
+void  sac_meta_copy(sac *to, sac *from);
+void  sac_header_copy(sac *to, sac *from);
+void  sac_data_copy(sac *to, sac *from);
+sac * sac_copy(sac *s);
+
+void sac_check_time_precision(sac *s);
 
 /** @brief Get a float value from a sac object */
 int sac_get_float(sac *s, int hdr, double *v);
@@ -920,7 +929,9 @@ static struct sac_hdr NullSacHeader = {
     X(EVLO, _evlo)         \
     X(EVLA, _evla)         \
     X(STLO, _stlo)         \
-    X(STLA, _stla)
+    X(STLA, _stla)         \
+    X(SB, _sb)             \
+    X(SDELTA, _sdelta)             \
 
 #define SAC_F32           \
     X(DELTA,_delta)        \
@@ -977,8 +988,8 @@ static struct sac_hdr NullSacHeader = {
     X(AZ, az)             \
     X(BAZ, baz)           \
     X(GCARC, gcarc)       \
-    X(SB, sb)             \
-    X(SDELTA, sdelta)     \
+    X(SB, _sb)             \
+    X(SDELTA, _sdelta)     \
     X(DEPMEN, depmen)     \
     X(CMPAZ, cmpaz)       \
     X(CMPINC, cmpinc)     \

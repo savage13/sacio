@@ -384,8 +384,8 @@ wsac1(char   *kname,
     fstrcpy(name, sizeof(name), kname, kname_s);
     y = s->y;
     s->y = yarray;
-    sac_set_float(s, SAC_DELTA, (float) *del);
-    sac_set_float(s, SAC_B, (float) *beg);
+    sac_set_float(s, SAC_DELTA, (double) *del);
+    sac_set_float(s, SAC_B, (double) *beg);
     s->h->npts  = *nlen;
     s->h->leven = TRUE;
     sac_be(s);

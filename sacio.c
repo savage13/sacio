@@ -566,6 +566,16 @@ sac_data_copy(sac *to, sac *from) {
     }
 }
 
+sac *
+sac_copy(sac *s) {
+    sac *new;
+    new = sac_new();
+    sac_header_copy(new, s);
+    sac_meta_copy(new, s);
+    sac_data_copy(new, s);
+    return new;
+}
+
 
 /**
  * @brief      Check the number of npts in a sac file
@@ -961,30 +971,31 @@ check_precision(float dt, float val) {
  */
 void
 sac_check_time_precision(sac *s) {
-    UNUSED(s);
-    /* int i, n; */
-    /* double df; */
-    /* char *names[] = {"b","e","a","o","t0","t1","t2","t3","t4","t5","t6","t7","t8","t9","f"}; */
-    /* float values[] = {s->z->b, h->e, h->a, h->o, */
-    /*                   h->t0,h->t1,h->t2,h->t3,h->t4, h->t5,h->t6,h->t7,h->t8,h->t9, */
-    /*                   h->f}; */
-    /* if(h->delta == SAC_FLOAT_UNDEFINED || h->iftype != ITIME) { */
-    /*     return; */
-    /* } */
-    /* n = sizeof(values)/sizeof(float); */
-    /* for(i = 0; i < n; i++) { */
-    /*     if(values[i] == SAC_FLOAT_UNDEFINED) { */
-    /*         continue; */
-    /*     } */
-    /*     if((df = check_precision(h->delta, values[i])) != 0) { */
-    /*         printf(" WARNING:  minimum precision > sampling rate: %s = %f\n" */
-    /*             "       sampling rate (delta):      %f\n" */
-    /*             "       32-bit minimum precision:   %f\n", */
-    /*             names[i], values[i], h->delta, df); */
-    /*         //outmsg(); */
-    /*         //clrmsg(); */
-    /*     } */
-    /* } */
+    int i = 0;
+    double df, v, dt;
+    char *names[] = {"b","e","a","o","fmt",
+                     "t0","t1","t2","t3","t4","t5","t6","t7","t8","t9","f"};
+    if(s->h->nvhdr == SAC_HEADER_VERSION_7 ||
+       s->h->_delta == SAC_FLOAT_UNDEFINED ||
+       s->h->iftype != ITIME) {
+        return;
+    }
+    sac_get_float(s, SAC_DELTA, &dt);
+    for(i = SAC_B; i <= SAC_T9; i++) {
+        if(i == SAC_FMT) { continue; }
+        sac_get_float(s, i, &v);
+        if(v == SAC_FLOAT_UNDEFINED) {
+            continue;
+        }
+        if((df = check_precision(dt, v)) != 0) {
+            printf(" WARNING:  minimum precision > sampling rate: %s = %f\n"
+                "       sampling rate (delta):      %f\n"
+                "       32-bit minimum precision:   %f\n",
+                names[i-SAC_B], v, dt, df);
+            //outmsg();
+            //clrmsg();
+        }
+    }
 }
 
 /**
@@ -1358,7 +1369,7 @@ sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) 
     }
     update_distaz(s);
 
-    //sac_check_time_precision(s->h);
+    sac_check_time_precision(s);
 
     if(write_data) {
         nin = creat(filename, 0666);
@@ -1510,7 +1521,7 @@ sac_header_read(sac *s, FILE *fp) {
     }
     sac_copy_strings_add_terminator(s, str);
 
-    //sac_check_time_precision(s->h);
+    sac_check_time_precision(s);
 
     return 0;
 }
@@ -1845,14 +1856,7 @@ sac_set_float(sac *s, int hdr, double v) {
     if(!s || hdr < SAC_DELTA || hdr > SAC_UN70) {
         return 0;
     }
-    switch(s->h->nvhdr) {
-    case SAC_HEADER_VERSION_6: return sac_set_f32(s, hdr, v); break;
-    case SAC_HEADER_VERSION_7: return sac_set_f64(s, hdr, v); break;
-    default:
-        printf("Unknown header version: %d, expected 6 or 7\n", s->h->nvhdr);
-        break;
-    }
-    return 0;
+    return sac_set_f64(s, hdr, v);
 }
 /**
  * @brief      Get a floating point value from a sac file
