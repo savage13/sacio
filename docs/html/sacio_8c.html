@@ -65,7 +65,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">sacio.c File Reference</div>  </div>
 </div><!--header-->
@@ -92,6 +93,9 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a3377a0c555213a52bab8db143ccfee74">ERROR_READING_FILE</a>&#160;&#160;&#160;114</td></tr>
 <tr class="memdesc:a3377a0c555213a52bab8db143ccfee74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error reading sac file. <br /></td></tr>
 <tr class="separator:a3377a0c555213a52bab8db143ccfee74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb4384a234383602e38abee506fdcc92"><td class="memItemLeft" align="right" valign="top"><a id="aeb4384a234383602e38abee506fdcc92"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_FILE_DOES_NOT_EXIST</b>&#160;&#160;&#160;108</td></tr>
+<tr class="separator:aeb4384a234383602e38abee506fdcc92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc969fb8e6180670f42c7591b814a914"><td class="memItemLeft" align="right" valign="top"><a id="acc969fb8e6180670f42c7591b814a914"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#acc969fb8e6180670f42c7591b814a914">ERROR_OPENING_FILE</a>&#160;&#160;&#160;101</td></tr>
 <tr class="memdesc:acc969fb8e6180670f42c7591b814a914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error opening sac file. <br /></td></tr>
@@ -108,10 +112,22 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a5673502234a056374f8bfd922ec6d377">SAC_DATA_SIZE</a>&#160;&#160;&#160;<a class="el" href="sacio_8c.html#af400785809f2c6122055503899b9f900">SAC_HEADER_SIZEOF_NUMBER</a></td></tr>
 <tr class="memdesc:a5673502234a056374f8bfd922ec6d377"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of data values in bytes. <br /></td></tr>
 <tr class="separator:a5673502234a056374f8bfd922ec6d377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c77502852d1b05e1cbc1ee816a0d1da"><td class="memItemLeft" align="right" valign="top"><a id="a8c77502852d1b05e1cbc1ee816a0d1da"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a8c77502852d1b05e1cbc1ee816a0d1da">SAC_HEADER_VERSION_6</a>&#160;&#160;&#160;6</td></tr>
+<tr class="memdesc:a8c77502852d1b05e1cbc1ee816a0d1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sac version no 6. <br /></td></tr>
+<tr class="separator:a8c77502852d1b05e1cbc1ee816a0d1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeeefe045397e0d0a244a4a54a91fbb46"><td class="memItemLeft" align="right" valign="top"><a id="aeeefe045397e0d0a244a4a54a91fbb46"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#aeeefe045397e0d0a244a4a54a91fbb46">SAC_HEADER_VERSION_7</a>&#160;&#160;&#160;7</td></tr>
+<tr class="memdesc:aeeefe045397e0d0a244a4a54a91fbb46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sac version no 7. <br /></td></tr>
+<tr class="separator:aeeefe045397e0d0a244a4a54a91fbb46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cfd89776a46bc637b6ac48e4e192976"><td class="memItemLeft" align="right" valign="top"><a id="a5cfd89776a46bc637b6ac48e4e192976"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a5cfd89776a46bc637b6ac48e4e192976">SAC_HEADER_MAJOR_VERSION</a>&#160;&#160;&#160;6</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a5cfd89776a46bc637b6ac48e4e192976">SAC_HEADER_MAJOR_VERSION</a>&#160;&#160;&#160;<a class="el" href="sacio_8c.html#a8c77502852d1b05e1cbc1ee816a0d1da">SAC_HEADER_VERSION_6</a></td></tr>
 <tr class="memdesc:a5cfd89776a46bc637b6ac48e4e192976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current Major sac version number. <br /></td></tr>
 <tr class="separator:a5cfd89776a46bc637b6ac48e4e192976"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fcfe1057b65f02f4453bc2132701636"><td class="memItemLeft" align="right" valign="top"><a id="a1fcfe1057b65f02f4453bc2132701636"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a1fcfe1057b65f02f4453bc2132701636">SAC_HEADER_MAX_VERSION</a>&#160;&#160;&#160;<a class="el" href="sacio_8c.html#aeeefe045397e0d0a244a4a54a91fbb46">SAC_HEADER_VERSION_7</a></td></tr>
+<tr class="memdesc:a1fcfe1057b65f02f4453bc2132701636"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current Maximum sac version number. <br /></td></tr>
+<tr class="separator:a1fcfe1057b65f02f4453bc2132701636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9855e0a2f2df61b4b7f25499c1796a8c"><td class="memItemLeft" align="right" valign="top"><a id="a9855e0a2f2df61b4b7f25499c1796a8c"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a9855e0a2f2df61b4b7f25499c1796a8c">SAC_VERSION_LOCATION</a>&#160;&#160;&#160;76</td></tr>
 <tr class="memdesc:a9855e0a2f2df61b4b7f25499c1796a8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset in 4-byte words of the header version. <br /></td></tr>
@@ -128,10 +144,47 @@ Macros</h2></td></tr>
 <tr class="separator:a7889b3c5ba4fd516731855c382d1d2d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaa14e077a6a00ca5b65867cee91a91c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#adaa14e077a6a00ca5b65867cee91a91c">SAC_HEADER_NUMBERS</a>&#160;&#160;&#160;( <a class="el" href="sacio_8c.html#aa2a94d4b4c7fbfe914e89c7c4e8155f0">SAC_HEADER_FLOATS</a> + <a class="el" href="sacio_8c.html#af763d8ce6b9a15a92f9aefddcce5b454">SAC_HEADER_INTEGERS</a> + <a class="el" href="sacio_8c.html#addae298125276b3a938f604ae2e811c8">SAC_HEADER_ENUMS</a> + <a class="el" href="sacio_8c.html#af170c26029b2e52d353806ecfb5b547d">SAC_HEADER_LOGICALS</a> )</td></tr>
 <tr class="separator:adaa14e077a6a00ca5b65867cee91a91c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;z-&gt;key = <a class="el" href="sacio_8h.html#aadd583fcb5b40bdb165796c8d4875f0e">SAC_FLOAT_UNDEFINED</a>;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;case SAC_##name: s-&gt;h-&gt;key = value; break;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;case SAC_##name: s-&gt;z-&gt;key = value; s-&gt;h-&gt;key = value; break;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;case SAC_##name: *v = s-&gt;h-&gt;key; break;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;case SAC_##name: *v = s-&gt;z-&gt;key; break;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;s-&gt;h-&gt;key = s-&gt;z-&gt;key;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;s-&gt;z-&gt;key = s-&gt;h-&gt;key;</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff0b80def0324cc14d0bc25be7f9242b"><td class="memItemLeft" align="right" valign="top"><a id="aff0b80def0324cc14d0bc25be7f9242b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#aff0b80def0324cc14d0bc25be7f9242b">SAC_HEADER_SIZE</a>&#160;&#160;&#160;632</td></tr>
 <tr class="memdesc:aff0b80def0324cc14d0bc25be7f9242b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of header. <br /></td></tr>
 <tr class="separator:aff0b80def0324cc14d0bc25be7f9242b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6fd2776460e16373df12ecf1b2942e"><td class="memItemLeft" align="right" valign="top"><a id="a3d6fd2776460e16373df12ecf1b2942e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>X</b>(name,  key)&#160;&#160;&#160;SAC_##name ,</td></tr>
+<tr class="separator:a3d6fd2776460e16373df12ecf1b2942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ac3571466e40088cfadc482a362e35bdb"><td class="memItemLeft" align="right" valign="top"><a id="ac3571466e40088cfadc482a362e35bdb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>distaz</b> (double the, double phe, float *ths, float *phs, int ns, float *dist, float *az, float *baz, float *xdeg, int *nerr)</td></tr>
+<tr class="separator:ac3571466e40088cfadc482a362e35bdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb8de8eaef89eb56204a6f128f2feb27"><td class="memItemLeft" align="right" valign="top"><a id="acb8de8eaef89eb56204a6f128f2feb27"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update_distaz</b> (<a class="el" href="structsac.html">sac</a> *s)</td></tr>
+<tr class="separator:acb8de8eaef89eb56204a6f128f2feb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c9db1a3de0d30b0fcd8dcbdc0a7fc81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a9c9db1a3de0d30b0fcd8dcbdc0a7fc81">sac_header_write_v7</a> (int nun, <a class="el" href="structsac.html">sac</a> *s, int *nerr)</td></tr>
+<tr class="separator:a9c9db1a3de0d30b0fcd8dcbdc0a7fc81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78e0e6a48aeff9377c57b14887e2aae9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a78e0e6a48aeff9377c57b14887e2aae9">sac_header_read_v7</a> (FILE *fp, <a class="el" href="structsac.html">sac</a> *s, int *nerr)</td></tr>
+<tr class="separator:a78e0e6a48aeff9377c57b14887e2aae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>sac I/O and manipulation </p>
@@ -253,6 +306,91 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a78e0e6a48aeff9377c57b14887e2aae9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78e0e6a48aeff9377c57b14887e2aae9">&#9670;&nbsp;</a></span>sac_header_read_v7()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sac_header_read_v7 </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>fp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>nerr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Read the sac header version 7</p>
+<h1>Arguments</h1>
+<ul>
+<li><code>nun</code> - Negative file id number (yes, it is negative)</li>
+<li><code>s</code> - sac file structure to fill</li>
+<li><code>nerr</code> - Error reporting value</li>
+</ul>
+<p>V7 of the header is a additional set of data at the end of the file following the data. This routine only reads the this "footer" of metadata, the v6 header I/O routines are still required </p>
+
+</div>
+</div>
+<a id="a9c9db1a3de0d30b0fcd8dcbdc0a7fc81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c9db1a3de0d30b0fcd8dcbdc0a7fc81">&#9670;&nbsp;</a></span>sac_header_write_v7()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sac_header_write_v7 </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nun</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>nerr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Write the sac header version 7</p>
+<h1>Arguments</h1>
+<ul>
+<li><code>nun</code> - Negative file id number (yes, it is negative)</li>
+<li><code>s</code> - sac file structure to write out</li>
+<li><code>nerr</code> - Error reporting value</li>
+</ul>
+<p>V7 of the header is a additional set of data at the end of the file following the data. This routine only reads the this "footer" of metadata, the v6 header I/O routines are still required </p>
 
 </div>
 </div>

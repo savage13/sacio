@@ -1,19 +1,12 @@
 var searchData=
 [
-  ['e',['e',['../structsac__hdr.html#afb19496eb32e2e2d5a0d64d56da3a6ac',1,'sac_hdr']]],
-  ['error_5fillegal_5fdata_5ffile_5flist_5fnumber',['ERROR_ILLEGAL_DATA_FILE_LIST_NUMBER',['../compat_8c.html#a2f7e6bc0b59a94b7a1f98c8fcca8abcd',1,'compat.c']]],
-  ['error_5fillegal_5fheader_5ffield_5fname',['ERROR_ILLEGAL_HEADER_FIELD_NAME',['../compat_8c.html#a9f42912e5dd423aaa3c44ee49a4d8fd2',1,'compat.c']]],
-  ['error_5fnot_5fa_5fsac_5ffile',['ERROR_NOT_A_SAC_FILE',['../sacio_8c.html#a2e410ebbb6381756bc12ed61dfb56d6c',1,'sacio.c']]],
-  ['error_5fopening_5ffile',['ERROR_OPENING_FILE',['../sacio_8c.html#acc969fb8e6180670f42c7591b814a914',1,'sacio.c']]],
-  ['error_5foverwrite_5fflag_5fis_5foff',['ERROR_OVERWRITE_FLAG_IS_OFF',['../sacio_8c.html#ad13c242306837262aed9c380d30e73a6',1,'sacio.c']]],
-  ['error_5freading_5ffile',['ERROR_READING_FILE',['../sacio_8c.html#a3377a0c555213a52bab8db143ccfee74',1,'sacio.c']]],
-  ['error_5fsac_5fdata_5ftruncated_5fon_5fread',['ERROR_SAC_DATA_TRUNCATED_ON_READ',['../compat_8c.html#a564eede102aebe48533a8409bc2453af',1,'compat.c']]],
-  ['error_5fsac_5ffile_5fnot_5fevenly_5fspaced',['ERROR_SAC_FILE_NOT_EVENLY_SPACED',['../compat_8c.html#af83b2c1cf6131d39aa787622d40d099b',1,'compat.c']]],
-  ['error_5fsac_5ffile_5fnot_5funevenly_5fspaced',['ERROR_SAC_FILE_NOT_UNEVENLY_SPACED',['../compat_8c.html#a013f760b31e932dc723609949b313e07',1,'compat.c']]],
-  ['error_5fundefined_5fheader_5ffield_5fvalue',['ERROR_UNDEFINED_HEADER_FIELD_VALUE',['../compat_8c.html#a5db54e0556eff9d2935af2756da657c3',1,'compat.c']]],
-  ['error_5fwriting_5ffile',['ERROR_WRITING_FILE',['../sacio_8c.html#af7d40252f357dcd1453299deff2df0cf',1,'sacio.c']]],
-  ['evdp',['evdp',['../structsac__hdr.html#a4283745c40ed242b136e283f86d6df62',1,'sac_hdr']]],
-  ['evel',['evel',['../structsac__hdr.html#ab495e12388555762ac1eb2a183ae6cc4',1,'sac_hdr']]],
-  ['evla',['evla',['../structsac__hdr.html#acdec4d0c6641bb01649a9649ef1b0275',1,'sac_hdr']]],
-  ['evlo',['evlo',['../structsac__hdr.html#a87cc3d23454da06ec0db91c952ec5276',1,'sac_hdr']]]
+  ['depmax',['depmax',['../structsac__hdr.html#aecdc59c942ea8cacb578cb2ee6887470',1,'sac_hdr']]],
+  ['depmen',['depmen',['../structsac__hdr.html#a93a57ae3b5f286098bf5362bf90fe939',1,'sac_hdr']]],
+  ['depmin',['depmin',['../structsac__hdr.html#a686ebebd36dbe608ab4d31b60fab6995',1,'sac_hdr']]],
+  ['dist',['dist',['../structsac__hdr.html#a90df03e38c4dd6586c203e7183d11728',1,'sac_hdr']]],
+  ['duration',['duration',['../structduration.html',1,'']]],
+  ['duration_5ffrom_5fstring',['duration_from_string',['../group__time.html#ga6fb9430514b4e55d9484e55833556df7',1,'duration']]],
+  ['duration_5finit',['duration_init',['../group__time.html#gaa2e41f1d50480249dd9feade2fe8be49',1,'duration']]],
+  ['duration_5fnew',['duration_new',['../structduration.html#a8a609d8a6625cc15e97c4d1d4af18859',1,'duration']]],
+  ['duration_5fparse',['duration_parse',['../group__time.html#gaac537a781a2220350497530f609a3d10',1,'duration']]]
 ];

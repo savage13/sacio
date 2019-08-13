@@ -103,9 +103,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gaf88fdd6703c75ebb37d4316b1cf22a0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#gaf88fdd6703c75ebb37d4316b1cf22a0b">sac_iris::getihv</a> (char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s)</td></tr>
 <tr class="memdesc:gaf88fdd6703c75ebb37d4316b1cf22a0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a enumerated header value.  <a href="#gaf88fdd6703c75ebb37d4316b1cf22a0b">More...</a><br /></td></tr>
 <tr class="separator:gaf88fdd6703c75ebb37d4316b1cf22a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga74e7d8de626506f6ce2bdc119c8182e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#ga74e7d8de626506f6ce2bdc119c8182e3">sac_iris::getkhv</a> (char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s)</td></tr>
-<tr class="memdesc:ga74e7d8de626506f6ce2bdc119c8182e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a character string header value.  <a href="#ga74e7d8de626506f6ce2bdc119c8182e3">More...</a><br /></td></tr>
-<tr class="separator:ga74e7d8de626506f6ce2bdc119c8182e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4ddbddcc18222ad8ed739c645edc7d0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#ga4ddbddcc18222ad8ed739c645edc7d0d">sac_iris::getkhv_internal</a> (char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s, int null_terminate)</td></tr>
+<tr class="memdesc:ga4ddbddcc18222ad8ed739c645edc7d0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a character string header value.  <a href="#ga4ddbddcc18222ad8ed739c645edc7d0d">More...</a><br /></td></tr>
+<tr class="separator:ga4ddbddcc18222ad8ed739c645edc7d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae1702632d811c1b81fe0f40753cc31ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#gae1702632d811c1b81fe0f40753cc31ec">sac_iris::getnhv</a> (char *kname, int *nvalue, int *nerr, int kname_s)</td></tr>
 <tr class="memdesc:gae1702632d811c1b81fe0f40753cc31ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a integer header value.  <a href="#gae1702632d811c1b81fe0f40753cc31ec">More...</a><br /></td></tr>
 <tr class="separator:gae1702632d811c1b81fe0f40753cc31ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -244,14 +244,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga74e7d8de626506f6ce2bdc119c8182e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga74e7d8de626506f6ce2bdc119c8182e3">&#9670;&nbsp;</a></span>getkhv()</h2>
+<a id="ga4ddbddcc18222ad8ed739c645edc7d0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4ddbddcc18222ad8ed739c645edc7d0d">&#9670;&nbsp;</a></span>getkhv_internal()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void getkhv </td>
+          <td class="memname">void getkhv_internal </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>kname</em>, </td>
@@ -278,7 +278,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>kvalue_s</em>&#160;</td>
+          <td class="paramname"><em>kvalue_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>null_terminate</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -427,7 +433,7 @@ Functions</h2></td></tr>
 
 <p>Create a new sac header to store in memory. </p>
 <p>Creates a new, empy sac header in memory</p>
-<dl class="section note"><dt>Note</dt><dd>The header is held in memory and fields are accessible throught <a class="el" href="group__sac-iris.html#ga053052bf9729821a53c3b1e18bff4251" title="Get a floating point header value. ">getfhv()</a>, <a class="el" href="group__sac-iris.html#gaf88fdd6703c75ebb37d4316b1cf22a0b" title="Get a enumerated header value. ">getihv()</a>, <a class="el" href="group__sac-iris.html#ga74e7d8de626506f6ce2bdc119c8182e3" title="Get a character string header value. ">getkhv()</a>, <a class="el" href="group__sac-iris.html#gae1702632d811c1b81fe0f40753cc31ec" title="Get a integer header value. ">getnhv()</a>, <a class="el" href="group__sac-iris.html#gad3dc4f7d34fbb7bf2d94f042ac2d0a74" title="Get a logical/bool header value. ">getlhv()</a> and settable from <a class="el" href="group__sac-iris.html#gaf178567569a203b9781611d2c94ab82b" title="Set a floating point header value. ">setfhv()</a>, <a class="el" href="group__sac-iris.html#gac771817c78cc4c82601c7cb6e709fc20" title="Set a enumerated header value. ">setihv()</a>, <a class="el" href="group__sac-iris.html#gaaeb743911564d22c06604396f55e3f7d" title="Set a character string header value. ">setkhv()</a>, <a class="el" href="group__sac-iris.html#ga311f8fa00d96340d7393de1aafcf5c2e" title="Set a integer header value. ">setnhv()</a>, <a class="el" href="group__sac-iris.html#ga957b964a36d66717de768cc62065414f" title="Set a logical/bool header value. ">setlhv()</a>. This active header is used during writes in <a class="el" href="group__sac-iris.html#ga217d782d6d9b07c99ca631c326079170" title="Write a sac file. ">wsac0()</a>, <a class="el" href="group__sac-iris.html#ga2c90b56e40f85cc9bb98fb0898c4805f" title="Write an evenly spaced sac file. ">wsac1()</a>, <a class="el" href="group__sac-iris.html#ga91da0d15bab46b5f512976fb23dd1b30" title="Write an unevenly spaced sac file. ">wsac2()</a>, and wsac3(). </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The header is held in memory and fields are accessible throught <a class="el" href="group__sac-iris.html#ga053052bf9729821a53c3b1e18bff4251" title="Get a floating point header value. ">getfhv()</a>, <a class="el" href="group__sac-iris.html#gaf88fdd6703c75ebb37d4316b1cf22a0b" title="Get a enumerated header value. ">getihv()</a>, getkhv(), <a class="el" href="group__sac-iris.html#gae1702632d811c1b81fe0f40753cc31ec" title="Get a integer header value. ">getnhv()</a>, <a class="el" href="group__sac-iris.html#gad3dc4f7d34fbb7bf2d94f042ac2d0a74" title="Get a logical/bool header value. ">getlhv()</a> and settable from <a class="el" href="group__sac-iris.html#gaf178567569a203b9781611d2c94ab82b" title="Set a floating point header value. ">setfhv()</a>, <a class="el" href="group__sac-iris.html#gac771817c78cc4c82601c7cb6e709fc20" title="Set a enumerated header value. ">setihv()</a>, <a class="el" href="group__sac-iris.html#gaaeb743911564d22c06604396f55e3f7d" title="Set a character string header value. ">setkhv()</a>, <a class="el" href="group__sac-iris.html#ga311f8fa00d96340d7393de1aafcf5c2e" title="Set a integer header value. ">setnhv()</a>, <a class="el" href="group__sac-iris.html#ga957b964a36d66717de768cc62065414f" title="Set a logical/bool header value. ">setlhv()</a>. This active header is used during writes in <a class="el" href="group__sac-iris.html#ga217d782d6d9b07c99ca631c326079170" title="Write a sac file. ">wsac0()</a>, <a class="el" href="group__sac-iris.html#ga2c90b56e40f85cc9bb98fb0898c4805f" title="Write an evenly spaced sac file. ">wsac1()</a>, <a class="el" href="group__sac-iris.html#ga91da0d15bab46b5f512976fb23dd1b30" title="Write an unevenly spaced sac file. ">wsac2()</a>, and wsac3(). </dd></dl>
 
 </div>
 </div>

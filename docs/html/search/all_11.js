@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['update_5fdistaz',['update_distaz',['../group__sac.html#gacb8de8eaef89eb56204a6f128f2feb27',1,'sac']]],
   ['user0',['user0',['../structsac__hdr.html#ab2b798ba9e80849ec8b2ade62b5a596a',1,'sac_hdr']]],
   ['user1',['user1',['../structsac__hdr.html#a89ae532c180efe96735089b2abe544ea',1,'sac_hdr']]],
   ['user2',['user2',['../structsac__hdr.html#ac30d6ccae02c28362612584fa7f970db',1,'sac_hdr']]],

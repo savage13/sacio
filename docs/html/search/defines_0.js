@@ -1,6 +1,7 @@
 var searchData=
 [
   ['error_5fillegal_5fdata_5ffile_5flist_5fnumber',['ERROR_ILLEGAL_DATA_FILE_LIST_NUMBER',['../compat_8c.html#a2f7e6bc0b59a94b7a1f98c8fcca8abcd',1,'compat.c']]],
+  ['error_5fillegal_5fenumerated_5fvalue',['ERROR_ILLEGAL_ENUMERATED_VALUE',['../compat_8c.html#aca6a9d0ed53a40e1137822c88271a266',1,'compat.c']]],
   ['error_5fillegal_5fheader_5ffield_5fname',['ERROR_ILLEGAL_HEADER_FIELD_NAME',['../compat_8c.html#a9f42912e5dd423aaa3c44ee49a4d8fd2',1,'compat.c']]],
   ['error_5fnot_5fa_5fsac_5ffile',['ERROR_NOT_A_SAC_FILE',['../sacio_8c.html#a2e410ebbb6381756bc12ed61dfb56d6c',1,'sacio.c']]],
   ['error_5fopening_5ffile',['ERROR_OPENING_FILE',['../sacio_8c.html#acc969fb8e6180670f42c7591b814a914',1,'sacio.c']]],
