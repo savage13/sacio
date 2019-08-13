@@ -432,9 +432,10 @@ sac_get_pick(sac *s, int n, double *t) {
     case 9: return sac_get_float(s, SAC_T9, t); break;
     default:
         fprintf(stderr, "Error in sac_get_pick(): Unknown pick: %d\n", n);
+        return 0;
         break;
     }
-    return 0;
+    return 1;
 }
 
 /**
@@ -1707,11 +1708,11 @@ sac_header_read(sac *s, FILE *fp) {
     //fprintf(stderr, "sac hdr: %p\n", s->h);
     n = SAC_HEADER_NUMBERS;
     if(fread((char *) s->h, sizeof(float), n, fp) != n) {
-        return ERROR_READING_FILE;
+        return ERROR_NOT_A_SAC_FILE;
     }
     s->m->swap = sac_check_header_version((float *) s->h, &nerr);
     if(nerr) {
-        return ERROR_READING_FILE;
+        return ERROR_NOT_A_SAC_FILE;
     }
     if(s->m->swap) {
         sac_header_swap((float *) s->h);
@@ -1894,7 +1895,7 @@ calc_e_even(sac *s) {
     case ITIME:
     case IXY:
     case IUNKN:
-        return b + dt * (float)(s->h->npts - 1);
+        return b + dt * (double)(s->h->npts - 1);
         break;
     case IRLIM:
     case IAMPH: {
@@ -1904,7 +1905,7 @@ calc_e_even(sac *s) {
         } else {
             nfreq = (s->h->npts-1) / 2;
         }
-        return b + (float)nfreq * dt;
+        return b + (double)nfreq * dt;
     }
         break;
     case IXYZ:

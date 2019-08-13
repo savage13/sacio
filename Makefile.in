@@ -88,9 +88,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT)
 check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -166,6 +166,11 @@ t_time_OBJECTS = $(am_t_time_OBJECTS)
 t_time_DEPENDENCIES = libsacio_bsd.a
 t_time_LINK = $(CCLD) $(t_time_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_t_ver_OBJECTS = t/ver-ver.$(OBJEXT)
+t_ver_OBJECTS = $(am_t_ver_OBJECTS)
+t_ver_DEPENDENCIES = libsacio_bsd.a
+t_ver_LINK = $(CCLD) $(t_ver_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -198,9 +203,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES)
+	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
+	$(t_ver_SOURCES)
 DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES)
+	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
+	$(t_ver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -532,14 +539,17 @@ t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
 t_dur_SOURCES = t/dur.c
 t_time_SOURCES = t/time.c
+t_ver_SOURCES = t/ver.c
 t_iotest_CFLAGS = -Iinclude
 t_compat_CFLAGS = -Iinclude
 t_dur_CFLAGS = -Iinclude
 t_time_CFLAGS = -Iinclude
+t_ver_CFLAGS = -Iinclude
 t_iotest_LDADD = libsacio_bsd.a -lm
 t_compat_LDADD = libsacio_bsd.a -lm
 t_dur_LDADD = libsacio_bsd.a -lm
 t_time_LDADD = libsacio_bsd.a -lm
+t_ver_LDADD = libsacio_bsd.a -lm
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -656,6 +666,11 @@ t/time-time.$(OBJEXT): t/$(am__dirstamp)
 t/time$(EXEEXT): $(t_time_OBJECTS) $(t_time_DEPENDENCIES) $(EXTRA_t_time_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/time$(EXEEXT)
 	$(AM_V_CCLD)$(t_time_LINK) $(t_time_OBJECTS) $(t_time_LDADD) $(LIBS)
+t/ver-ver.$(OBJEXT): t/$(am__dirstamp)
+
+t/ver$(EXEEXT): $(t_ver_OBJECTS) $(t_ver_DEPENDENCIES) $(EXTRA_t_ver_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/ver$(EXEEXT)
+	$(AM_V_CCLD)$(t_ver_LINK) $(t_ver_OBJECTS) $(t_ver_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -693,6 +708,12 @@ t/time-time.o: t/time.c
 
 t/time-time.obj: t/time.c
 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_time_CFLAGS) $(CFLAGS) -c -o t/time-time.obj `if test -f 't/time.c'; then $(CYGPATH_W) 't/time.c'; else $(CYGPATH_W) '$(srcdir)/t/time.c'; fi`
+
+t/ver-ver.o: t/ver.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_ver_CFLAGS) $(CFLAGS) -c -o t/ver-ver.o `test -f 't/ver.c' || echo '$(srcdir)/'`t/ver.c
+
+t/ver-ver.obj: t/ver.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_ver_CFLAGS) $(CFLAGS) -c -o t/ver-ver.obj `if test -f 't/ver.c'; then $(CYGPATH_W) 't/ver.c'; else $(CYGPATH_W) '$(srcdir)/t/ver.c'; fi`
 install-sacioincHEADERS: $(sacioinc_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(sacioinc_HEADERS)'; test -n "$(sacioincdir)" || list=; \
@@ -939,6 +960,13 @@ t/dur.log: t/dur$(EXEEXT)
 t/time.log: t/time$(EXEEXT)
 	@p='t/time$(EXEEXT)'; \
 	b='t/time'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+t/ver.log: t/ver$(EXEEXT)
+	@p='t/ver$(EXEEXT)'; \
+	b='t/ver'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
