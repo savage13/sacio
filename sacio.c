@@ -1987,7 +1987,7 @@ sac_calc_read_window(sac *s, double t1, double t2, enum CutAction cutact, int *n
         if(cutact == CutFatal && (f != (START_INSIDE | END_INSIDE))) {
             goto error;
         }
-        if(nread <= 0 && cutact != CutFillZero) {
+        if(*nread <= 0 && cutact != CutFillZero) {
             goto error;
         }
 
