@@ -25,7 +25,8 @@ main() {
     assert_eq(s->z->_b, 0.0);
     assert_eq(s->h->_e, 99.0);
     assert_eq(s->z->_e, 99.0);
-
+    sac_free(s);
+    
     // Within Data Range
     s = sac_read_with_cut("t/test_line.sac", 10.0, 90.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -39,7 +40,8 @@ main() {
     assert_eq(s->z->_b, 10.0);
     assert_eq(s->h->_e, 90.0);
     assert_eq(s->z->_e, 90.0);
-
+    sac_free(s);
+    
     // Small length
     s = sac_read_with_cut("t/test_line.sac", 10.0, 11.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -53,7 +55,8 @@ main() {
     assert_eq(s->z->_b, 10.0);
     assert_eq(s->h->_e, 11.0);
     assert_eq(s->z->_e, 11.0);
-
+    sac_free(s);
+    
     // No Window
     s = sac_read_with_cut("t/test_line.sac", 10.0, 10.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -83,7 +86,7 @@ main() {
     assert_eq(s->y[0], 10.0);
     assert_eq(s->h->depmin, 10.0);
     assert_eq(s->h->depmax, 99.0);
-
+    sac_free(s);
 
     // Less than begin, cut at end
     s = sac_read_with_cut("t/test_line.sac", -10.0, 90.0, CutUseBE, &nerr);
@@ -100,7 +103,8 @@ main() {
     assert_eq(s->z->_e, 90.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 90.0);
-
+    sac_free(s);
+    
     // cut at begin, small within data range
     s = sac_read_with_cut("t/test_line.sac", -1.0, 1.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -116,7 +120,8 @@ main() {
     assert_eq(s->z->_e, 1.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 1.0);
-
+    sac_free(s);
+    
     // Both < begin
     s = sac_read_with_cut("t/test_line.sac", -2.0, -1.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -162,7 +167,8 @@ main() {
     assert_eq(s->z->_e, 99.0);
     assert_eq(s->h->depmin, 99.0);
     assert_eq(s->h->depmax, 99.0);
-
+    sac_free(s);
+    
     // Start at end
     s = sac_read_with_cut("t/test_line.sac", 99.49, 100.2, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -178,7 +184,7 @@ main() {
     assert_eq(s->z->_e, 99.0);
     assert_eq(s->h->depmin, 99.0);
     assert_eq(s->h->depmax, 99.0);
-
+    sac_free(s);
 
     // Start at end
     s = sac_read_with_cut("t/test_line.sac", 99.50 - 1e-14, 100.2, CutUseBE, &nerr);
@@ -195,7 +201,8 @@ main() {
     assert_eq(s->z->_e, 99.0);
     assert_eq(s->h->depmin, 99.0);
     assert_eq(s->h->depmax, 99.0);
-
+    sac_free(s);
+    
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -1e-14, 50.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -211,7 +218,8 @@ main() {
     assert_eq(s->z->_e, 50.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 50.0);
-
+    sac_free(s);
+    
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -0.49, 50.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -227,7 +235,8 @@ main() {
     assert_eq(s->z->_e, 50.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 50.0);
-
+    sac_free(s);
+    
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -0.49, 0.0, CutUseBE, &nerr);
     printf("nerr: %d\n", nerr);
@@ -243,7 +252,7 @@ main() {
     assert_eq(s->z->_e, 0.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
-
+    sac_free(s);
 
     // Not floating point numbers
     s = sac_read_with_cut("t/test_line.sac", -1.0/0.0, 10.0, CutUseBE, &nerr);
@@ -268,7 +277,7 @@ main() {
     printf("nerr: %d\n", nerr);
     assert_eq(nerr, ERROR_CUT_TIMES_BEYOND_DATA_LIMITS);
     assert_eq(s, NULL);
-
+    sac_free(s);
     // Within Data Range
     s = sac_read_with_cut("t/test_line.sac", 10.0, 90.0, CutFatal, &nerr);
     printf("nerr: %d within data range %p\n", nerr, s);
@@ -282,7 +291,8 @@ main() {
     assert_eq(s->z->_b, 10.0);
     assert_eq(s->h->_e, 90.0);
     assert_eq(s->z->_e, 90.0);
-
+    sac_free(s);
+    
     // Small length
     s = sac_read_with_cut("t/test_line.sac", 10.0, 11.0, CutFatal, &nerr);
     printf("nerr: %d\n", nerr);
@@ -296,6 +306,7 @@ main() {
     assert_eq(s->z->_b, 10.0);
     assert_eq(s->h->_e, 11.0);
     assert_eq(s->z->_e, 11.0);
+    sac_free(s);
 
     // No Window
     s = sac_read_with_cut("t/test_line.sac", 10.0, 10.0, CutFatal, &nerr);
@@ -393,6 +404,8 @@ main() {
     printf("min,max: %e %e\n", s->h->depmin, s->h->depmax);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 50.0);
+    sac_free(s);
+
 
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -0.49, 50.0, CutFatal, &nerr);
@@ -410,6 +423,8 @@ main() {
     printf("min,max: %e %e\n", s->h->depmin, s->h->depmax);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 50.0);
+    sac_free(s);
+
 
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -0.49, 0.0, CutFatal, &nerr);
@@ -427,6 +442,8 @@ main() {
     printf("min,max: %e %e\n", s->h->depmin, s->h->depmax);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
     // Too Wide
     s = sac_read_with_cut("t/test_line.sac", -100.0, 100.0, CutFillZero, &nerr);
@@ -444,6 +461,8 @@ main() {
     printf("min,max: %e %e\n", s->h->depmin, s->h->depmax);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 99.0);
+    sac_free(s);
+
 
 
     // Within Data Range
@@ -459,6 +478,8 @@ main() {
     assert_eq(s->z->_b, 10.0);
     assert_eq(s->h->_e, 90.0);
     assert_eq(s->z->_e, 90.0);
+    sac_free(s);
+
 
     // Small length
     s = sac_read_with_cut("t/test_line.sac", 10.0, 11.0, CutFillZero, &nerr);
@@ -473,6 +494,8 @@ main() {
     assert_eq(s->z->_b, 10.0);
     assert_eq(s->h->_e, 11.0);
     assert_eq(s->z->_e, 11.0);
+    sac_free(s);
+
 
     // No Window
     s = sac_read_with_cut("t/test_line.sac", 10.0, 10.0, CutFillZero, &nerr);
@@ -504,6 +527,8 @@ main() {
     printf("depmin depmax: %e %e\n", s->h->depmin, s->h->depmax);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 99.0);
+    sac_free(s);
+
 
 
     // Less than begin, cut at end
@@ -521,6 +546,8 @@ main() {
     assert_eq(s->z->_e, 90.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 90.0);
+    sac_free(s);
+
 
     // cut at begin, small within data range
     s = sac_read_with_cut("t/test_line.sac", -1.0, 1.0, CutFillZero, &nerr);
@@ -537,6 +564,8 @@ main() {
     assert_eq(s->z->_e, 1.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 1.0);
+    sac_free(s);
+
 
     // Both < begin
     s = sac_read_with_cut("t/test_line.sac", -2.0, -1.0, CutFillZero, &nerr);
@@ -553,6 +582,8 @@ main() {
     assert_eq(s->z->_e, -1.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
 
     // Both > end
@@ -570,6 +601,8 @@ main() {
     assert_eq(s->z->_e, 103.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
 
     // Both > end
@@ -588,6 +621,8 @@ main() {
     assert_eq(s->z->_e, 102.);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
     // Both > end
     s = sac_read_with_cut("t/test_line.sac", 100.1, 100.2, CutFillZero, &nerr);
@@ -605,6 +640,8 @@ main() {
     assert_eq(s->z->_e, 100.);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
 
     // Both > end
@@ -623,6 +660,8 @@ main() {
     assert_eq(s->z->_e, 100.);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
 
     // Start at end point
@@ -640,6 +679,8 @@ main() {
     assert_eq(s->z->_e, 100.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 99.0);
+    sac_free(s);
+
 
     // Start at end
     s = sac_read_with_cut("t/test_line.sac", 99.49, 100.2, CutFillZero, &nerr);
@@ -656,6 +697,8 @@ main() {
     assert_eq(s->z->_e, 100.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 99.0);
+    sac_free(s);
+
 
 
     // Start at end
@@ -673,6 +716,8 @@ main() {
     assert_eq(s->z->_e, 100.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 99.0);
+    sac_free(s);
+
 
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -1e-14, 50.0, CutFillZero, &nerr);
@@ -689,6 +734,8 @@ main() {
     assert_eq(s->z->_e, 50.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 50.0);
+    sac_free(s);
+
 
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -0.49, 50.0, CutFillZero, &nerr);
@@ -705,6 +752,8 @@ main() {
     assert_eq(s->z->_e, 50.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 50.0);
+    sac_free(s);
+
 
     // Start slightly < begin
     s = sac_read_with_cut("t/test_line.sac", -0.49, 0.0, CutFillZero, &nerr);
@@ -721,6 +770,8 @@ main() {
     assert_eq(s->z->_e, 0.0);
     assert_eq(s->h->depmin, 0.0);
     assert_eq(s->h->depmax, 0.0);
+    sac_free(s);
+
 
 
 

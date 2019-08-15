@@ -548,6 +548,7 @@ sac_free(sac * s) {
         FREE(s->h);
         FREE(s->x);
         FREE(s->y);
+        FREE(s->z);
         if (s->m) {
             FREE(s->m->filename);
         }
@@ -1967,8 +1968,8 @@ sac_calc_read_window(sac *s, double t1, double t2, enum CutAction cutact, int *n
             *skip  = MAX(s->m->nstart, 1) - 1;
         } else if(cutact == CutFatal) {
             *nread = s->m->nstop - s->m->nstart + 1;
-            *offt  = s->m->nstart-1;
-            *skip  = 0;
+            *skip  = s->m->nstart-1;
+            *offt  = 0;
         }
         if(cutact != CutFillZero) {
             switch (f) {
