@@ -22,27 +22,30 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 
 # TESTS
 
-TESTS = t/iotest t/compat t/dur t/time t/ver
+TESTS = t/iotest t/compat t/dur t/time t/ver t/cut
 
-check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver
+check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver t/cut
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
 t_dur_SOURCES = t/dur.c
 t_time_SOURCES = t/time.c
 t_ver_SOURCES = t/ver.c
+t_cut_SOURCES = t/cut.c
 
 t_iotest_CFLAGS = -Iinclude
 t_compat_CFLAGS = -Iinclude
 t_dur_CFLAGS = -Iinclude
 t_time_CFLAGS = -Iinclude
 t_ver_CFLAGS = -Iinclude
+t_cut_CFLAGS = -Iinclude
 
 t_iotest_LDADD = libsacio_bsd.a -lm
 t_compat_LDADD = libsacio_bsd.a -lm
 t_dur_LDADD = libsacio_bsd.a -lm
 t_time_LDADD = libsacio_bsd.a -lm
 t_ver_LDADD = libsacio_bsd.a -lm
+t_cut_LDADD = libsacio_bsd.a -lm
 
 CLEANFILES = t/test*.tmp
 

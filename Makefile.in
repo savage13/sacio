@@ -88,9 +88,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT)
 check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -151,6 +151,11 @@ t_compat_OBJECTS = $(am_t_compat_OBJECTS)
 t_compat_DEPENDENCIES = libsacio_bsd.a
 t_compat_LINK = $(CCLD) $(t_compat_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_t_cut_OBJECTS = t/cut-cut.$(OBJEXT)
+t_cut_OBJECTS = $(am_t_cut_OBJECTS)
+t_cut_DEPENDENCIES = libsacio_bsd.a
+t_cut_LINK = $(CCLD) $(t_cut_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am_t_dur_OBJECTS = t/dur-dur.$(OBJEXT)
 t_dur_OBJECTS = $(am_t_dur_OBJECTS)
 t_dur_DEPENDENCIES = libsacio_bsd.a
@@ -203,11 +208,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
-	$(t_ver_SOURCES)
+	$(t_cut_SOURCES) $(t_dur_SOURCES) $(t_iotest_SOURCES) \
+	$(t_time_SOURCES) $(t_ver_SOURCES)
 DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
-	$(t_ver_SOURCES)
+	$(t_cut_SOURCES) $(t_dur_SOURCES) $(t_iotest_SOURCES) \
+	$(t_time_SOURCES) $(t_ver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -540,16 +545,19 @@ t_compat_SOURCES = t/compat.c
 t_dur_SOURCES = t/dur.c
 t_time_SOURCES = t/time.c
 t_ver_SOURCES = t/ver.c
+t_cut_SOURCES = t/cut.c
 t_iotest_CFLAGS = -Iinclude
 t_compat_CFLAGS = -Iinclude
 t_dur_CFLAGS = -Iinclude
 t_time_CFLAGS = -Iinclude
 t_ver_CFLAGS = -Iinclude
+t_cut_CFLAGS = -Iinclude
 t_iotest_LDADD = libsacio_bsd.a -lm
 t_compat_LDADD = libsacio_bsd.a -lm
 t_dur_LDADD = libsacio_bsd.a -lm
 t_time_LDADD = libsacio_bsd.a -lm
 t_ver_LDADD = libsacio_bsd.a -lm
+t_cut_LDADD = libsacio_bsd.a -lm
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -651,6 +659,11 @@ t/compat-compat.$(OBJEXT): t/$(am__dirstamp)
 t/compat$(EXEEXT): $(t_compat_OBJECTS) $(t_compat_DEPENDENCIES) $(EXTRA_t_compat_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/compat$(EXEEXT)
 	$(AM_V_CCLD)$(t_compat_LINK) $(t_compat_OBJECTS) $(t_compat_LDADD) $(LIBS)
+t/cut-cut.$(OBJEXT): t/$(am__dirstamp)
+
+t/cut$(EXEEXT): $(t_cut_OBJECTS) $(t_cut_DEPENDENCIES) $(EXTRA_t_cut_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/cut$(EXEEXT)
+	$(AM_V_CCLD)$(t_cut_LINK) $(t_cut_OBJECTS) $(t_cut_LDADD) $(LIBS)
 t/dur-dur.$(OBJEXT): t/$(am__dirstamp)
 
 t/dur$(EXEEXT): $(t_dur_OBJECTS) $(t_dur_DEPENDENCIES) $(EXTRA_t_dur_DEPENDENCIES) t/$(am__dirstamp)
@@ -690,6 +703,12 @@ t/compat-compat.o: t/compat.c
 
 t/compat-compat.obj: t/compat.c
 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_compat_CFLAGS) $(CFLAGS) -c -o t/compat-compat.obj `if test -f 't/compat.c'; then $(CYGPATH_W) 't/compat.c'; else $(CYGPATH_W) '$(srcdir)/t/compat.c'; fi`
+
+t/cut-cut.o: t/cut.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_cut_CFLAGS) $(CFLAGS) -c -o t/cut-cut.o `test -f 't/cut.c' || echo '$(srcdir)/'`t/cut.c
+
+t/cut-cut.obj: t/cut.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_cut_CFLAGS) $(CFLAGS) -c -o t/cut-cut.obj `if test -f 't/cut.c'; then $(CYGPATH_W) 't/cut.c'; else $(CYGPATH_W) '$(srcdir)/t/cut.c'; fi`
 
 t/dur-dur.o: t/dur.c
 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dur_CFLAGS) $(CFLAGS) -c -o t/dur-dur.o `test -f 't/dur.c' || echo '$(srcdir)/'`t/dur.c
@@ -967,6 +986,13 @@ t/time.log: t/time$(EXEEXT)
 t/ver.log: t/ver$(EXEEXT)
 	@p='t/ver$(EXEEXT)'; \
 	b='t/ver'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+t/cut.log: t/cut$(EXEEXT)
+	@p='t/cut$(EXEEXT)'; \
+	b='t/cut'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
