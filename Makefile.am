@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 EXTRA_DIST = License README.md t config docs
 
-AM_CFLAGS = -Wall -Wextra -Iinclude/
+AM_CFLAGS = -fPIC -Wall -Wextra -Iinclude/
 
 saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
