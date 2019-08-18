@@ -74,6 +74,7 @@ sac_float(sac *s, int id) {
 }
 
 #define  B(s) sac_float(s, SAC_B)
+#define  E(s) sac_float(s, SAC_E)
 #define DT(s) sac_float(s, SAC_DELTA)
 
 /**
@@ -1936,8 +1937,37 @@ window_overlap(sac *s) {
     return f;
 }
 
+double
+sac_pick_ref_time(sac *s, char *c, int *nerr) {
+    double r = 0.0;
+    switch(c[0]) {
+    case 'Z': r = 0.0; break;
+    case 'B': r = sac_float(s, SAC_B); break;
+    case 'E': r = sac_float(s, SAC_E); break;
+    case 'O': r = sac_float(s, SAC_O); break;
+    case 'A': r = sac_float(s, SAC_A); break;
+    case 'F': r = sac_float(s, SAC_F); break;
+    case 'T':
+        switch(c[1]) {
+        case '1': r = sac_float(s, SAC_T1); break;
+        case '2': r = sac_float(s, SAC_T2); break;
+        case '3': r = sac_float(s, SAC_T3); break;
+        case '4': r = sac_float(s, SAC_T4); break;
+        case '5': r = sac_float(s, SAC_T5); break;
+        case '6': r = sac_float(s, SAC_T6); break;
+        case '7': r = sac_float(s, SAC_T7); break;
+        case '8': r = sac_float(s, SAC_T8); break;
+        case '9': r = sac_float(s, SAC_T9); break;
+        default: *nerr = 1301; break;
+        }
+        break;
+    default: *nerr = 1301; break;
+    }
+    return r;
+}
+
 int
-sac_calc_read_window(sac *s, double t1, double t2, enum CutAction cutact, int *nread, int *offt, int *skip, int *nerr) {
+sac_calc_read_window(sac *s, char *c1, double t1, char *c2, double t2, enum CutAction cutact, int *nread, int *offt, int *skip, int *nerr) {
     *nerr = 0;
     if(cutact == CutNone) {
         s->m->nfillb = 0;
@@ -1948,6 +1978,22 @@ sac_calc_read_window(sac *s, double t1, double t2, enum CutAction cutact, int *n
         *offt  = 0;
         *skip  = 0;
     } else {
+
+        double r1 = sac_pick_ref_time(s, c1, nerr);
+        double r2 = sac_pick_ref_time(s, c2, nerr);
+        if(r1 == SAC_FLOAT_UNDEFINED) {
+            printf(" WARNING: Undefined starting cut for file %s\n Corrected by using file begin.\n", s->m->filename);
+        }
+        if(r2 == SAC_FLOAT_UNDEFINED) {
+            printf(" WARNING: Undefined starting cut for file %s\n Corrected by using file end.\n", s->m->filename);
+        }
+        t1 = (r1 == SAC_FLOAT_UNDEFINED) ? B(s) : r1 + t1;
+        t2 = (r2 == SAC_FLOAT_UNDEFINED) ? E(s) : r2 + t2;
+
+        if(t1 >= t2) {
+            *nerr = ERROR_START_TIME_GREATER_THAN_STOP;
+            goto error;
+        }
         s->m->nstart = sac_time_to_index(s, t1) + 1;
         s->m->nstop  = sac_time_to_index(s, t2) + 1;
 
@@ -2006,13 +2052,15 @@ sac_calc_read_window(sac *s, double t1, double t2, enum CutAction cutact, int *n
 }
 
 sac *
-sac_read_with_cut(char *filename, double t1, double t2, enum CutAction cutact, int *nerr) {
+sac_read_with_cut(char *filename,
+                  char* c1, double t1,
+                  char* c2, double t2,
+                  enum CutAction cutact, int *nerr) {
     FILE *fp = NULL;
     sac *s = NULL;
     int nread = 0, offt = 0;
     int skip = 0;
-
-    if(cutact != CutNone && (!isfinite(t1) || !isfinite(t2) || t1 >= t2)) {
+    if(cutact != CutNone && (!isfinite(t1) || !isfinite(t2))) {
         *nerr = ERROR_START_TIME_GREATER_THAN_STOP;
         goto error;
     }
@@ -2031,7 +2079,8 @@ sac_read_with_cut(char *filename, double t1, double t2, enum CutAction cutact, i
 
     sac_header_v6_v7(s, fp, nerr);
 
-    if(!sac_calc_read_window(s, t1, t2, cutact, &nread, &offt, &skip, nerr)) {
+    if(!sac_calc_read_window(s, c1, t1, c2, t2, cutact,
+                             &nread, &offt, &skip, nerr)) {
         goto error;
     }
 
