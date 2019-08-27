@@ -88,9 +88,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT)
 check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -146,36 +146,34 @@ am_libsacio_bsd_a_OBJECTS = sacio.$(OBJEXT) geodesic.$(OBJEXT) \
 	compat.$(OBJEXT) header_map.$(OBJEXT)
 libsacio_bsd_a_OBJECTS = $(am_libsacio_bsd_a_OBJECTS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_t_compat_OBJECTS = t/compat-compat.$(OBJEXT)
+am_t_compat_OBJECTS = t/compat.$(OBJEXT)
 t_compat_OBJECTS = $(am_t_compat_OBJECTS)
+t_compat_LDADD = $(LDADD)
 t_compat_DEPENDENCIES = libsacio_bsd.a
-t_compat_LINK = $(CCLD) $(t_compat_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_t_cut_OBJECTS = t/cut-cut.$(OBJEXT)
+am_t_cut_OBJECTS = t/cut.$(OBJEXT)
 t_cut_OBJECTS = $(am_t_cut_OBJECTS)
+t_cut_LDADD = $(LDADD)
 t_cut_DEPENDENCIES = libsacio_bsd.a
-t_cut_LINK = $(CCLD) $(t_cut_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_t_dur_OBJECTS = t/dur-dur.$(OBJEXT)
+am_t_cutim_OBJECTS = t/cutim.$(OBJEXT)
+t_cutim_OBJECTS = $(am_t_cutim_OBJECTS)
+t_cutim_LDADD = $(LDADD)
+t_cutim_DEPENDENCIES = libsacio_bsd.a
+am_t_dur_OBJECTS = t/dur.$(OBJEXT)
 t_dur_OBJECTS = $(am_t_dur_OBJECTS)
+t_dur_LDADD = $(LDADD)
 t_dur_DEPENDENCIES = libsacio_bsd.a
-t_dur_LINK = $(CCLD) $(t_dur_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_t_iotest_OBJECTS = t/iotest-iotest.$(OBJEXT)
+am_t_iotest_OBJECTS = t/iotest.$(OBJEXT)
 t_iotest_OBJECTS = $(am_t_iotest_OBJECTS)
+t_iotest_LDADD = $(LDADD)
 t_iotest_DEPENDENCIES = libsacio_bsd.a
-t_iotest_LINK = $(CCLD) $(t_iotest_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_t_time_OBJECTS = t/time-time.$(OBJEXT)
+am_t_time_OBJECTS = t/time.$(OBJEXT)
 t_time_OBJECTS = $(am_t_time_OBJECTS)
+t_time_LDADD = $(LDADD)
 t_time_DEPENDENCIES = libsacio_bsd.a
-t_time_LINK = $(CCLD) $(t_time_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_t_ver_OBJECTS = t/ver-ver.$(OBJEXT)
+am_t_ver_OBJECTS = t/ver.$(OBJEXT)
 t_ver_OBJECTS = $(am_t_ver_OBJECTS)
+t_ver_LDADD = $(LDADD)
 t_ver_DEPENDENCIES = libsacio_bsd.a
-t_ver_LINK = $(CCLD) $(t_ver_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -191,10 +189,6 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
 am__maybe_remake_depfiles =
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_@AM_V@)
@@ -208,11 +202,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_cut_SOURCES) $(t_dur_SOURCES) $(t_iotest_SOURCES) \
-	$(t_time_SOURCES) $(t_ver_SOURCES)
+	$(t_cut_SOURCES) $(t_cutim_SOURCES) $(t_dur_SOURCES) \
+	$(t_iotest_SOURCES) $(t_time_SOURCES) $(t_ver_SOURCES)
 DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_cut_SOURCES) $(t_dur_SOURCES) $(t_iotest_SOURCES) \
-	$(t_time_SOURCES) $(t_ver_SOURCES)
+	$(t_cut_SOURCES) $(t_cutim_SOURCES) $(t_dur_SOURCES) \
+	$(t_iotest_SOURCES) $(t_time_SOURCES) $(t_ver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -527,7 +521,7 @@ top_srcdir = @top_srcdir@
 # Do not create dependencies while compiling
 AUTOMAKE_OPTIONS = no-dependencies
 EXTRA_DIST = License README.md t config docs
-AM_CFLAGS = -fPIC -Wall -Wextra -Iinclude/
+AM_CFLAGS = -fPIC -Wall -Wextra 
 saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
 saciolib_LIBRARIES = libsacio_bsd.a
@@ -540,24 +534,30 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 												 sacio.h timespec.h \
                          header_map.txt
 
+
+# TESTS
+LDADD = libsacio_bsd.a -lm
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
 t_dur_SOURCES = t/dur.c
 t_time_SOURCES = t/time.c
 t_ver_SOURCES = t/ver.c
 t_cut_SOURCES = t/cut.c
-t_iotest_CFLAGS = -Iinclude
-t_compat_CFLAGS = -Iinclude
-t_dur_CFLAGS = -Iinclude
-t_time_CFLAGS = -Iinclude
-t_ver_CFLAGS = -Iinclude
-t_cut_CFLAGS = -Iinclude
-t_iotest_LDADD = libsacio_bsd.a -lm
-t_compat_LDADD = libsacio_bsd.a -lm
-t_dur_LDADD = libsacio_bsd.a -lm
-t_time_LDADD = libsacio_bsd.a -lm
-t_ver_LDADD = libsacio_bsd.a -lm
-t_cut_LDADD = libsacio_bsd.a -lm
+t_cutim_SOURCES = t/cutim.c
+
+# t_iotest_CFLAGS = -Iinclude
+# t_compat_CFLAGS = -Iinclude
+# t_dur_CFLAGS = -Iinclude
+# t_time_CFLAGS = -Iinclude
+# t_ver_CFLAGS = -Iinclude
+# t_cut_CFLAGS = -Iinclude
+
+# t_iotest_LDADD = libsacio_bsd.a -lm
+# t_compat_LDADD = libsacio_bsd.a -lm
+# t_dur_LDADD = libsacio_bsd.a -lm
+# t_time_LDADD = libsacio_bsd.a -lm
+# t_ver_LDADD = libsacio_bsd.a -lm
+# t_cut_LDADD = libsacio_bsd.a -lm
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -654,36 +654,41 @@ libsacio_bsd.a: $(libsacio_bsd_a_OBJECTS) $(libsacio_bsd_a_DEPENDENCIES) $(EXTRA
 t/$(am__dirstamp):
 	@$(MKDIR_P) t
 	@: > t/$(am__dirstamp)
-t/compat-compat.$(OBJEXT): t/$(am__dirstamp)
+t/compat.$(OBJEXT): t/$(am__dirstamp)
 
 t/compat$(EXEEXT): $(t_compat_OBJECTS) $(t_compat_DEPENDENCIES) $(EXTRA_t_compat_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/compat$(EXEEXT)
-	$(AM_V_CCLD)$(t_compat_LINK) $(t_compat_OBJECTS) $(t_compat_LDADD) $(LIBS)
-t/cut-cut.$(OBJEXT): t/$(am__dirstamp)
+	$(AM_V_CCLD)$(LINK) $(t_compat_OBJECTS) $(t_compat_LDADD) $(LIBS)
+t/cut.$(OBJEXT): t/$(am__dirstamp)
 
 t/cut$(EXEEXT): $(t_cut_OBJECTS) $(t_cut_DEPENDENCIES) $(EXTRA_t_cut_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/cut$(EXEEXT)
-	$(AM_V_CCLD)$(t_cut_LINK) $(t_cut_OBJECTS) $(t_cut_LDADD) $(LIBS)
-t/dur-dur.$(OBJEXT): t/$(am__dirstamp)
+	$(AM_V_CCLD)$(LINK) $(t_cut_OBJECTS) $(t_cut_LDADD) $(LIBS)
+t/cutim.$(OBJEXT): t/$(am__dirstamp)
+
+t/cutim$(EXEEXT): $(t_cutim_OBJECTS) $(t_cutim_DEPENDENCIES) $(EXTRA_t_cutim_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/cutim$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(t_cutim_OBJECTS) $(t_cutim_LDADD) $(LIBS)
+t/dur.$(OBJEXT): t/$(am__dirstamp)
 
 t/dur$(EXEEXT): $(t_dur_OBJECTS) $(t_dur_DEPENDENCIES) $(EXTRA_t_dur_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/dur$(EXEEXT)
-	$(AM_V_CCLD)$(t_dur_LINK) $(t_dur_OBJECTS) $(t_dur_LDADD) $(LIBS)
-t/iotest-iotest.$(OBJEXT): t/$(am__dirstamp)
+	$(AM_V_CCLD)$(LINK) $(t_dur_OBJECTS) $(t_dur_LDADD) $(LIBS)
+t/iotest.$(OBJEXT): t/$(am__dirstamp)
 
 t/iotest$(EXEEXT): $(t_iotest_OBJECTS) $(t_iotest_DEPENDENCIES) $(EXTRA_t_iotest_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/iotest$(EXEEXT)
-	$(AM_V_CCLD)$(t_iotest_LINK) $(t_iotest_OBJECTS) $(t_iotest_LDADD) $(LIBS)
-t/time-time.$(OBJEXT): t/$(am__dirstamp)
+	$(AM_V_CCLD)$(LINK) $(t_iotest_OBJECTS) $(t_iotest_LDADD) $(LIBS)
+t/time.$(OBJEXT): t/$(am__dirstamp)
 
 t/time$(EXEEXT): $(t_time_OBJECTS) $(t_time_DEPENDENCIES) $(EXTRA_t_time_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/time$(EXEEXT)
-	$(AM_V_CCLD)$(t_time_LINK) $(t_time_OBJECTS) $(t_time_LDADD) $(LIBS)
-t/ver-ver.$(OBJEXT): t/$(am__dirstamp)
+	$(AM_V_CCLD)$(LINK) $(t_time_OBJECTS) $(t_time_LDADD) $(LIBS)
+t/ver.$(OBJEXT): t/$(am__dirstamp)
 
 t/ver$(EXEEXT): $(t_ver_OBJECTS) $(t_ver_DEPENDENCIES) $(EXTRA_t_ver_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/ver$(EXEEXT)
-	$(AM_V_CCLD)$(t_ver_LINK) $(t_ver_OBJECTS) $(t_ver_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK) $(t_ver_OBJECTS) $(t_ver_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -697,42 +702,6 @@ distclean-compile:
 
 .c.obj:
 	$(AM_V_CC)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-t/compat-compat.o: t/compat.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_compat_CFLAGS) $(CFLAGS) -c -o t/compat-compat.o `test -f 't/compat.c' || echo '$(srcdir)/'`t/compat.c
-
-t/compat-compat.obj: t/compat.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_compat_CFLAGS) $(CFLAGS) -c -o t/compat-compat.obj `if test -f 't/compat.c'; then $(CYGPATH_W) 't/compat.c'; else $(CYGPATH_W) '$(srcdir)/t/compat.c'; fi`
-
-t/cut-cut.o: t/cut.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_cut_CFLAGS) $(CFLAGS) -c -o t/cut-cut.o `test -f 't/cut.c' || echo '$(srcdir)/'`t/cut.c
-
-t/cut-cut.obj: t/cut.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_cut_CFLAGS) $(CFLAGS) -c -o t/cut-cut.obj `if test -f 't/cut.c'; then $(CYGPATH_W) 't/cut.c'; else $(CYGPATH_W) '$(srcdir)/t/cut.c'; fi`
-
-t/dur-dur.o: t/dur.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dur_CFLAGS) $(CFLAGS) -c -o t/dur-dur.o `test -f 't/dur.c' || echo '$(srcdir)/'`t/dur.c
-
-t/dur-dur.obj: t/dur.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dur_CFLAGS) $(CFLAGS) -c -o t/dur-dur.obj `if test -f 't/dur.c'; then $(CYGPATH_W) 't/dur.c'; else $(CYGPATH_W) '$(srcdir)/t/dur.c'; fi`
-
-t/iotest-iotest.o: t/iotest.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_iotest_CFLAGS) $(CFLAGS) -c -o t/iotest-iotest.o `test -f 't/iotest.c' || echo '$(srcdir)/'`t/iotest.c
-
-t/iotest-iotest.obj: t/iotest.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_iotest_CFLAGS) $(CFLAGS) -c -o t/iotest-iotest.obj `if test -f 't/iotest.c'; then $(CYGPATH_W) 't/iotest.c'; else $(CYGPATH_W) '$(srcdir)/t/iotest.c'; fi`
-
-t/time-time.o: t/time.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_time_CFLAGS) $(CFLAGS) -c -o t/time-time.o `test -f 't/time.c' || echo '$(srcdir)/'`t/time.c
-
-t/time-time.obj: t/time.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_time_CFLAGS) $(CFLAGS) -c -o t/time-time.obj `if test -f 't/time.c'; then $(CYGPATH_W) 't/time.c'; else $(CYGPATH_W) '$(srcdir)/t/time.c'; fi`
-
-t/ver-ver.o: t/ver.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_ver_CFLAGS) $(CFLAGS) -c -o t/ver-ver.o `test -f 't/ver.c' || echo '$(srcdir)/'`t/ver.c
-
-t/ver-ver.obj: t/ver.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_ver_CFLAGS) $(CFLAGS) -c -o t/ver-ver.obj `if test -f 't/ver.c'; then $(CYGPATH_W) 't/ver.c'; else $(CYGPATH_W) '$(srcdir)/t/ver.c'; fi`
 install-sacioincHEADERS: $(sacioinc_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(sacioinc_HEADERS)'; test -n "$(sacioincdir)" || list=; \
@@ -993,6 +962,13 @@ t/ver.log: t/ver$(EXEEXT)
 t/cut.log: t/cut$(EXEEXT)
 	@p='t/cut$(EXEEXT)'; \
 	b='t/cut'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+t/cutim.log: t/cutim$(EXEEXT)
+	@p='t/cutim$(EXEEXT)'; \
+	b='t/cutim'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

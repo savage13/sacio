@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 EXTRA_DIST = License README.md t config docs
 
-AM_CFLAGS = -fPIC -Wall -Wextra -Iinclude/
+AM_CFLAGS = -fPIC -Wall -Wextra 
 
 saciolibdir = $(libdir)/
 sacioincdir = $(includedir)/sacio
@@ -22,9 +22,11 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 
 # TESTS
 
-TESTS = t/iotest t/compat t/dur t/time t/ver t/cut
+LDADD = libsacio_bsd.a -lm
 
-check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver t/cut
+TESTS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim
+
+check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
@@ -32,20 +34,7 @@ t_dur_SOURCES = t/dur.c
 t_time_SOURCES = t/time.c
 t_ver_SOURCES = t/ver.c
 t_cut_SOURCES = t/cut.c
-
-t_iotest_CFLAGS = -Iinclude
-t_compat_CFLAGS = -Iinclude
-t_dur_CFLAGS = -Iinclude
-t_time_CFLAGS = -Iinclude
-t_ver_CFLAGS = -Iinclude
-t_cut_CFLAGS = -Iinclude
-
-t_iotest_LDADD = libsacio_bsd.a -lm
-t_compat_LDADD = libsacio_bsd.a -lm
-t_dur_LDADD = libsacio_bsd.a -lm
-t_time_LDADD = libsacio_bsd.a -lm
-t_ver_LDADD = libsacio_bsd.a -lm
-t_cut_LDADD = libsacio_bsd.a -lm
+t_cutim_SOURCES = t/cutim.c
 
 CLEANFILES = t/test*.tmp
 

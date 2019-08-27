@@ -482,6 +482,8 @@ void  sac_free(sac *s);
 sac * sac_read(char *filename, int *nerr);
 /** @brief Read a sac file within a cut window */
 sac * sac_read_with_cut(char *filename, char *c1, double t1, char *c2, double t2, enum CutAction cutact, int *nerr);
+/** @brief Cut a sac file returning a new sac file */
+sac * sac_cut(sac *sin, char *c1, double t1, char *c2, double t2, enum CutAction cutact, int *nerr);
 /** @brief Read a sac header */
 sac * sac_read_header(char *filename, int *nerr);
 /** @brief Write a sac file */
