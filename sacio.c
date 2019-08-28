@@ -2950,8 +2950,8 @@ sac_hdr_new() {
  */
 int 
 sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
-    size_t i = 0;
-    size_t j = 0;
+    int i = 0;
+    int j = 0;
     char c = 0;
     if(!dst || !fmt || n == 0) {
         return -1;
@@ -2968,42 +2968,42 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
         }
         // Format Character
         switch(c = *fmt++) {
-        case 'E': i = sac_strlcat(dst, s->h->kevnm, n);  break;
-        case 'I': i = sac_strlcat(dst, s->h->kinst, n);  break;
-        case 'N': i = sac_strlcat(dst, s->h->knetwk, n); break;
-        case 'S': i = sac_strlcat(dst, s->h->kstnm, n);  break;
-        case 'C': i = sac_strlcat(dst, s->h->kcmpnm, n); break;
-        case 'H': i = sac_strlcat(dst, s->h->khole, n);  break;
+        case 'E': i = (int) sac_strlcat(dst, s->h->kevnm, n);  break;
+        case 'I': i = (int) sac_strlcat(dst, s->h->kinst, n);  break;
+        case 'N': i = (int) sac_strlcat(dst, s->h->knetwk, n); break;
+        case 'S': i = (int) sac_strlcat(dst, s->h->kstnm, n);  break;
+        case 'C': i = (int) sac_strlcat(dst, s->h->kcmpnm, n); break;
+        case 'H': i = (int) sac_strlcat(dst, s->h->khole, n);  break;
         case 'L': {
-            if((j = sac_strlcat(dst, s->h->khole, n)) == i) {
+            if((j = (int) sac_strlcat(dst, s->h->khole, n)) == i) {
                 // No chracters copied, either empty "" or -12345
-                j = sac_strlcat(dst, "--", n);
+                j = (int) sac_strlcat(dst, "--", n);
             }
             i = j;
             break;
         }
         case 'c': {
             if(s->h->cmpinc == 0.0) {
-                i = sac_strlcat(dst, "VERT", n);
+                i = (int) sac_strlcat(dst, "VERT", n);
             } else if(s->h->cmpinc == 90.0) {
                 float az = (float)fmod((double)s->h->cmpaz + 360.0, 360.0);
                 if(az < 0.0) { az += 360.0; }
 
                 if(fabs(az - 0.0) < 0.1) {
-                    i = sac_strlcat(dst, "NORTH", n);
+                    i = (int) sac_strlcat(dst, "NORTH", n);
                 } else if(fabs(az - 90.0) < 0.1) {
-                    i = sac_strlcat(dst, "EAST", n);
+                    i = (int) sac_strlcat(dst, "EAST", n);
                 } else if(fabs(az - 180.0) < 0.1) {
-                    i = sac_strlcat(dst, "SOUTH", n);
+                    i = (int) sac_strlcat(dst, "SOUTH", n);
                 } else if(fabs(az - 270.0) < 0.1) {
-                    i = sac_strlcat(dst, "WEST", n);
+                    i = (int) sac_strlcat(dst, "WEST", n);
                 } else if(sac_hdr_defined(s, SAC_CMPAZ, SAC_CMPINC, NULL)) {
                     snprintf(dst, n, "%s %4d %4d", dst, (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
-                    i = strlen(dst);
+                    i = (int) strlen(dst);
                 }
             } else if(sac_hdr_defined(s, SAC_CMPAZ, SAC_CMPINC, NULL)) {
                 snprintf(dst, n, "%s %4d %4d", dst, (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
-                i = strlen(dst);
+                i = (int) strlen(dst);
             }
         } break;
         case 't': {
@@ -3014,12 +3014,12 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
             switch(c = *fmt++) {
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
-                i = sac_floatlcat(dst, s, SAC_T0 + (c - '0'), n);
+                i = (int) sac_floatlcat(dst, s, SAC_T0 + (c - '0'), n);
                 break;
-            case 'b': i = sac_floatlcat(dst, s, SAC_B, n); break;
-            case 'e': i = sac_floatlcat(dst, s, SAC_E, n); break;
-            case 'o': i = sac_floatlcat(dst, s, SAC_O, n); break;
-            case 'a': i = sac_floatlcat(dst, s, SAC_A, n); break;
+            case 'b': i = (int) sac_floatlcat(dst, s, SAC_B, n); break;
+            case 'e': i = (int) sac_floatlcat(dst, s, SAC_E, n); break;
+            case 'o': i = (int) sac_floatlcat(dst, s, SAC_O, n); break;
+            case 'a': i = (int) sac_floatlcat(dst, s, SAC_A, n); break;
             default:
                 printf("Unknown conversion character: %c\n", c);
                 return -1;
@@ -3040,10 +3040,10 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
         }
             break;
         case 'Z':
-            i = (size_t) sac_fmt(dst+i, n-i, "%N.%S.%H.%C", s);
+            i = sac_fmt(dst+i, n - (size_t) i, "%N.%S.%H.%C", s);
             break;
         case 'R':
-            i = (size_t) sac_fmt(dst+i, n-i, "%N %S %L %C %TB %TE", s);
+            i = sac_fmt(dst+i, n - (size_t) i, "%N %S %L %C %TB %TE", s);
             break;
         case 'T':
             if(*fmt == 0) {
@@ -3053,12 +3053,12 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
             switch(c = *fmt++) {
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
-                i = sac_timelcat(dst, s, SAC_T0 + (c - '0'), n);
+                i = (int) sac_timelcat(dst, s, SAC_T0 + (c - '0'), n);
                 break;
-            case 'B': i = sac_timelcat(dst, s, SAC_B, n); break;
-            case 'E': i = sac_timelcat(dst, s, SAC_E, n); break;
-            case 'O': i = sac_timelcat(dst, s, SAC_O, n); break;
-            case 'A': i = sac_timelcat(dst, s, SAC_A, n); break;
+            case 'B': i = (int) sac_timelcat(dst, s, SAC_B, n); break;
+            case 'E': i = (int) sac_timelcat(dst, s, SAC_E, n); break;
+            case 'O': i = (int) sac_timelcat(dst, s, SAC_O, n); break;
+            case 'A': i = (int) sac_timelcat(dst, s, SAC_A, n); break;
             default:
                 printf("Unknown conversion character: %c\n", c);
                 return -1;
@@ -3070,7 +3070,7 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
         }
 
     }
-    return (int) i;
+    return i;
 }
 
 
