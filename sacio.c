@@ -30,7 +30,7 @@
 #define ERROR_OVERWRITE_FLAG_IS_OFF         1303 /**< @brief Overwrite flag, lovrok is set to 0 */
 #define ERROR_WRITING_FILE                  115 /**< @brief Error writing sac file */
 #define ERROR_READING_FILE                  114 /**< @brief Error reading sac file */
-#define ERROR_FILE_DOES_NOT_EXIST           108
+#define ERROR_FILE_DOES_NOT_EXIST           108 /**< @brief Error file does not exist */
 #define ERROR_OPENING_FILE                  101 /**< @brief Error opening sac file */
 #define SAC_OK                              0 /**< @brief Success, everything is ok */
 
@@ -48,7 +48,16 @@
  *
  */
 
+
+/**
+ * @brief   Minimum of two values
+ * @private
+ */
 #define MIN(a,b) ((a < b) ? a : b )
+/**
+ * @brief   Maximum of two values
+ * @private
+ */
 #define MAX(a,b) ((a > b) ? a : b )
 
 /** \cond NO_DOCS */
@@ -63,7 +72,10 @@ sac_hdr * sac_hdr_new();
 int sac_get_time_ref(sac *s, timespec64 *t);
 /** \endcond */
 
-
+/**
+ * @brief Get a sac header floating value. Error are returned as SAC_FLOAT_UNDEFINED
+ * @private
+ */
 static double
 sac_float(sac *s, int id) {
     double v = 0;
@@ -73,8 +85,20 @@ sac_float(sac *s, int id) {
     return v;
 }
 
+/**
+ * @brief Get begin value
+ * @private
+ */
 #define  B(s) sac_float(s, SAC_B)
+/**
+ * @brief Get end value
+ * @private
+ */
 #define  E(s) sac_float(s, SAC_E)
+/**
+ * @brief Get delta time value
+ * @private
+ */
 #define DT(s) sac_float(s, SAC_DELTA)
 
 /**
@@ -209,6 +233,11 @@ sac_write(sac *s, char *filename, int *nerr) {
 }
 
 
+/**
+ * @brief    X-Macro for sac_f64_new()
+ * @private
+ */
+#define X(name,key)  z->key = SAC_FLOAT_UNDEFINED;
 
 /**
  * @brief      create a new 64 bit float sac header value
@@ -226,12 +255,18 @@ sac_f64_new() {
     sac_f64 *z;
     z = (sac_f64 *) malloc(sizeof(sac_f64));
     if(z) {
-#define X(name,key)  z->key = SAC_FLOAT_UNDEFINED;
   SAC_F64
-#undef X
     }
     return z;
 }
+#undef X
+
+/**
+ * @brief   X-Macro for sac_f32_new()
+ * @private
+ */
+#define X(name,key)  case SAC_##name: s->h->key = (float) value; break;
+
 /**
  * @brief      set a 32-bit float value
  *
@@ -250,15 +285,14 @@ sac_f64_new() {
 int
 sac_set_f32(sac *s, int n, double value) {
     switch(n) {
-#define X(name,key)  case SAC_##name: s->h->key = (float) value; break;
   SAC_F32
-#undef X
     default:
         fprintf(stderr, "Error in sac_set_f32(): Unknown type: %d\n", n);
         return 0;
     }
     return 1;
 }
+#undef X
 
 /**
  * @brief      set a 64-bit float value
@@ -665,9 +699,30 @@ update_distaz(sac *s) {
     sac_set_float(s, SAC_BAZ, az2);
 }
 #else
+/**
+ * @brief Function prototype for sac version of computing distance and azimuth
+ * @private
+ */
 void distaz(double the, double phe, float *ths, float *phs,
             int ns, float *dist, float *az, float *baz, float *xdeg,
             int *nerr);
+/**
+ * @brief      Update the dist, az, gcarc, baz header fields
+ *
+ * @details    Update the dist, az, gcarc, baz header fields of a sac file
+ *             using the sac's method.  Header updates are performed
+ *             if stlo, stla, evlo, evla are defined.
+ *
+ * @note       This is only used if the actual sacio library is available
+ *             from the IRIS SAC distribution.
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ * @private
+ *
+ * @param      s  sac file to update
+ *
+ */
 void
 update_distaz(sac * s) {
     float d,a,b,g;
@@ -1531,16 +1586,23 @@ sac_header_write_v7(int nun, sac *s, int *nerr) {
 }
 
 /**
- * Read the sac header version 7
- * 
- * # Arguments
- * - `nun` - Negative file id number (yes, it is negative)
- * - `s` - sac file structure to fill
- * - `nerr` - Error reporting value
+ * @brief     Read the sac header version 7
  *
- * V7 of the header is a additional set of data at the end of the file
- * following the data.  This routine only reads the this "footer" of
- * metadata, the v6 header I/O routines are still required
+ * @details   V7 of the header is a additional set of data at the end of the file
+ *            following the data.  This routine only reads the this "footer" of
+ *            metadata, the v6 header I/O routines are still required
+ *
+ *            Function places the file pointer at the beginning of the v7 header,
+ *            completes the read and then places the file pointer at its previous
+ *            position.  It is safe to call before reading data components.
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ * @private
+ *
+ * @param  fp    File Pointer to open sac file for reading
+ * @param  s     sac file structure to fill
+ * @param  nerr  Error reporting value
  *
  */
 void
@@ -1565,8 +1627,25 @@ sac_header_read_v7(FILE *fp, sac *s, int *nerr) {
     fseek(fp, offset, SEEK_SET);
 }
 
+/**
+ * @brief      Fill the v7 header
+ *
+ * @details    Fill the v7 header through either reading the v7 header
+ *             or copying v6 header values to the v7 header.  Reading of
+ *             the v7 header will only occur if the header version equals 7.
+ *
+ * @ingroup    sac
+ * @memberof   sac
+ * @private
+ *
+ * @param      s      sac file
+ * @param      fp     file begin read from
+ * @param      nerr   0 on success, non-zero on error
+ *
+ * @return     return type
+ */
 void
-sac_header_v6_v7(sac *s, FILE *fp, int *nerr) {
+sac_header_v7_fill(sac *s, FILE *fp, int *nerr) {
     switch(s->h->nvhdr) {
     case SAC_HEADER_VERSION_7:
         sac_header_read_v7(fp, s, nerr);
@@ -1856,7 +1935,7 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
         }
     }
 
-    sac_header_v6_v7(s, fp, nerr);
+    sac_header_v7_fill(s, fp, nerr);
 
     fclose(fp);
 
@@ -1930,11 +2009,35 @@ sac_time_to_index(sac *s, double t) {
 
 
 
+/**
+ * @brief    Start Time is before Begin value (B)
+ * @private
+ */
 #define START_BEFORE 1<<0
+/**
+ * @brief    Start Time is between Begin (B) and End Value (E)
+ * @private
+ */
 #define START_INSIDE 1<<1
+/**
+ * @brief    Start Time is after End value (E)
+ * @private
+ */
 #define START_AFTER  1<<2
+/**
+ * @brief    End Time is before Start time (B)
+ * @private
+ */
 #define END_BEFORE   1<<3
+/**
+ * @brief    End Time is between Begin (B) and End Value (E)
+ * @private
+ */
 #define END_INSIDE   1<<4
+/**
+ * @brief    End Time is after End Value (E)
+ * @private
+ */
 #define END_AFTER    1<<5
 
 /**
@@ -2156,17 +2259,17 @@ sac_calc_read_window(sac *s, char *c1, double t1, char *c2, double t2, enum CutA
  *
  * @details    read a sac file while cutting
  *
- * @param      s       sac file
- * @param      c1      reference time pick for start
- * @param      t1      relative time from time pick `c1`
- * @param      c2      reference time pick for end
- * @param      t2      relative time ffrom time pick `c2`
- * @param      cutact  Behavior of cut
- *                     - CutNone = 0
- *                     - CutFatal = 1
- *                     - CutUseBe = 2
- *                     - CutFillZero = 3
- * @param      nerr    Status code
+ * @param      filename  sac file to read
+ * @param      c1        reference time pick for start
+ * @param      t1        relative time from time pick `c1`
+ * @param      c2        reference time pick for end
+ * @param      t2        relative time ffrom time pick `c2`
+ * @param      cutact    Behavior of cut
+ *                       - CutNone = 0
+ *                       - CutFatal = 1
+ *                       - CutUseBe = 2
+ *                       - CutFillZero = 3
+ * @param      nerr      Status code, 0 on success, non-zero on Error
  *
  * @return     read and cut file on success, NULL on error
  */
@@ -2196,7 +2299,7 @@ sac_read_with_cut(char *filename,
         goto error;
     }
 
-    sac_header_v6_v7(s, fp, nerr);
+    sac_header_v7_fill(s, fp, nerr);
 
     if(!sac_calc_read_window(s, c1, t1, c2, t2, cutact,
                              &nread, &offt, &skip, nerr)) {
@@ -2269,7 +2372,7 @@ cut_data(float *in, int nstart, int nstop, int nfillb, int nfille, float *out) {
  *
  * @details    cut a sac file and return a new sac file
  *
- * @param      s       sac file
+ * @param      sin     sac file
  * @param      c1      reference time pick for start time
  * @param      t1      relative time from `c1`
  * @param      c2      reference time pick for end time

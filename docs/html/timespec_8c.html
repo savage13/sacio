@@ -76,16 +76,153 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga7f03fbec7716db1289bcf749db878f5b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga7f03fbec7716db1289bcf749db878f5b">strptime64</a> (const char *buf, const char *fmt, struct TM *tm, int64_t *ns)</td></tr>
-<tr class="memdesc:ga7f03fbec7716db1289bcf749db878f5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a string into a TM value.  <a href="group__time.html#ga7f03fbec7716db1289bcf749db878f5b">More...</a><br /></td></tr>
-<tr class="separator:ga7f03fbec7716db1289bcf749db878f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga0d27b6260ef13dc2d8ea2e14daab0d7d">strftime64</a> (char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns)</td></tr>
-<tr class="memdesc:ga0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a struct TM value.  <a href="group__time.html#ga0d27b6260ef13dc2d8ea2e14daab0d7d">More...</a><br /></td></tr>
-<tr class="separator:ga0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f03fbec7716db1289bcf749db878f5b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timespec_8c.html#a7f03fbec7716db1289bcf749db878f5b">strptime64</a> (const char *buf, const char *fmt, struct TM *tm, int64_t *ns)</td></tr>
+<tr class="memdesc:a7f03fbec7716db1289bcf749db878f5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a string into a TM value.  <a href="#a7f03fbec7716db1289bcf749db878f5b">More...</a><br /></td></tr>
+<tr class="separator:a7f03fbec7716db1289bcf749db878f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timespec_8c.html#a0d27b6260ef13dc2d8ea2e14daab0d7d">strftime64</a> (char *dst, size_t n, const char *fmt, struct TM *tm, int64_t ns)</td></tr>
+<tr class="memdesc:a0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a struct TM value.  <a href="#a0d27b6260ef13dc2d8ea2e14daab0d7d">More...</a><br /></td></tr>
+<tr class="separator:a0d27b6260ef13dc2d8ea2e14daab0d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Long duration, high precision timing. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a0d27b6260ef13dc2d8ea2e14daab0d7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d27b6260ef13dc2d8ea2e14daab0d7d">&#9670;&nbsp;</a></span>strftime64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t strftime64 </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>fmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct TM *&#160;</td>
+          <td class="paramname"><em>tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>ns</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Format a struct TM value. </p>
+<p>Format a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> according to the format specifiers</p><ul>
+<li><code>%%</code> &ndash; <code>%</code> character</li>
+<li><code>%Y</code> &ndash; Year, 4 digits, zero padded</li>
+<li><code>%j</code> &ndash; Day of the year, 3 digits, zero padded</li>
+<li><code>%m</code> &ndash; Month number, 2 digits, zero padded</li>
+<li><code>%d</code> &ndash; Day of the month, 2 digits, zero padded</li>
+<li><code>%H</code> &ndash; Hour, 2 digits, zero padded</li>
+<li><code>%M</code> &ndash; Minute, 2 digits, zero padded</li>
+<li><code>%S</code> &ndash; Seconds, 2 digits, zero padded</li>
+<li><code>%f</code> &ndash; partial seconds as nanoseconds, prefix digit defines the number of leading digits to show</li>
+<li><code>%F</code> &ndash; alias for <code>Y-m-d</code></li>
+<li><code>%T</code> &ndash; alias for <code>H:M:S</code></li>
+<li><code>%b</code> &ndash; Abbreviated Month Name</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dst</td><td>Output character string </td></tr>
+    <tr><td class="paramname">n</td><td>Length of dst </td></tr>
+    <tr><td class="paramname">fmt</td><td>Format for character string </td></tr>
+    <tr><td class="paramname">tm</td><td>input struct TM </td></tr>
+    <tr><td class="paramname">ns</td><td>input nanoseconds</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>length of output character string, 0 on failure </dd></dl>
+
+</div>
+</div>
+<a id="a7f03fbec7716db1289bcf749db878f5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f03fbec7716db1289bcf749db878f5b">&#9670;&nbsp;</a></span>strptime64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * strptime64 </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>fmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct TM *&#160;</td>
+          <td class="paramname"><em>tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramname"><em>ns</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parse a string into a TM value. </p>
+<p>Parse a <a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> according to the format specifiers</p><ul>
+<li><code>%%</code> &ndash; <code>%</code> character</li>
+<li><code>%Y</code> &ndash; Year</li>
+<li><code>%j</code> &ndash; Day of the year, 1-366</li>
+<li><code>%m</code> &ndash; Month number, 1-12</li>
+<li><code>%d</code> &ndash; Day of the month, 1-31</li>
+<li><code>%H</code> &ndash; Hour, 0-23</li>
+<li><code>%M</code> &ndash; Minute, 0-59</li>
+<li><code>%S</code> &ndash; Seconds, 0-60</li>
+<li><code>%f</code> &ndash; partial seconds as nanoseconds</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>Input character string </td></tr>
+    <tr><td class="paramname">fmt</td><td>Format to interpret the charater string </td></tr>
+    <tr><td class="paramname">tm</td><td>struct TM to place values into </td></tr>
+    <tr><td class="paramname">ns</td><td>output for nanoseconds</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>first character not read based on the format during success, NULL on failure </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- GitHub corner from https://github.com/tholman/github-corners -->
 <a href="https://github.com/savage13/sacio" class="github-corner" aria-label="View source on GitHub"><svg width="75" height="75" viewBox="0 0 250 250" style="fill:#442487; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 <!--<a href="https://ds.iris.edu"><img style="position: absolute; top: 0; border: 0; right: 75px; height:75px;" src="https://www.iris.edu/hq/files/publications/logos/iris_color_screen.png"></a>-->

@@ -24,11 +24,18 @@
 #endif /* FALSE */
 /** \endcond */
 
+/**
+ * @brief Sac Cutting Behavior
+ *
+ * @memberof sac
+ * @ingroup sac
+ *
+ */
 enum CutAction {
-    CutNone     = 0,
-    CutFatal    = 1,
-    CutUseBE    = 2,
-    CutFillZero = 3,
+    CutNone     = 0,  /**< @brief Cut Action is not defined */
+    CutFatal    = 1,  /**< @brief Cut window is only allowed within data region */
+    CutUseBE    = 2,  /**< @brief Cut windows larger than data region are corrected to either the begin and end values */
+    CutFillZero = 3,  /**< @brief Cut windows larger than data region are filled with zeros */
 };
 
 
@@ -920,9 +927,17 @@ static struct sac_hdr NullSacHeader = {
 };
 #endif /* SAC_NULL_HEADER_REQUIRED */
 
+/**
+ * @brief Region Conversion
+ * @private
+ */
 #define REGCONV    100
 
 
+/**
+ * @brief  X-Macro v7 floating point header values, in order
+ * @private
+ */
 #define SAC_F64           \
     X(DELTA, _delta)       \
     X(B, _b)               \
@@ -947,6 +962,10 @@ static struct sac_hdr NullSacHeader = {
     X(SB, _sb)             \
     X(SDELTA, _sdelta)             \
 
+/**
+ * @brief  X-Macro v6 floating point header values, in order
+ * @private
+ */
 #define SAC_F32           \
     X(DELTA,_delta)        \
     X(DEPMIN, depmin)     \
@@ -1019,14 +1038,14 @@ static struct sac_hdr NullSacHeader = {
     X(UN69, unused11) \
     X(UN70, unused12)
 
-#define ERROR_CANT_CUT_SPECTRAL_FILE        1321
-#define ERROR_CUT_TIMES_BEYOND_DATA_LIMITS  13241325
-#define ERROR_START_TIME_LESS_THAN_BEGIN    1324
-#define ERROR_STOP_TIME_GREATER_THAN_END    1325
-#define ERROR_START_TIME_GREATER_THAN_END   1326
-#define ERROR_STOP_TIME_LESS_THAN_BEGIN     1327
-#define ERROR_START_TIME_GREATER_THAN_STOP  1328
-#define ERROR_CANT_CUT_UNEVENLY_SPACED_FILE 1356
+#define ERROR_CANT_CUT_SPECTRAL_FILE        1321     /**< @brief Error cutting spectral file */
+#define ERROR_CUT_TIMES_BEYOND_DATA_LIMITS  13241325 /**< @brief Cut times are beyond data limits: 1324 and 1325 */
+#define ERROR_START_TIME_LESS_THAN_BEGIN    1324     /**< @brief Cut start time is less than begin value */
+#define ERROR_STOP_TIME_GREATER_THAN_END    1325     /**< @brief Cut stop time is greater than end value */
+#define ERROR_START_TIME_GREATER_THAN_END   1326     /**< @brief Cut start time is greater than end value */
+#define ERROR_STOP_TIME_LESS_THAN_BEGIN     1327     /**< @brief Cut stop time is less than begin value */
+#define ERROR_START_TIME_GREATER_THAN_STOP  1328     /**< @brief Cut time time is greater than stop value */
+#define ERROR_CANT_CUT_UNEVENLY_SPACED_FILE 1356     /**< @brief Error cuting unevenly spaced file */
 
 #endif /* __SACIO_H__ */
 

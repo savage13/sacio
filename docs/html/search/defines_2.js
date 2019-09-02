@@ -24,7 +24,5 @@ var searchData=
   ['error_5fstop_5ftime_5fgreater_5fthan_5fend',['ERROR_STOP_TIME_GREATER_THAN_END',['../sacio_8h.html#a0e52fc1f8fd7d35679a716445753a25d',1,'sacio.h']]],
   ['error_5fstop_5ftime_5fless_5fthan_5fbegin',['ERROR_STOP_TIME_LESS_THAN_BEGIN',['../sacio_8h.html#aaf849301f9823eee3fa1cf434492615e',1,'sacio.h']]],
   ['error_5fundefined_5fheader_5ffield_5fvalue',['ERROR_UNDEFINED_HEADER_FIELD_VALUE',['../compat_8c.html#a5db54e0556eff9d2935af2756da657c3',1,'compat.c']]],
-  ['error_5fwriting_5ffile',['ERROR_WRITING_FILE',['../sacio_8c.html#af7d40252f357dcd1453299deff2df0cf',1,'sacio.c']]],
-  ['evdp',['evdp',['../structsac__hdr.html#a4283745c40ed242b136e283f86d6df62',1,'sac_hdr']]],
-  ['evel',['evel',['../structsac__hdr.html#ab495e12388555762ac1eb2a183ae6cc4',1,'sac_hdr']]]
+  ['error_5fwriting_5ffile',['ERROR_WRITING_FILE',['../sacio_8c.html#af7d40252f357dcd1453299deff2df0cf',1,'sacio.c']]]
 ];
