@@ -718,7 +718,9 @@ sac_read_alpha(char *filename, int *nerr) {
     char line[256] = {0};
     char *p = NULL;
     double *d = NULL;
-    
+
+    *nerr = 0;
+
     if(!(fp = fopen(filename, "r"))) {
         *nerr = 101;
         goto error;
@@ -728,27 +730,36 @@ sac_read_alpha(char *filename, int *nerr) {
 
     f = &(s->h->_delta);
     for(j = 0; j < 14; j++) {
-        fgets(line, sizeof(line), fp); // Read a Line
+        if(fgets(line, sizeof(line), fp) == NULL) { // Read a Line
+            *nerr = 1319;
+            goto error;
+        }
         if(sscanf(line, "%15g%15g%15g%15g%15g", &f[0],&f[1],&f[2],&f[3],&f[4]) != 5) {
             printf("Error reading float: %d,%d\n", j,i);
-            *nerr = 1301;
+            *nerr = 1319;
             goto error;
         }
         f+=5;
     }
     v = &(s->h->nzyear);
     for(j = 0; j < 8; j++) {
-        fgets(line, sizeof(line), fp); // Read a Line
+        if(fgets(line, sizeof(line), fp) == NULL) { // Read a Line
+            *nerr = 1319;
+            goto error;
+        }
         if(sscanf(line, "%10d%10d%10d%10d%10d", &v[0],&v[1],&v[2],&v[3],&v[4]) != 5) {
             printf("Error reading int: %d,%d\n", j,i);
-            *nerr = 1301;
+            *nerr = 1319;
             goto error;
         }
         v+=5;
     }
     c = s->h->kstnm;
     for(i = 0; i < 8; i++) {
-        fgets(line, sizeof(line), fp);
+        if(fgets(line, sizeof(line), fp) == NULL) { // Read a Line
+            *nerr = 1319;
+            goto error;
+        }
         p = line;
         COPY_MOVE(c, p, 8);
         if(i == 0) {
@@ -763,9 +774,15 @@ sac_read_alpha(char *filename, int *nerr) {
     for(j = 0; j < sac_comps(s); j++) {
         f = (j == 0) ? s->y : s->x;
         for(i = 0; i < s->h->npts; i++) {
-            fscanf(fp, "%f", &f[i]);
+            if(fscanf(fp, "%f", &f[i]) != 1) {
+                *nerr = 1319;
+                goto error;
+            }
         }
-        fgets(line, sizeof(line), fp);
+        if(fgets(line, sizeof(line), fp) == NULL) {
+            *nerr = 1319;
+            goto error;
+        }
     }
     if(s->h->nvhdr == 6) {
         sac_copy_f32_to_f64(s);
@@ -774,7 +791,10 @@ sac_read_alpha(char *filename, int *nerr) {
     /* Version 7 Header */
     d = &(s->z->_delta);
     for(i = 0; i < (int)(sizeof(sac_f64)/sizeof(double)); i++) {
-        fscanf(fp, "%lf", d);
+        if(fscanf(fp, "%lf", d) != 1) {
+            *nerr = 1319;
+            goto error;
+        }
         d++;
     }
     return s;

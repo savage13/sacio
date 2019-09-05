@@ -1050,6 +1050,7 @@ static struct sac_hdr NullSacHeader = {
 #define ERROR_STOP_TIME_LESS_THAN_BEGIN     1327     /**< @brief Cut stop time is less than begin value */
 #define ERROR_START_TIME_GREATER_THAN_STOP  1328     /**< @brief Cut time time is greater than stop value */
 #define ERROR_CANT_CUT_UNEVENLY_SPACED_FILE 1356     /**< @brief Error cuting unevenly spaced file */
+#define ERROR_READING_CARD_IMAGE_HEADER     1319     /**< @brief Error reading an sac alphanumeric file */
 
 #endif /* __SACIO_H__ */
 
