@@ -627,6 +627,165 @@ sac_alloc(sac * s) {
     }
 }
 
+#define COPY_MOVE(dst, src, n) do {   \
+        memcpy(dst, src, n);          \
+        dst[n] = 0;                   \
+        src += n;                     \
+        dst += (n+1);                 \
+    } while(0) ;
+
+#define SAC_ALPHA_FLOAT_LINES  14
+#define SAC_ALPHA_INT_LINES     8
+#define SAC_ALPHA_STRING_LINES  8
+#define SAC_ALPHA_FLOAT_FMT    "%#15.7g"
+#define SAC_ALPHA_INT_FMT      "%10d"
+#define SAC_ALPHA_STRING_FMT   "%8s"
+#define SAC_ALPHA_DOUBLE_FMT   "%.17g" // https://stackoverflow.com/a/21162120
+
+void
+sac_write_alpha(sac *s, char *filename, int *nerr) {
+    FILE *fp = NULL;
+    float *f = NULL;
+    double *d = NULL;
+    char *c = NULL;
+    int *v = NULL;
+    int i = 0, j = 0;
+    if(!s || !filename) {
+        *nerr = 1301;
+        goto error;
+    }
+    if(!(fp = fopen(filename, "w"))) {
+        *nerr = 101;
+        goto error;
+    }
+    f = &(s->h->_delta);
+    for(j = 0; j < SAC_ALPHA_FLOAT_LINES; j++) {
+        for(i = 0; i < 5; i++) {
+            fprintf(fp, SAC_ALPHA_FLOAT_FMT, *f);
+            f++;
+        }
+        fprintf(fp, "\n");
+    }
+    v = &(s->h->nzyear);
+    for(j = 0; j < SAC_ALPHA_INT_LINES; j++) {
+        for(i = 0; i < 5; i++) {
+            fprintf(fp, SAC_ALPHA_INT_FMT,  *v);
+            v++;
+        }
+        fprintf(fp, "\n");
+    }
+    c = s->h->kstnm;
+    fprintf(fp, "%8s%16s\n", s->h->kstnm, s->h->kevnm);
+    c += (8+1)*3;
+    for(i = 1; i < SAC_ALPHA_STRING_LINES; i++) {
+        for(j = 0; j < 3; j++) {
+            fprintf(fp, SAC_ALPHA_STRING_FMT, c); c += 9;
+        }
+        fprintf(fp, "\n");
+    }
+    for(j = 0; j < sac_comps(s); j++) {
+        f = (j == 0) ? s->y : s->x;
+        for(i = 0; i < s->h->npts; i++) {
+            fprintf(fp, SAC_ALPHA_FLOAT_FMT, f[i]);
+            if(i % 5 == 4 && i+1 != s->h->npts) {
+                fprintf(fp,"\n");
+            }
+        }
+        fprintf(fp, "\n");
+    }
+    if(s->h->nvhdr == SAC_HEADER_VERSION_7) {
+        // Version 7 Header
+        d = &(s->z->_delta);
+        for(i = 0; i < (int)(sizeof(sac_f64)/sizeof(double)); i++) {
+            fprintf(fp, SAC_ALPHA_DOUBLE_FMT "\n", *d);
+            d++;
+        }
+    }
+ error:
+    if(fp) {
+        fclose(fp);
+    }
+}
+
+sac *
+sac_read_alpha(char *filename, int *nerr) {
+    FILE *fp = NULL;
+    int i = 0, j = 0;
+    float *f = NULL;
+    int *v = NULL;
+    char *c = NULL;
+    sac *s = NULL;
+    char line[256] = {0};
+    char *p = NULL;
+    double *d = NULL;
+    
+    if(!(fp = fopen(filename, "r"))) {
+        *nerr = 101;
+        goto error;
+    }
+    s = sac_new();
+    s->m->filename = strdup(filename);
+
+    f = &(s->h->_delta);
+    for(j = 0; j < 14; j++) {
+        fgets(line, sizeof(line), fp); // Read a Line
+        if(sscanf(line, "%15g%15g%15g%15g%15g", &f[0],&f[1],&f[2],&f[3],&f[4]) != 5) {
+            printf("Error reading float: %d,%d\n", j,i);
+            *nerr = 1301;
+            goto error;
+        }
+        f+=5;
+    }
+    v = &(s->h->nzyear);
+    for(j = 0; j < 8; j++) {
+        fgets(line, sizeof(line), fp); // Read a Line
+        if(sscanf(line, "%10d%10d%10d%10d%10d", &v[0],&v[1],&v[2],&v[3],&v[4]) != 5) {
+            printf("Error reading int: %d,%d\n", j,i);
+            *nerr = 1301;
+            goto error;
+        }
+        v+=5;
+    }
+    c = s->h->kstnm;
+    for(i = 0; i < 8; i++) {
+        fgets(line, sizeof(line), fp);
+        p = line;
+        COPY_MOVE(c, p, 8);
+        if(i == 0) {
+            memcpy(c, p, 16); c[16] = 0; c += 18;
+        } else {
+            COPY_MOVE(c, p, 8);
+            COPY_MOVE(c, p, 8);
+        }
+    }
+
+    sac_alloc(s);
+    for(j = 0; j < sac_comps(s); j++) {
+        f = (j == 0) ? s->y : s->x;
+        for(i = 0; i < s->h->npts; i++) {
+            fscanf(fp, "%f", &f[i]);
+        }
+        fgets(line, sizeof(line), fp);
+    }
+    if(s->h->nvhdr == 6) {
+        sac_copy_f32_to_f64(s);
+        return s;
+    }
+    /* Version 7 Header */
+    d = &(s->z->_delta);
+    for(i = 0; i < (int)(sizeof(sac_f64)/sizeof(double)); i++) {
+        fscanf(fp, "%lf", d);
+        d++;
+    }
+    return s;
+ error:
+    if(s) {
+        sac_free(s);
+        s = NULL;
+    }
+    return NULL;
+}
+
 /**
  * @brief      Set the beginning and end time for a sac file
  *
@@ -1835,7 +1994,7 @@ sac_header_read(sac *s, FILE *fp) {
     int nerr;
     size_t n;
     char str[SAC_HEADER_STRINGS * 8];
-    //fprintf(stderr, "sac hdr: %p\n", s->h);
+
     n = SAC_HEADER_NUMBERS;
     if(fread((char *) s->h, sizeof(float), n, fp) != n) {
         return ERROR_NOT_A_SAC_FILE;
@@ -1923,7 +2082,6 @@ sac_read_internal(char *filename, int read_data, int *nerr) {
     }
 
     if(read_data) {
-        //fprintf(stderr, "alloc: %d\n", s->h->npts);
         sac_alloc(s);
         s->m->nstart = 1;
         s->m->nstop  = s->h->npts;
@@ -1983,7 +2141,7 @@ sac_hdr_init(sac_hdr *sh) {
         sh->lpspol = FALSE;
         sh->lovrok = TRUE;
         sh->lcalda = TRUE;
-
+        sh->unused27 = TRUE;
         sh->iftype = ITIME;
     }
 }

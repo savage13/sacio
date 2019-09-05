@@ -24,9 +24,9 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 
 LDADD = libsacio_bsd.a -lm
 
-TESTS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim
+TESTS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim t/alpha
 
-check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim
+check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim t/alpha
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
@@ -35,6 +35,7 @@ t_time_SOURCES = t/time.c
 t_ver_SOURCES = t/ver.c
 t_cut_SOURCES = t/cut.c
 t_cutim_SOURCES = t/cutim.c
+t_alpha_SOURCES = t/alpha.c
 
 CLEANFILES = t/test*.tmp
 

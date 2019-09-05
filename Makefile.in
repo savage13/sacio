@@ -88,9 +88,11 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
+	t/alpha$(EXEEXT)
 check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT)
+	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
+	t/alpha$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -146,6 +148,10 @@ am_libsacio_bsd_a_OBJECTS = sacio.$(OBJEXT) geodesic.$(OBJEXT) \
 	compat.$(OBJEXT) header_map.$(OBJEXT)
 libsacio_bsd_a_OBJECTS = $(am_libsacio_bsd_a_OBJECTS)
 am__dirstamp = $(am__leading_dot)dirstamp
+am_t_alpha_OBJECTS = t/alpha.$(OBJEXT)
+t_alpha_OBJECTS = $(am_t_alpha_OBJECTS)
+t_alpha_LDADD = $(LDADD)
+t_alpha_DEPENDENCIES = libsacio_bsd.a
 am_t_compat_OBJECTS = t/compat.$(OBJEXT)
 t_compat_OBJECTS = $(am_t_compat_OBJECTS)
 t_compat_LDADD = $(LDADD)
@@ -201,12 +207,14 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_cut_SOURCES) $(t_cutim_SOURCES) $(t_dur_SOURCES) \
-	$(t_iotest_SOURCES) $(t_time_SOURCES) $(t_ver_SOURCES)
-DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_compat_SOURCES) \
-	$(t_cut_SOURCES) $(t_cutim_SOURCES) $(t_dur_SOURCES) \
-	$(t_iotest_SOURCES) $(t_time_SOURCES) $(t_ver_SOURCES)
+SOURCES = $(libsacio_bsd_a_SOURCES) $(t_alpha_SOURCES) \
+	$(t_compat_SOURCES) $(t_cut_SOURCES) $(t_cutim_SOURCES) \
+	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
+	$(t_ver_SOURCES)
+DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_alpha_SOURCES) \
+	$(t_compat_SOURCES) $(t_cut_SOURCES) $(t_cutim_SOURCES) \
+	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
+	$(t_ver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -544,20 +552,7 @@ t_time_SOURCES = t/time.c
 t_ver_SOURCES = t/ver.c
 t_cut_SOURCES = t/cut.c
 t_cutim_SOURCES = t/cutim.c
-
-# t_iotest_CFLAGS = -Iinclude
-# t_compat_CFLAGS = -Iinclude
-# t_dur_CFLAGS = -Iinclude
-# t_time_CFLAGS = -Iinclude
-# t_ver_CFLAGS = -Iinclude
-# t_cut_CFLAGS = -Iinclude
-
-# t_iotest_LDADD = libsacio_bsd.a -lm
-# t_compat_LDADD = libsacio_bsd.a -lm
-# t_dur_LDADD = libsacio_bsd.a -lm
-# t_time_LDADD = libsacio_bsd.a -lm
-# t_ver_LDADD = libsacio_bsd.a -lm
-# t_cut_LDADD = libsacio_bsd.a -lm
+t_alpha_SOURCES = t/alpha.c
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -654,6 +649,11 @@ libsacio_bsd.a: $(libsacio_bsd_a_OBJECTS) $(libsacio_bsd_a_DEPENDENCIES) $(EXTRA
 t/$(am__dirstamp):
 	@$(MKDIR_P) t
 	@: > t/$(am__dirstamp)
+t/alpha.$(OBJEXT): t/$(am__dirstamp)
+
+t/alpha$(EXEEXT): $(t_alpha_OBJECTS) $(t_alpha_DEPENDENCIES) $(EXTRA_t_alpha_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/alpha$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(t_alpha_OBJECTS) $(t_alpha_LDADD) $(LIBS)
 t/compat.$(OBJEXT): t/$(am__dirstamp)
 
 t/compat$(EXEEXT): $(t_compat_OBJECTS) $(t_compat_DEPENDENCIES) $(EXTRA_t_compat_DEPENDENCIES) t/$(am__dirstamp)
@@ -969,6 +969,13 @@ t/cut.log: t/cut$(EXEEXT)
 t/cutim.log: t/cutim$(EXEEXT)
 	@p='t/cutim$(EXEEXT)'; \
 	b='t/cutim'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+t/alpha.log: t/alpha$(EXEEXT)
+	@p='t/alpha$(EXEEXT)'; \
+	b='t/alpha'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
