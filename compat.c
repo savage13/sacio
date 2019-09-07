@@ -480,7 +480,7 @@ wsac2(char   *kname,
  *       rsac1(), rsac2() or newhdr()
  */
 void
-getfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
+getrhv(char *kname, double *fvalue, int *nerr, int kname_s) {
     double v = SAC_FLOAT_UNDEFINED;
     sac *s = NULL;
     struct hid *h = NULL;
@@ -501,6 +501,28 @@ getfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
     if(v == SAC_FLOAT_UNDEFINED) {
         *nerr = ERROR_UNDEFINED_HEADER_FIELD_VALUE;
     }
+    *fvalue = v;
+}
+/**
+ * @brief      Get a floating point header value
+ *
+ * @details    Get a floating point header value from the sac header
+ *
+ * @ingroup    sac-iris
+ * @memberof   sac_iris
+ *
+ * @param      kname    Name of header value
+ * @param      fvalue   Output header value
+ * @param      nerr     Status, 0 on success, non-zero on failure
+ * @param      kname_s  Length of kname
+ *
+ * @note This routine requires an internal, global sac file from
+ *       rsac1(), rsac2() or newhdr()
+ */
+void
+getfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
+    double v;
+    getrhv(kname, &v, nerr, kname_s);
     *fvalue = (float) v;
 }
 
@@ -884,8 +906,7 @@ getlhv(char *kname, int *nvalue, int *nerr, int kname_s) {
  *       rsac1(), rsac2() or newhdr()
  */
 void
-setfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
-    double v = SAC_FLOAT_UNDEFINED;
+setrhv(char *kname, double *fvalue, int *nerr, int kname_s) {
     sac *s = NULL;
     struct hid *h = NULL;
 
@@ -900,8 +921,28 @@ setfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
         *nerr = ERROR_ILLEGAL_HEADER_FIELD_NAME;
         return;
     }
-    v = (double) *fvalue;
-    sac_set_float(s, h->id, v);
+    sac_set_float(s, h->id, *fvalue);
+}
+/**
+ * @brief      Set a floating point header value
+ *
+ * @details    Set a floating point header value in the active sac header
+ *
+ * @ingroup    sac-iris
+ * @memberof   sac_iris
+ *
+ * @param      kname      Name of header value to set
+ * @param      fvalue     Input value to set
+ * @param      nerr       Status code, 0 on success, non-zero on failure
+ * @param      kname_s    Length of kname
+ *
+ * @note This routine requires an internal, global sac file from
+ *       rsac1(), rsac2() or newhdr()
+ */
+void
+setfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
+    double v = *fvalue;
+    setrhv(kname, &v, nerr, kname_s);
 }
 /**
  * @brief      Set a integer header value
