@@ -546,7 +546,7 @@ int sac_get_time(sac *s, int hdr, timespec64 *t);
 /** @brief  Set the reference time for a sac object */
 int sac_set_time(sac *s, timespec64 t);
 /** @brief  Get the size of a sac file in bytes */
-size_t sac_size(sac *s);
+off_t sac_size(sac *s);
 /** @brief  Compute and set the begin and end time of a sac object */
 void sac_be(sac *s);
 
