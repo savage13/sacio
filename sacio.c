@@ -2089,8 +2089,8 @@ sac_read_header_internal(char *filename, int *nerr, FILE **fp) {
 
     // Check actual size versus expected size of the file
     if(sac_size(s) != size) {
-        printf("Actual file size %lld != expected file size: %lld [npts: %d]\n",
-               size, sac_size(s), s->h->npts);
+        printf("sacio: Actual file size %lld != expected file size: %lld [npts: %d]\n",
+               (long long int) size, (long long int) sac_size(s), s->h->npts);
         *nerr = ERROR_NOT_A_SAC_FILE;
         goto error;
     }
