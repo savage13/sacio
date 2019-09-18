@@ -9,7 +9,7 @@
 #define __SACIO_H__
 
 #include <stdlib.h>
-
+#include <sys/stat.h>
 #include "timespec.h"
 
 /** \cond NO_DOCS */
