@@ -752,10 +752,21 @@ enum SacHeaderTypes {
     SAC_AUX_TYPE = 7, /**< @brief  Aux Type */
 };
 
+/**
+ * @brief Structure to convert keyword to enum value
+ */
+struct eid {
+    char *name;
+    int type;
+    int id;
+};
+
 /** \cond NO_DOCS */
 /** @brief Convert a keyword to a header ID*/
 struct hid * sac_keyword_to_header(register const char *str,
-                                   register size_t len);
+                                   register unsigned int len);
+struct eid * sac_enum_to_id(register const char *str,
+                            register unsigned int len);
 /** \endcond */
 
 #define SAC_KSTNM  SAC_STA   /**< @brief Alias for Station */
