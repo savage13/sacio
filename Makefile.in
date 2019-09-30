@@ -145,7 +145,7 @@ libsacio_bsd_a_AR = $(AR) $(ARFLAGS)
 libsacio_bsd_a_LIBADD =
 am_libsacio_bsd_a_OBJECTS = sacio.$(OBJEXT) geodesic.$(OBJEXT) \
 	timespec.$(OBJEXT) time64.$(OBJEXT) strip.$(OBJEXT) \
-	compat.$(OBJEXT) header_map.$(OBJEXT)
+	compat.$(OBJEXT) header_map.$(OBJEXT) enums.$(OBJEXT)
 libsacio_bsd_a_OBJECTS = $(am_libsacio_bsd_a_OBJECTS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_t_alpha_OBJECTS = t/alpha.$(OBJEXT)
@@ -540,7 +540,8 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 												 time64.h geodesic.h strip.h \
 												 time64_limits.h \
 												 sacio.h timespec.h \
-                         header_map.txt
+                         header_map.txt \
+                         enums.txt enums.c
 
 
 # TESTS
@@ -1307,7 +1308,9 @@ distclean-local:
 	-rm -rf autom4te.cache
 
 header_map.c: header_map.txt
-	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
+	gperf $< > $@
+enums.c: enums.txt
+	gperf $< > $@
 
 test: check
 

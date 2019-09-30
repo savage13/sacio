@@ -18,7 +18,8 @@ libsacio_bsd_a_SOURCES = sacio.c geodesic.c timespec.c \
 												 time64.h geodesic.h strip.h \
 												 time64_limits.h \
 												 sacio.h timespec.h \
-                         header_map.txt
+                         header_map.txt \
+                         enums.txt enums.c
 
 # TESTS
 
@@ -47,7 +48,9 @@ distclean-local:
 	-rm -rf autom4te.cache
 
 header_map.c: header_map.txt
-	gperf -t -T --output-file=$@ -N sac_keyword_to_header $<
+	gperf $< > $@
+enums.c: enums.txt
+	gperf $< > $@
 
 test: check
 
