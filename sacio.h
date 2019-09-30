@@ -507,6 +507,8 @@ sac * sac_cut(sac *sin, char *c1, double t1, char *c2, double t2, enum CutAction
 sac * sac_read_header(char *filename, int *nerr);
 /** @brief Write a sac file */
 void  sac_write(sac *s, char *filename, int *nerr);
+/** @brief Write a sac file header for an existing file*/
+void sac_write_header(sac *s, char *filename, int *nerr);
 /** @brief Write a sac file in alphanumeric format */
 void  sac_write_alpha(sac *s, char *filename, int *nerr);
 /** @brief Copy a sac object  */

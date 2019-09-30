@@ -234,6 +234,11 @@ sac_write(sac *s, char *filename, int *nerr) {
     sac_write_internal(s, filename, SAC_WRITE_HEADER_AND_DATA, s->m->swap, nerr);
 }
 
+void
+sac_write_header(sac *s, char *filename, int *nerr) {
+    sac_write_internal(s, filename, SAC_WRITE_HEADER, s->m->swap, nerr);
+}
+
 
 /**
  * @brief    X-Macro for sac_f64_new()
@@ -1915,6 +1920,11 @@ sac_write_internal(sac *s, char *filename, int write_data, int swap, int *nerr) 
         if(*nerr != SAC_OK) {
             return;
         }
+    } else {
+        lseek(nin,
+              SAC_HEADER_SIZE +
+              4 * (off_t) s->h->npts * sac_comps(s),
+              SEEK_SET);
     }
     if(s->h->nvhdr == SAC_HEADER_VERSION_7) {
         sac_header_write_v7(nin, s, nerr);
