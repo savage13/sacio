@@ -240,6 +240,21 @@ sac_write_header(sac *s, char *filename, int *nerr) {
 }
 
 
+int
+sac_is_timeval(int hid) {
+    switch(hid) {
+    case SAC_B: case SAC_E: case SAC_O: case SAC_A: case SAC_F:
+    case SAC_T0: case SAC_T1: case SAC_T2: case SAC_T3:
+    case SAC_T4: case SAC_T5: case SAC_T6: case SAC_T7:
+    case SAC_T8: case SAC_T9:
+        return 1;
+        break;
+    default:
+        break;
+    }
+    return 0;
+}
+
 /**
  * @brief    X-Macro for sac_f64_new()
  * @private
@@ -3027,7 +3042,6 @@ sac_hdr_defined(sac *s, ...) {
 /**
  * @brief     Get the reference time from a sac file
  *
- * @private
  * @ingroup    sac
  * @memberof   sac
  *

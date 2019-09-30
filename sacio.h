@@ -517,6 +517,8 @@ sac * sac_copy(sac *s);
 void  sac_extrema(sac *s);
 /** @brief Get the number of components from a sac string */
 int   sac_comps(sac * s);
+/** @brief Return if the header value represents a time */
+int   sac_is_timeval(int hid);
 
 void  sac_meta_copy(sac *to, sac *from);
 void  sac_header_copy(sac *to, sac *from);
@@ -545,6 +547,8 @@ int sac_hdr_defined(sac *s, ...);
 int sac_fmt(char *dst, size_t n, const char *fmt, sac *s);
 /** @brief  Get an absolute time from a sac object */
 int sac_get_time(sac *s, int hdr, timespec64 *t);
+/** @brief  Get an absolute reference time from a sac object */
+int sac_get_time_ref(sac *s, timespec64 *t);
 /** @brief  Set the reference time for a sac object */
 int sac_set_time(sac *s, timespec64 t);
 /** @brief  Get the size of a sac file in bytes */
