@@ -731,6 +731,10 @@ enum HeaderID {
     SAC_T7MARKER     = 150, /**< @brief t7marker */
     SAC_T8MARKER     = 151, /**< @brief t8marker */
     SAC_T9MARKER     = 152, /**< @brief t9marker */
+
+    SAC_MONTH        = 153, /**< @brief month */
+    SAC_MONTH_DAY    = 154, /**< @brief day of the month */
+    SAC_DATE_TIME    = 155, /**< @brief full date time references */
 };
 
 /**
