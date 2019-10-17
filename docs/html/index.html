@@ -77,53 +77,7 @@ $(function() {
 <p>The code and library here was originally written and licensed under the <a href="https://choosealicense.com/licenses/bsd-2-clause/">2-Clause BSD License</a> and subsequently included for the <a href="http://ds.iris.edu/ds/nodes/dmc/forms/sac/">IRIS-SAC distribution</a>. This distribution also includes other, essentially, public domain knowledge on the sac format. The code found here is the same included within the IRIS-SAC distribution, but does <b>not</b> included the licensed code from LLNL/IRIS; this is primarily the processing, filtering, and data operations. If you require the SAC program and this functionality, make that request to <a href="http://ds.iris.edu/ds/nodes/dmc/forms/sac/">IRIS</a></p>
 <h2>Examples </h2>
 <h3>Read, Change and Write a sac file</h3>
-<pre class="fragment">#include &lt;stdio.h&gt;
-
-#include &lt;sacio.h&gt;
-
-// Variable Declaration
-int nerr = 0;
-char org[128] = {0};
-char id[64] = {0};
-sac *s = NULL;
-
-// Read a SAc file, could be evenly or unevenly spaced
-s = sac_read("file.sac", &amp;nerr);
-if(nerr != 0) {
-    printf("Error: %d reading file\n", nerr);
-    return;
-}
-
-// Print out some header values
-printf("delta: %f\n", s-&gt;h-&gt;delta);
-printf("npts:  %d\n", s-&gt;h-&gt;npts);
-printf("comps: %d\n", sac_comps(s));
-
-// Print out the first 5 data values
-for(i = 0; i &lt; 5; i++) {
-    printf("y[%4d]  %f\n", i, s-&gt;y[i]);
-}
-
-// Set some header character string values
-sac_set_string(s, SAC_NET, "IU");
-sac_set_string(s, SAC_STA, "BORG");
-sac_set_string(s, SAC_LOC, "00");
-sac_set_string(s, SAC_CHA, "BHZ");
-
-// Set the origin time to 1994/160 00:33:16.123
-sac_set_time(s, timespec64_from_yjhmsf(1994, 160, 0, 33, 16, 123));
-
-// Format the origin time in absolute time
-sac_fmt(org, sizeof(ostr), "%TO", s);
-printf("Origin Time: %s [Absolute]\n", org);
-
-// Output the Station id: NET.STA.LOC.CHA
-sac_fmt(id, sizeof(id), "%Z", s);
-printf("Station ID: %s\n", id);
-
-// Write out the modified sac file
-sac_write(s, "output.sac", &amp;nerr);
-</pre><h2>Downloading and installing </h2>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;stdio.h&gt;</span></div><div class="line"></div><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="sacio_8h.html">sacio.h</a>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">// Variable Declaration</span></div><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><span class="keywordtype">char</span> org[128] = {0};</div><div class="line"><span class="keywordtype">char</span> <span class="keywordtype">id</span>[64] = {0};</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = NULL;</div><div class="line"></div><div class="line"><span class="comment">// Read a SAc file, could be evenly or unevenly spaced</span></div><div class="line">s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;file.sac&quot;</span>, &amp;nerr);</div><div class="line"><span class="keywordflow">if</span>(nerr != 0) {</div><div class="line">    printf(<span class="stringliteral">&quot;Error: %d reading file\n&quot;</span>, nerr);</div><div class="line">    <span class="keywordflow">return</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">// Print out some header values</span></div><div class="line">printf(<span class="stringliteral">&quot;delta: %f\n&quot;</span>, s-&gt;<a class="code" href="structsac.html#a6ed17ebaa4218acf60f9fd23db4ebcb8">h</a>-&gt;delta);</div><div class="line">printf(<span class="stringliteral">&quot;npts:  %d\n&quot;</span>, s-&gt;<a class="code" href="structsac.html#a6ed17ebaa4218acf60f9fd23db4ebcb8">h</a>-&gt;<a class="code" href="structsac__hdr.html#a358373ce8523bdff4cbbf9542769a4b6">npts</a>);</div><div class="line">printf(<span class="stringliteral">&quot;comps: %d\n&quot;</span>, <a class="code" href="group__sac.html#gab4a7982bd079a51a699b1db2dc65abae">sac_comps</a>(s));</div><div class="line"></div><div class="line"><span class="comment">// Print out the first 5 data values</span></div><div class="line"><span class="keywordflow">for</span>(i = 0; i &lt; 5; i++) {</div><div class="line">    printf(<span class="stringliteral">&quot;y[%4d]  %f\n&quot;</span>, i, s-&gt;<a class="code" href="structsac.html#a70e28ac2d965592a4d63fcec9f2953bb">y</a>[i]);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">// Set some header character string values</span></div><div class="line"><a class="code" href="group__sac.html#ga9acd9d129945c8fdf5a21434ce1d3359">sac_set_string</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fad7d239c9bb72bd347bc6009d38a84537">SAC_NET</a>, <span class="stringliteral">&quot;IU&quot;</span>);</div><div class="line"><a class="code" href="group__sac.html#ga9acd9d129945c8fdf5a21434ce1d3359">sac_set_string</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789faa5246088d03161d945eef63379b49623">SAC_STA</a>, <span class="stringliteral">&quot;BORG&quot;</span>);</div><div class="line"><a class="code" href="group__sac.html#ga9acd9d129945c8fdf5a21434ce1d3359">sac_set_string</a>(s, <a class="code" href="sacio_8h.html#a14f1d53e66ecaecfbbae92858e7c25da">SAC_LOC</a>, <span class="stringliteral">&quot;00&quot;</span>);</div><div class="line"><a class="code" href="group__sac.html#ga9acd9d129945c8fdf5a21434ce1d3359">sac_set_string</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa6363721d34da8028a16dd696fa875461">SAC_CHA</a>, <span class="stringliteral">&quot;BHZ&quot;</span>);</div><div class="line"></div><div class="line"><span class="comment">// Set the origin time to 1994/160 00:33:16.123</span></div><div class="line"><a class="code" href="group__sac.html#gac845536a51695fa8d63edf98e61d3672">sac_set_time</a>(s, <a class="code" href="group__time.html#gad177be50dbba74a92c7c64e390aaf3a0">timespec64_from_yjhmsf</a>(1994, 160, 0, 33, 16, 123));</div><div class="line"></div><div class="line"><span class="comment">// Format the origin time in absolute time</span></div><div class="line"><a class="code" href="group__sac.html#ga934ef8bc503bb93ac0953cd94efb9b86">sac_fmt</a>(org, <span class="keyword">sizeof</span>(ostr), <span class="stringliteral">&quot;%TO&quot;</span>, s);</div><div class="line">printf(<span class="stringliteral">&quot;Origin Time: %s [Absolute]\n&quot;</span>, org);</div><div class="line"></div><div class="line"><span class="comment">// Output the Station id: NET.STA.LOC.CHA</span></div><div class="line"><a class="code" href="group__sac.html#ga934ef8bc503bb93ac0953cd94efb9b86">sac_fmt</a>(<span class="keywordtype">id</span>, <span class="keyword">sizeof</span>(<span class="keywordtype">id</span>), <span class="stringliteral">&quot;%Z&quot;</span>, s);</div><div class="line">printf(<span class="stringliteral">&quot;Station ID: %s\n&quot;</span>, <span class="keywordtype">id</span>);</div><div class="line"></div><div class="line"><span class="comment">// Write out the modified sac file</span></div><div class="line"><a class="code" href="group__sac.html#gafe8cd1cadc546ea9d67a5ca14fd3886d">sac_write</a>(s, <span class="stringliteral">&quot;output.sac&quot;</span>, &amp;nerr);</div></div><!-- fragment --><h2>Downloading and installing </h2>
 <p>Please report issues to the project.</p>
 <p>If you would like to contribute to the project please file Pull Requests and/or create issues for discussion at the libsacio project.</p>
 <h2>Included Libraries </h2>

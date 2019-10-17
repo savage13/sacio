@@ -6,5 +6,6 @@ var searchData=
   ['getihv',['getihv',['../group__sac-iris.html#gaf88fdd6703c75ebb37d4316b1cf22a0b',1,'sac_iris']]],
   ['getkhv',['getkhv',['../group__sac-iris.html#ga74e7d8de626506f6ce2bdc119c8182e3',1,'sac_iris']]],
   ['getlhv',['getlhv',['../group__sac-iris.html#gad3dc4f7d34fbb7bf2d94f042ac2d0a74',1,'sac_iris']]],
-  ['getnhv',['getnhv',['../group__sac-iris.html#gae1702632d811c1b81fe0f40753cc31ec',1,'sac_iris']]]
+  ['getnhv',['getnhv',['../group__sac-iris.html#gae1702632d811c1b81fe0f40753cc31ec',1,'sac_iris']]],
+  ['getrhv',['getrhv',['../group__sac-iris.html#gad9c4ba030d14391cb85dc49ed7703a09',1,'sac_iris']]]
 ];

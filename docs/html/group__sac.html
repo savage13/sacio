@@ -244,7 +244,11 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faa8ff1f69538c9162719c394c13d87da3">SAC_T6MARKER</a> = 149, 
 <a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faea43ba6e4aaba08d5a2ad571746b3d49">SAC_T7MARKER</a> = 150, 
 <a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa08a779d8c5d6c20cc7b657a1a44c6f43">SAC_T8MARKER</a> = 151, 
-<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faa7b2571a9b23bcbcebe75a8e99a29aca">SAC_T9MARKER</a> = 152
+<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faa7b2571a9b23bcbcebe75a8e99a29aca">SAC_T9MARKER</a> = 152, 
+<br />
+&#160;&#160;<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa6ae990050ad8e3672a62d5eb990994d4">SAC_MONTH</a> = 153, 
+<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa0b9ce494688819476e9585836955dbc0">SAC_MONTH_DAY</a> = 154, 
+<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa13945fa176cb0e651606ae4a2a387992">SAC_DATE_TIME</a> = 155
 <br />
  }</td></tr>
 <tr class="memdesc:gac91c16838512143a982243cb00a0789f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sac Header IDs.  <a href="group__sac.html#gac91c16838512143a982243cb00a0789f">More...</a><br /></td></tr>
@@ -261,6 +265,12 @@ Functions</h2></td></tr>
 <tr class="memitem:gafe8cd1cadc546ea9d67a5ca14fd3886d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gafe8cd1cadc546ea9d67a5ca14fd3886d">sac::sac_write</a> (<a class="el" href="structsac.html">sac</a> *s, char *filename, int *nerr)</td></tr>
 <tr class="memdesc:gafe8cd1cadc546ea9d67a5ca14fd3886d"><td class="mdescLeft">&#160;</td><td class="mdescRight">write a sac file to disk  <a href="#gafe8cd1cadc546ea9d67a5ca14fd3886d">More...</a><br /></td></tr>
 <tr class="separator:gafe8cd1cadc546ea9d67a5ca14fd3886d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac50de3ac64b3869d2f5931c901a66203"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gac50de3ac64b3869d2f5931c901a66203">sac::sac_write_header</a> (<a class="el" href="structsac.html">sac</a> *s, char *filename, int *nerr)</td></tr>
+<tr class="memdesc:gac50de3ac64b3869d2f5931c901a66203"><td class="mdescLeft">&#160;</td><td class="mdescRight">write a sac header to disk  <a href="#gac50de3ac64b3869d2f5931c901a66203">More...</a><br /></td></tr>
+<tr class="separator:gac50de3ac64b3869d2f5931c901a66203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb2e92832dcc5c174362dbd13c22a312"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gacb2e92832dcc5c174362dbd13c22a312">sac::sac_is_timeval</a> (int hid)</td></tr>
+<tr class="memdesc:gacb2e92832dcc5c174362dbd13c22a312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identify if a header is a time value.  <a href="#gacb2e92832dcc5c174362dbd13c22a312">More...</a><br /></td></tr>
+<tr class="separator:gacb2e92832dcc5c174362dbd13c22a312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7d8a8a35afcab78161e32d4032b5a104"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#ga7d8a8a35afcab78161e32d4032b5a104">sac::sac_set_pick</a> (<a class="el" href="structsac.html">sac</a> *s, int n, double value)</td></tr>
 <tr class="memdesc:ga7d8a8a35afcab78161e32d4032b5a104"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a time pick value.  <a href="#ga7d8a8a35afcab78161e32d4032b5a104">More...</a><br /></td></tr>
 <tr class="separator:ga7d8a8a35afcab78161e32d4032b5a104"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -297,9 +307,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gaf43c9d8c9dcfc7e70c07a5535fc0b001"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structsac.html">sac</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gaf43c9d8c9dcfc7e70c07a5535fc0b001">sac::sac_copy</a> (<a class="el" href="structsac.html">sac</a> *s)</td></tr>
 <tr class="memdesc:gaf43c9d8c9dcfc7e70c07a5535fc0b001"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy a sac file  <a href="#gaf43c9d8c9dcfc7e70c07a5535fc0b001">More...</a><br /></td></tr>
 <tr class="separator:gaf43c9d8c9dcfc7e70c07a5535fc0b001"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga49af932e1a21f43954f33e2bb75eef18"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#ga49af932e1a21f43954f33e2bb75eef18">sac::sac_size</a> (<a class="el" href="structsac.html">sac</a> *s)</td></tr>
-<tr class="memdesc:ga49af932e1a21f43954f33e2bb75eef18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of a sac file in bytes.  <a href="#ga49af932e1a21f43954f33e2bb75eef18">More...</a><br /></td></tr>
-<tr class="separator:ga49af932e1a21f43954f33e2bb75eef18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6531585fd2953dc9e54bc9096436d16b"><td class="memItemLeft" align="right" valign="top">off_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#ga6531585fd2953dc9e54bc9096436d16b">sac::sac_size</a> (<a class="el" href="structsac.html">sac</a> *s)</td></tr>
+<tr class="memdesc:ga6531585fd2953dc9e54bc9096436d16b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of a sac file in bytes.  <a href="#ga6531585fd2953dc9e54bc9096436d16b">More...</a><br /></td></tr>
+<tr class="separator:ga6531585fd2953dc9e54bc9096436d16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab4a7982bd079a51a699b1db2dc65abae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gab4a7982bd079a51a699b1db2dc65abae">sac::sac_comps</a> (<a class="el" href="structsac.html">sac</a> *s)</td></tr>
 <tr class="memdesc:gab4a7982bd079a51a699b1db2dc65abae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of data components.  <a href="#gab4a7982bd079a51a699b1db2dc65abae">More...</a><br /></td></tr>
 <tr class="separator:gab4a7982bd079a51a699b1db2dc65abae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -327,6 +337,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga4f6f342bc83df949eb42210e5a918d07"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#ga4f6f342bc83df949eb42210e5a918d07">sac::sac_hdr_defined</a> (<a class="el" href="structsac.html">sac</a> *s,...)</td></tr>
 <tr class="memdesc:ga4f6f342bc83df949eb42210e5a918d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if multiple header values are defined.  <a href="#ga4f6f342bc83df949eb42210e5a918d07">More...</a><br /></td></tr>
 <tr class="separator:ga4f6f342bc83df949eb42210e5a918d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaecae001aec2d8d107d55f9d8cad25cf6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gaecae001aec2d8d107d55f9d8cad25cf6">sac::sac_get_time_ref</a> (<a class="el" href="structsac.html">sac</a> *s, <a class="el" href="structtimespec64.html">timespec64</a> *t)</td></tr>
+<tr class="memdesc:gaecae001aec2d8d107d55f9d8cad25cf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the reference time from a sac file.  <a href="#gaecae001aec2d8d107d55f9d8cad25cf6">More...</a><br /></td></tr>
+<tr class="separator:gaecae001aec2d8d107d55f9d8cad25cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf90c5bb17d838e3b879c9b83bbf4584c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac.html#gaf90c5bb17d838e3b879c9b83bbf4584c">sac::sac_get_time</a> (<a class="el" href="structsac.html">sac</a> *s, int hdr, <a class="el" href="structtimespec64.html">timespec64</a> *t)</td></tr>
 <tr class="memdesc:gaf90c5bb17d838e3b879c9b83bbf4584c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get time value from sac file.  <a href="#gaf90c5bb17d838e3b879c9b83bbf4584c">More...</a><br /></td></tr>
 <tr class="separator:gaf90c5bb17d838e3b879c9b83bbf4584c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -617,6 +630,12 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gac91c16838512143a982243cb00a0789faa7b2571a9b23bcbcebe75a8e99a29aca"></a>SAC_T9MARKER&#160;</td><td class="fielddoc"><p>t9marker </p>
 </td></tr>
+<tr><td class="fieldname"><a id="gac91c16838512143a982243cb00a0789fa6ae990050ad8e3672a62d5eb990994d4"></a>SAC_MONTH&#160;</td><td class="fielddoc"><p>month </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gac91c16838512143a982243cb00a0789fa0b9ce494688819476e9585836955dbc0"></a>SAC_MONTH_DAY&#160;</td><td class="fielddoc"><p>day of the month </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gac91c16838512143a982243cb00a0789fa13945fa176cb0e651606ae4a2a387992"></a>SAC_DATE_TIME&#160;</td><td class="fielddoc"><p>full date time references </p>
+</td></tr>
 </table>
 
 </div>
@@ -642,11 +661,11 @@ Functions</h2></td></tr>
 <p>allocate the sac data poriton of a sac structure. The memory size the data and components are determined by <a class="el" href="group__sac.html#gab4a7982bd079a51a699b1db2dc65abae" title="Get the number of data components. ">sac_comps()</a> and the number of points <code>npts</code>. Any previous data is freed before allocation</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>sac file to allocate the data for </td></tr>
+    <tr><td class="paramname">s</td><td>sac file to allocate the data for</td></tr>
   </table>
   </dd>
 </dl>
-
+<p>Example of creating and allocating space for data in a sac file in memory </p><div class="fragment"><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#ga6f50ed93b4f469abb2f9a58e7dfbb9bb">sac_new</a>();</div><div class="line"><a class="code" href="group__sac.html#ga65ddb9d01a8d1ea66bc7ad1024b30534">sac_set_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fabb61b0a1e6cba6892a70380cd3fd762b">SAC_NPTS</a>, 100);</div><div class="line"><a class="code" href="group__sac.html#gaeb28c80531421fea6d139dd3ea929046">sac_alloc</a>(s);</div><div class="line">assert_ne(s-&gt;<a class="code" href="structsac.html#a70e28ac2d965592a4d63fcec9f2953bb">y</a>, NULL);</div><div class="line">assert_eq(s-&gt;<a class="code" href="structsac.html#a90c2bd1f04161a1fea16bb08bd6651f2">x</a>, NULL);</div><div class="line"></div><div class="line"><span class="comment">// Set the file type to Amplitude/Phase (2 components)</span></div><div class="line"><a class="code" href="group__sac.html#ga65ddb9d01a8d1ea66bc7ad1024b30534">sac_set_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789faf47d6cf381eb93e393349b64db263ad2">SAC_FILE_TYPE</a>, <a class="code" href="sacio_8h.html#a47542b0ee1f7f1d6eafb75a5ef12e7b5a174248b8bce727e2402e1d33c1223464">IAMPH</a>);</div><div class="line"><a class="code" href="group__sac.html#gaeb28c80531421fea6d139dd3ea929046">sac_alloc</a>(s);</div><div class="line">assert_ne(s-&gt;<a class="code" href="structsac.html#a70e28ac2d965592a4d63fcec9f2953bb">y</a>, NULL);</div><div class="line">assert_ne(s-&gt;<a class="code" href="structsac.html#a90c2bd1f04161a1fea16bb08bd6651f2">x</a>, NULL);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="ga6331ab86649f3b9b368c863554fdd6e0"></a>
@@ -904,11 +923,11 @@ Functions</h2></td></tr>
 <p>free a sac file structure. Free any data components, meta data, header and other associated components</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>sac file struture to free </td></tr>
+    <tr><td class="paramname">s</td><td>sac file struture to free</td></tr>
   </table>
   </dd>
 </dl>
-
+<p>Example of creating and freeing a sac file in memory </p><div class="fragment"><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#ga6f50ed93b4f469abb2f9a58e7dfbb9bb">sac_new</a>();</div><div class="line"><a class="code" href="group__sac.html#ga65ddb9d01a8d1ea66bc7ad1024b30534">sac_set_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fabb61b0a1e6cba6892a70380cd3fd762b">SAC_NPTS</a>, 100);</div><div class="line"><a class="code" href="group__sac.html#gaeb28c80531421fea6d139dd3ea929046">sac_alloc</a>(s);</div><div class="line">assert_ne(s-&gt;<a class="code" href="structsac.html#a70e28ac2d965592a4d63fcec9f2953bb">y</a>, NULL);</div><div class="line"><a class="code" href="group__sac.html#ga9df33feda720d50f920b408a856e97bd">sac_free</a>(s);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="ga94ddfd21929cd9cb6faa508d8b6d1460"></a>
@@ -1045,8 +1064,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure</dd></dl>
+<p>Example of getting a time pick by its number, 0 to 9 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><span class="keywordtype">double</span> t = 0.0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line"><a class="code" href="group__sac.html#ga7d8a8a35afcab78161e32d4032b5a104">sac_set_pick</a>(s, 3, 13.50);</div><div class="line"><a class="code" href="group__sac.html#ga0e27691d871f00477737d0a0125f34fc">sac_get_pick</a>(s, 3, &amp;t);</div><div class="line">assert_eq(t, 13.50);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="ga58de657b18177e79b5fa001b21c55e32"></a>
@@ -1148,6 +1167,45 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gaecae001aec2d8d107d55f9d8cad25cf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaecae001aec2d8d107d55f9d8cad25cf6">&#9670;&nbsp;</a></span>sac_get_time_ref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sac_get_time_ref </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtimespec64.html">timespec64</a> *&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the reference time from a sac file. </p>
+<p>Get the refereence time from a sac file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>sac file </td></tr>
+    <tr><td class="paramname">t</td><td><a class="el" href="structtimespec64.html" title="High-precision, long duration time value. ">timespec64</a> output value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 in failure </dd></dl>
+
+</div>
+</div>
 <a id="ga4f6f342bc83df949eb42210e5a918d07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga4f6f342bc83df949eb42210e5a918d07">&#9670;&nbsp;</a></span>sac_hdr_defined()</h2>
 
@@ -1225,6 +1283,34 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gacb2e92832dcc5c174362dbd13c22a312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacb2e92832dcc5c174362dbd13c22a312">&#9670;&nbsp;</a></span>sac_is_timeval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sac_is_timeval </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>hid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Identify if a header is a time value. </p>
+<p>Check is the sac header value is a time value</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hid</td><td>sac header id</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if header value is a time value type</dd></dl>
+<div class="fragment"><div class="line">assert_eq(<a class="code" href="group__sac.html#gacb2e92832dcc5c174362dbd13c22a312">sac_is_timeval</a>(<a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa3b98c72464ce172697850f140351f2c1">SAC_B</a>), 1);</div><div class="line">assert_eq(<a class="code" href="group__sac.html#gacb2e92832dcc5c174362dbd13c22a312">sac_is_timeval</a>(<a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa3fd17685db166eec2637b09c421b6e3f">SAC_DEPMAX</a>), 0);</div></div><!-- fragment --> 
+</div>
+</div>
 <a id="gaad15e397e27e3c859c886a0d15bc5173"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaad15e397e27e3c859c886a0d15bc5173">&#9670;&nbsp;</a></span>sac_meta_copy()</h2>
 
@@ -1280,8 +1366,8 @@ Functions</h2></td></tr>
 
 <p>create a new sac file structure </p>
 <p>create a new sac file structure. Header and meta data are allocated. Data components are not allocated and should be done with <a class="el" href="group__sac.html#gaeb28c80531421fea6d139dd3ea929046" title="allocate the sac data portion of a sac strucutre ">sac_alloc()</a> after setting <code>the</code> type of file and the number of data points</p>
-<dl class="section return"><dt>Returns</dt><dd>newly created sac file structure </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>newly created sac file structure</dd></dl>
+<p>Create a new sac file in memory </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> v = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#ga6f50ed93b4f469abb2f9a58e7dfbb9bb">sac_new</a>();</div><div class="line">assert_ne(s, NULL);</div><div class="line">assert_eq(s-&gt;<a class="code" href="structsac.html#a90c2bd1f04161a1fea16bb08bd6651f2">x</a>, NULL);</div><div class="line">assert_eq(s-&gt;<a class="code" href="structsac.html#a70e28ac2d965592a4d63fcec9f2953bb">y</a>, NULL);</div><div class="line"></div><div class="line"><a class="code" href="group__sac.html#gae653ac7ecc8c625069694eb2a97bbeb0">sac_get_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa8ad6ace06f7c586b5376db079976d07a">SAC_EVEN</a>, &amp;v);</div><div class="line">assert_eq(v, TRUE);</div><div class="line"></div><div class="line"><a class="code" href="group__sac.html#gae653ac7ecc8c625069694eb2a97bbeb0">sac_get_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa1d2f4e730579fea5dbfc8f3afc4cd735">SAC_POLARITY</a>, &amp;v);</div><div class="line">assert_eq(v, FALSE);</div><div class="line"></div><div class="line"><a class="code" href="group__sac.html#gae653ac7ecc8c625069694eb2a97bbeb0">sac_get_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa3f17312fad442709e880cb2d827fa01f">SAC_OVERWRITE</a>, &amp;v);</div><div class="line">assert_eq(v, TRUE);</div><div class="line"></div><div class="line"><a class="code" href="group__sac.html#gae653ac7ecc8c625069694eb2a97bbeb0">sac_get_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789faeca1725fde700be5290a69d6e1296447">SAC_CALC_DIST_AZ</a>, &amp;v);</div><div class="line">assert_eq(v, TRUE);</div><div class="line"></div><div class="line"><a class="code" href="group__sac.html#gae653ac7ecc8c625069694eb2a97bbeb0">sac_get_int</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789faf47d6cf381eb93e393349b64db263ad2">SAC_FILE_TYPE</a>, &amp;v);</div><div class="line">assert_eq(v, <a class="code" href="sacio_8h.html#a47542b0ee1f7f1d6eafb75a5ef12e7b5a833ee5f1c07dd84f1a51e22f75896af5">ITIME</a>);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="gab2623928ccd5cac1a4cc94be5dd89273"></a>
@@ -1319,8 +1405,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>sac file structure, NULL on failure </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>sac file structure, NULL on failure</dd></dl>
+<p>Reading a sac file should result in a pointer to a sac-file structure </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_ne(s, NULL);</div><div class="line">assert_eq(nerr, 0);</div></div><!-- fragment --><p>Reading a file that does not exist will return a NULL pointer and an error code of 108 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;non-existant-file&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(s, NULL);</div><div class="line">assert_eq(nerr, 108);</div></div><!-- fragment --><p>Reading a file that exists but is not a sac file will return a NULL pointer and an error code of 1317 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;sacio.c&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(s, NULL);</div><div class="line">assert_eq(nerr, 1317);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="ga9f55a31b6a946df455d7b1d03ad28fb2"></a>
@@ -1358,8 +1444,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>sac file structure, NULL on failure </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>sac file structure, NULL on failure</dd></dl>
+<div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#ga9f55a31b6a946df455d7b1d03ad28fb2">sac_read_header</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line">assert_eq(s-&gt;<a class="code" href="structsac.html#a90c2bd1f04161a1fea16bb08bd6651f2">x</a>, NULL);</div><div class="line">assert_eq(s-&gt;<a class="code" href="structsac.html#a70e28ac2d965592a4d63fcec9f2953bb">y</a>, NULL);</div><div class="line">assert_ne(s-&gt;<a class="code" href="structsac.html#a6ed17ebaa4218acf60f9fd23db4ebcb8">h</a>, NULL);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="gaa5cd583512409156b09d6a4b0ec4b683"></a>
@@ -1496,8 +1582,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure</dd></dl>
+<p>Exaple of setting the time pick t3 to 13.50 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><span class="keywordtype">double</span> t = 0.0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line"><a class="code" href="group__sac.html#ga7d8a8a35afcab78161e32d4032b5a104">sac_set_pick</a>(s, 3, 13.50);</div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fad81b1efd99d51e55c3a17641a3150416">SAC_T3</a>, &amp;t);</div><div class="line">assert_eq(t, 13.50);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="ga9acd9d129945c8fdf5a21434ce1d3359"></a>
@@ -1609,8 +1695,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Set the header version to <code>6</code>. See <a class="el" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460" title="Get a floating point value from a sac file. ">sac::sac_get_float()</a> and <a class="el" href="group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683" title="Set a floating point value in a sac file. ">sac::sac_set_float()</a> for the details about how the different header version impact which floating point values are set and get. </p>
-
+<p>Set the header version to <code>6</code>. See <a class="el" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460" title="Get a floating point value from a sac file. ">sac::sac_get_float()</a> and <a class="el" href="group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683" title="Set a floating point value in a sac file. ">sac::sac_set_float()</a> for the details about how the different header version impact which floating point values are set and get. </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><span class="keywordtype">double</span> t = 0.0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line"><a class="code" href="group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683">sac_set_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa473d34b27b0d35d3cffc4940420bbd58">SAC_DELTA</a>, 1.0/3.0);</div><div class="line"></div><div class="line"><span class="comment">// Switch to the v7 header</span></div><div class="line"><a class="code" href="group__sac.html#gae1efb5e07576bbfa2244dfaa4967042c">sac_set_v7</a>(s);</div><div class="line"></div><div class="line"><span class="comment">// Get delta, 64bit value, from the v7 footer</span></div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa473d34b27b0d35d3cffc4940420bbd58">SAC_DELTA</a>, &amp;t);</div><div class="line">assert_eq(t, 1.0/3.0);</div><div class="line"></div><div class="line"><span class="comment">// Switch to the v6 header</span></div><div class="line"><a class="code" href="group__sac.html#ga2286f903e51e3719297cbc77e54dac21">sac_set_v6</a>(s);</div><div class="line"></div><div class="line"><span class="comment">// Get delta, 32bit value, from the v6 header</span></div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa473d34b27b0d35d3cffc4940420bbd58">SAC_DELTA</a>, &amp;t);</div><div class="line">assert_ne(t, 1.0/3.0);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="gae1efb5e07576bbfa2244dfaa4967042c"></a>
@@ -1636,18 +1721,18 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Set the header version to <code>7</code>. See <a class="el" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460" title="Get a floating point value from a sac file. ">sac::sac_get_float()</a> and <a class="el" href="group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683" title="Set a floating point value in a sac file. ">sac::sac_set_float()</a> for the details about how the different header version impact which floating point values are set and get. </p>
-
+<p>Set the header version to <code>7</code>. See <a class="el" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460" title="Get a floating point value from a sac file. ">sac::sac_get_float()</a> and <a class="el" href="group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683" title="Set a floating point value in a sac file. ">sac::sac_set_float()</a> for the details about how the different header version impact which floating point values are set and get.</p>
+<div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><span class="keywordtype">double</span> t = 0.0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line"><a class="code" href="group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683">sac_set_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa473d34b27b0d35d3cffc4940420bbd58">SAC_DELTA</a>, 1.0/3.0);</div><div class="line"></div><div class="line"><span class="comment">// Get delta, 32bit value, from the v6 header</span></div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa473d34b27b0d35d3cffc4940420bbd58">SAC_DELTA</a>, &amp;t);</div><div class="line">assert_ne(t, 1.0/3.0);</div><div class="line"></div><div class="line"><span class="comment">// Switch to the v7 header</span></div><div class="line"><a class="code" href="group__sac.html#gae1efb5e07576bbfa2244dfaa4967042c">sac_set_v7</a>(s);</div><div class="line"></div><div class="line"><span class="comment">// Get delta, 64bit value, from the v7 footer</span></div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(s, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa473d34b27b0d35d3cffc4940420bbd58">SAC_DELTA</a>, &amp;t);</div><div class="line">assert_eq(t, 1.0/3.0);</div></div><!-- fragment --> 
 </div>
 </div>
-<a id="ga49af932e1a21f43954f33e2bb75eef18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga49af932e1a21f43954f33e2bb75eef18">&#9670;&nbsp;</a></span>sac_size()</h2>
+<a id="ga6531585fd2953dc9e54bc9096436d16b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6531585fd2953dc9e54bc9096436d16b">&#9670;&nbsp;</a></span>sac_size()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t sac_size </td>
+          <td class="memname">off_t sac_size </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -1701,16 +1786,61 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>write a sac file to disk </p>
-<p>write a sac file to dist, header and data</p>
+<p>write a sac file to disk, header and data</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>sac file to write to disk </td></tr>
     <tr><td class="paramname">filename</td><td>file to write to </td></tr>
-    <tr><td class="paramname">nerr</td><td>status code, 0 on success, non-zero on error </td></tr>
+    <tr><td class="paramname">nerr</td><td>status code, 0 on success, non-zero on error</td></tr>
   </table>
   </dd>
 </dl>
+<p>Example of writing a sac file </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line"><a class="code" href="group__sac.html#gafe8cd1cadc546ea9d67a5ca14fd3886d">sac_write</a>(s, <span class="stringliteral">&quot;t/test_io_small.sac.tmp&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div></div><!-- fragment --> 
+</div>
+</div>
+<a id="gac50de3ac64b3869d2f5931c901a66203"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac50de3ac64b3869d2f5931c901a66203">&#9670;&nbsp;</a></span>sac_write_header()</h2>
 
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sac_write_header </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>nerr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>write a sac header to disk </p>
+<p>write a sac header to disk</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>sac header to write to disk </td></tr>
+    <tr><td class="paramname">filename</td><td>file to write to, must exist and be a sac file </td></tr>
+    <tr><td class="paramname">nerr</td><td>status code, 0 on success, non-zero on error</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example of writing a sac header </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line"><a class="code" href="group__sac.html#gac50de3ac64b3869d2f5931c901a66203">sac_write_header</a>(s, <span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div></div><!-- fragment --><p>A file that does not exist should return a error code of 108 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line"><a class="code" href="group__sac.html#gac50de3ac64b3869d2f5931c901a66203">sac_write_header</a>(s, <span class="stringliteral">&quot;non-existant-file&quot;</span>, &amp;nerr );</div><div class="line">assert_eq(nerr, 108);</div></div><!-- fragment --><p>A file that is not a sac file should return an error code of 1317 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line"><a class="code" href="group__sac.html#gac50de3ac64b3869d2f5931c901a66203">sac_write_header</a>(s, <span class="stringliteral">&quot;sacio.c&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 1317);</div></div><!-- fragment --> 
 </div>
 </div>
 </div><!-- contents -->

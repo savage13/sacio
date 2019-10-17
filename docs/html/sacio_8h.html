@@ -89,6 +89,9 @@ Data Structures</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcomplexd__t.html">complexd</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeid.html">eid</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to convert keyword to enum value.  <a href="structeid.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -211,6 +214,10 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8h.html#a87f91bf575106ed5d5a21f9453e8ca3c">ERROR_CANT_CUT_UNEVENLY_SPACED_FILE</a>&#160;&#160;&#160;1356</td></tr>
 <tr class="memdesc:a87f91bf575106ed5d5a21f9453e8ca3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error cuting unevenly spaced file. <br /></td></tr>
 <tr class="separator:a87f91bf575106ed5d5a21f9453e8ca3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adba0d318947f1aca44786be5112adeaf"><td class="memItemLeft" align="right" valign="top"><a id="adba0d318947f1aca44786be5112adeaf"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8h.html#adba0d318947f1aca44786be5112adeaf">ERROR_READING_CARD_IMAGE_HEADER</a>&#160;&#160;&#160;1319</td></tr>
+<tr class="memdesc:adba0d318947f1aca44786be5112adeaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error reading an sac alphanumeric file. <br /></td></tr>
+<tr class="separator:adba0d318947f1aca44786be5112adeaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -378,7 +385,11 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faa8ff1f69538c9162719c394c13d87da3">SAC_T6MARKER</a> = 149, 
 <a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faea43ba6e4aaba08d5a2ad571746b3d49">SAC_T7MARKER</a> = 150, 
 <a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa08a779d8c5d6c20cc7b657a1a44c6f43">SAC_T8MARKER</a> = 151, 
-<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faa7b2571a9b23bcbcebe75a8e99a29aca">SAC_T9MARKER</a> = 152
+<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789faa7b2571a9b23bcbcebe75a8e99a29aca">SAC_T9MARKER</a> = 152, 
+<br />
+&#160;&#160;<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa6ae990050ad8e3672a62d5eb990994d4">SAC_MONTH</a> = 153, 
+<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa0b9ce494688819476e9585836955dbc0">SAC_MONTH_DAY</a> = 154, 
+<a class="el" href="group__sac.html#gac91c16838512143a982243cb00a0789fa13945fa176cb0e651606ae4a2a387992">SAC_DATE_TIME</a> = 155
 <br />
  }</td></tr>
 <tr class="memdesc:gac91c16838512143a982243cb00a0789f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sac Header IDs.  <a href="group__sac.html#gac91c16838512143a982243cb00a0789f">More...</a><br /></td></tr>
@@ -517,9 +528,9 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="sacio_8c.html#a3d6fd2776460e16373df12ecf1b2942e">X</a>(DELTA, _delta)       \</div><div class="line">    X(<a class="code" href="sacio_8c.html#af71b3cc9ccabb684a37f2f12b727820e">B</a>, _b)               \</div><div class="line">    X(<a class="code" href="sacio_8c.html#a55d7278624a8e70c5b38a6feea1d6214">E</a>, _e)               \</div><div class="line">    X(O, _o)               \</div><div class="line">    X(A, _a)               \</div><div class="line">    X(T0, _t0)             \</div><div class="line">    X(T1, _t1)             \</div><div class="line">    X(T2, _t2)             \</div><div class="line">    X(T3, _t3)             \</div><div class="line">    X(T4, _t4)             \</div><div class="line">    X(T5, _t5)             \</div><div class="line">    X(T6, _t6)             \</div><div class="line">    X(T7, _t7)             \</div><div class="line">    X(T8, _t8)             \</div><div class="line">    X(T9, _t9)             \</div><div class="line">    X(F, _f)               \</div><div class="line">    X(EVLO, _evlo)         \</div><div class="line">    X(EVLA, _evla)         \</div><div class="line">    X(STLO, _stlo)         \</div><div class="line">    X(STLA, _stla)         \</div><div class="line">    X(SB, _sb)             \</div><div class="line">    X(SDELTA, _sdelta)             \</div><div class="ttc" id="sacio_8c_html_a3d6fd2776460e16373df12ecf1b2942e"><div class="ttname"><a href="sacio_8c.html#a3d6fd2776460e16373df12ecf1b2942e">X</a></div><div class="ttdeci">#define X(name, key)</div><div class="ttdoc">X-Macro for sac_f64_new() </div><div class="ttdef"><b>Definition:</b> sacio.c:268</div></div>
-<div class="ttc" id="sacio_8c_html_a55d7278624a8e70c5b38a6feea1d6214"><div class="ttname"><a href="sacio_8c.html#a55d7278624a8e70c5b38a6feea1d6214">E</a></div><div class="ttdeci">#define E(s)</div><div class="ttdoc">Get end value. </div><div class="ttdef"><b>Definition:</b> sacio.c:97</div></div>
-<div class="ttc" id="sacio_8c_html_af71b3cc9ccabb684a37f2f12b727820e"><div class="ttname"><a href="sacio_8c.html#af71b3cc9ccabb684a37f2f12b727820e">B</a></div><div class="ttdeci">#define B(s)</div><div class="ttdoc">Get begin value. </div><div class="ttdef"><b>Definition:</b> sacio.c:92</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="sacio_8c.html#a3d6fd2776460e16373df12ecf1b2942e">X</a>(DELTA, _delta)       \</div><div class="line">    X(<a class="code" href="sacio_8c.html#af71b3cc9ccabb684a37f2f12b727820e">B</a>, _b)               \</div><div class="line">    X(<a class="code" href="sacio_8c.html#a55d7278624a8e70c5b38a6feea1d6214">E</a>, _e)               \</div><div class="line">    X(O, _o)               \</div><div class="line">    X(A, _a)               \</div><div class="line">    X(T0, _t0)             \</div><div class="line">    X(T1, _t1)             \</div><div class="line">    X(T2, _t2)             \</div><div class="line">    X(T3, _t3)             \</div><div class="line">    X(T4, _t4)             \</div><div class="line">    X(T5, _t5)             \</div><div class="line">    X(T6, _t6)             \</div><div class="line">    X(T7, _t7)             \</div><div class="line">    X(T8, _t8)             \</div><div class="line">    X(T9, _t9)             \</div><div class="line">    X(F, _f)               \</div><div class="line">    X(EVLO, _evlo)         \</div><div class="line">    X(EVLA, _evla)         \</div><div class="line">    X(STLO, _stlo)         \</div><div class="line">    X(STLA, _stla)         \</div><div class="line">    X(SB, _sb)             \</div><div class="line">    X(SDELTA, _sdelta)             \</div><div class="ttc" id="sacio_8c_html_a3d6fd2776460e16373df12ecf1b2942e"><div class="ttname"><a href="sacio_8c.html#a3d6fd2776460e16373df12ecf1b2942e">X</a></div><div class="ttdeci">#define X(name, key)</div><div class="ttdoc">X-Macro for sac_f64_new() </div><div class="ttdef"><b>Definition:</b> sacio.c:398</div></div>
+<div class="ttc" id="sacio_8c_html_a55d7278624a8e70c5b38a6feea1d6214"><div class="ttname"><a href="sacio_8c.html#a55d7278624a8e70c5b38a6feea1d6214">E</a></div><div class="ttdeci">#define E(s)</div><div class="ttdoc">Get end value. </div><div class="ttdef"><b>Definition:</b> sacio.c:108</div></div>
+<div class="ttc" id="sacio_8c_html_af71b3cc9ccabb684a37f2f12b727820e"><div class="ttname"><a href="sacio_8c.html#af71b3cc9ccabb684a37f2f12b727820e">B</a></div><div class="ttdeci">#define B(s)</div><div class="ttdoc">Get begin value. </div><div class="ttdef"><b>Definition:</b> sacio.c:103</div></div>
 </div><!-- fragment -->
 <p>X-Macro v7 floating point header values, in order. </p>
 

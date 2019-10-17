@@ -100,6 +100,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga91da0d15bab46b5f512976fb23dd1b30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#ga91da0d15bab46b5f512976fb23dd1b30">sac_iris::wsac2</a> (char *kname, float *yarray, int *nlen, float *xarray, int *nerr, int kname_s)</td></tr>
 <tr class="memdesc:ga91da0d15bab46b5f512976fb23dd1b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an unevenly spaced sac file.  <a href="#ga91da0d15bab46b5f512976fb23dd1b30">More...</a><br /></td></tr>
 <tr class="separator:ga91da0d15bab46b5f512976fb23dd1b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad9c4ba030d14391cb85dc49ed7703a09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#gad9c4ba030d14391cb85dc49ed7703a09">sac_iris::getrhv</a> (char *kname, double *fvalue, int *nerr, int kname_s)</td></tr>
+<tr class="memdesc:gad9c4ba030d14391cb85dc49ed7703a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a floating point header value.  <a href="#gad9c4ba030d14391cb85dc49ed7703a09">More...</a><br /></td></tr>
+<tr class="separator:gad9c4ba030d14391cb85dc49ed7703a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga053052bf9729821a53c3b1e18bff4251"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#ga053052bf9729821a53c3b1e18bff4251">sac_iris::getfhv</a> (char *kname, float *fvalue, int *nerr, int kname_s)</td></tr>
 <tr class="memdesc:ga053052bf9729821a53c3b1e18bff4251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a floating point header value.  <a href="#ga053052bf9729821a53c3b1e18bff4251">More...</a><br /></td></tr>
 <tr class="separator:ga053052bf9729821a53c3b1e18bff4251"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,6 +118,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gad3dc4f7d34fbb7bf2d94f042ac2d0a74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#gad3dc4f7d34fbb7bf2d94f042ac2d0a74">sac_iris::getlhv</a> (char *kname, int *nvalue, int *nerr, int kname_s)</td></tr>
 <tr class="memdesc:gad3dc4f7d34fbb7bf2d94f042ac2d0a74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a logical/bool header value.  <a href="#gad3dc4f7d34fbb7bf2d94f042ac2d0a74">More...</a><br /></td></tr>
 <tr class="separator:gad3dc4f7d34fbb7bf2d94f042ac2d0a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4dbf6791d21462a1acc9c11132d96446"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#ga4dbf6791d21462a1acc9c11132d96446">sac_iris::setrhv</a> (char *kname, double *fvalue, int *nerr, int kname_s)</td></tr>
+<tr class="memdesc:ga4dbf6791d21462a1acc9c11132d96446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a floating point header value.  <a href="#ga4dbf6791d21462a1acc9c11132d96446">More...</a><br /></td></tr>
+<tr class="separator:ga4dbf6791d21462a1acc9c11132d96446"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf178567569a203b9781611d2c94ab82b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sac-iris.html#gaf178567569a203b9781611d2c94ab82b">sac_iris::setfhv</a> (char *kname, float *fvalue, int *nerr, int kname_s)</td></tr>
 <tr class="memdesc:gaf178567569a203b9781611d2c94ab82b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a floating point header value.  <a href="#gaf178567569a203b9781611d2c94ab82b">More...</a><br /></td></tr>
 <tr class="separator:gaf178567569a203b9781611d2c94ab82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -404,6 +410,59 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">kname</td><td>Name of header value </td></tr>
     <tr><td class="paramname">nvalue</td><td>Output header value </td></tr>
+    <tr><td class="paramname">nerr</td><td>Status, 0 on success, non-zero on failure </td></tr>
+    <tr><td class="paramname">kname_s</td><td>Length of kname</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This routine requires an internal, global sac file from <a class="el" href="group__sac-iris.html#gab0fbc111e1262eced05ca625656ceb29" title="Read an evenly spaced sac file. ">rsac1()</a>, <a class="el" href="group__sac-iris.html#ga04821ee66aeb50ed277ffe9345b409bd" title="Read an unevenly spaced sac file. ">rsac2()</a> or <a class="el" href="group__sac-iris.html#ga093fd07fddeafcf6b834e585aaebb9d7" title="Create a new sac header to store in memory. ">newhdr()</a> </dd></dl>
+
+</div>
+</div>
+<a id="gad9c4ba030d14391cb85dc49ed7703a09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad9c4ba030d14391cb85dc49ed7703a09">&#9670;&nbsp;</a></span>getrhv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void getrhv </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>kname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>fvalue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>nerr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>kname_s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a floating point header value. </p>
+<p>Get a floating point header value from the sac header</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kname</td><td>Name of header value </td></tr>
+    <tr><td class="paramname">fvalue</td><td>Output header value </td></tr>
     <tr><td class="paramname">nerr</td><td>Status, 0 on success, non-zero on failure </td></tr>
     <tr><td class="paramname">kname_s</td><td>Length of kname</td></tr>
   </table>
@@ -902,6 +961,59 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">kname</td><td>Name of header value to set </td></tr>
     <tr><td class="paramname">nvalue</td><td>Input value to set </td></tr>
+    <tr><td class="paramname">nerr</td><td>Status code, 0 on success, non-zero on failure </td></tr>
+    <tr><td class="paramname">kname_s</td><td>Length of kname</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This routine requires an internal, global sac file from <a class="el" href="group__sac-iris.html#gab0fbc111e1262eced05ca625656ceb29" title="Read an evenly spaced sac file. ">rsac1()</a>, <a class="el" href="group__sac-iris.html#ga04821ee66aeb50ed277ffe9345b409bd" title="Read an unevenly spaced sac file. ">rsac2()</a> or <a class="el" href="group__sac-iris.html#ga093fd07fddeafcf6b834e585aaebb9d7" title="Create a new sac header to store in memory. ">newhdr()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga4dbf6791d21462a1acc9c11132d96446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4dbf6791d21462a1acc9c11132d96446">&#9670;&nbsp;</a></span>setrhv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setrhv </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>kname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>fvalue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>nerr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>kname_s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set a floating point header value. </p>
+<p>Set a floating point header value in the active sac header</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kname</td><td>Name of header value to set </td></tr>
+    <tr><td class="paramname">fvalue</td><td>Input value to set </td></tr>
     <tr><td class="paramname">nerr</td><td>Status code, 0 on success, non-zero on failure </td></tr>
     <tr><td class="paramname">kname_s</td><td>Length of kname</td></tr>
   </table>
