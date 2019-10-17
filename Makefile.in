@@ -89,10 +89,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
 	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
-	t/alpha$(EXEEXT)
+	t/alpha$(EXEEXT) t/snippets$(EXEEXT)
 check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
 	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
-	t/alpha$(EXEEXT)
+	t/alpha$(EXEEXT) t/snippets$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -172,6 +172,10 @@ am_t_iotest_OBJECTS = t/iotest.$(OBJEXT)
 t_iotest_OBJECTS = $(am_t_iotest_OBJECTS)
 t_iotest_LDADD = $(LDADD)
 t_iotest_DEPENDENCIES = libsacio_bsd.a
+am_t_snippets_OBJECTS = t/snippets.$(OBJEXT)
+t_snippets_OBJECTS = $(am_t_snippets_OBJECTS)
+t_snippets_LDADD = $(LDADD)
+t_snippets_DEPENDENCIES = libsacio_bsd.a
 am_t_time_OBJECTS = t/time.$(OBJEXT)
 t_time_OBJECTS = $(am_t_time_OBJECTS)
 t_time_LDADD = $(LDADD)
@@ -209,12 +213,12 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libsacio_bsd_a_SOURCES) $(t_alpha_SOURCES) \
 	$(t_compat_SOURCES) $(t_cut_SOURCES) $(t_cutim_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
-	$(t_ver_SOURCES)
+	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_snippets_SOURCES) \
+	$(t_time_SOURCES) $(t_ver_SOURCES)
 DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_alpha_SOURCES) \
 	$(t_compat_SOURCES) $(t_cut_SOURCES) $(t_cutim_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_time_SOURCES) \
-	$(t_ver_SOURCES)
+	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_snippets_SOURCES) \
+	$(t_time_SOURCES) $(t_ver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -554,6 +558,7 @@ t_ver_SOURCES = t/ver.c
 t_cut_SOURCES = t/cut.c
 t_cutim_SOURCES = t/cutim.c
 t_alpha_SOURCES = t/alpha.c
+t_snippets_SOURCES = t/snippets.c
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -680,6 +685,11 @@ t/iotest.$(OBJEXT): t/$(am__dirstamp)
 t/iotest$(EXEEXT): $(t_iotest_OBJECTS) $(t_iotest_DEPENDENCIES) $(EXTRA_t_iotest_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/iotest$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(t_iotest_OBJECTS) $(t_iotest_LDADD) $(LIBS)
+t/snippets.$(OBJEXT): t/$(am__dirstamp)
+
+t/snippets$(EXEEXT): $(t_snippets_OBJECTS) $(t_snippets_DEPENDENCIES) $(EXTRA_t_snippets_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/snippets$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(t_snippets_OBJECTS) $(t_snippets_LDADD) $(LIBS)
 t/time.$(OBJEXT): t/$(am__dirstamp)
 
 t/time$(EXEEXT): $(t_time_OBJECTS) $(t_time_DEPENDENCIES) $(EXTRA_t_time_DEPENDENCIES) t/$(am__dirstamp)
@@ -977,6 +987,13 @@ t/cutim.log: t/cutim$(EXEEXT)
 t/alpha.log: t/alpha$(EXEEXT)
 	@p='t/alpha$(EXEEXT)'; \
 	b='t/alpha'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+t/snippets.log: t/snippets$(EXEEXT)
+	@p='t/snippets$(EXEEXT)'; \
+	b='t/snippets'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
