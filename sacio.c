@@ -1109,6 +1109,16 @@ sac_read_alpha(char *filename, int *nerr) {
  *
  * @param      s   sac file
  *
+ * @code
+ * double e = 0.0;
+ * sac *s = sac_new();
+ * sac_set_int(s, SAC_NPTS, 100);
+ * sac_set_float(s, SAC_DELTA, 1.0);
+ * sac_set_float(s, SAC_B, 0.0);
+ * sac_be(s);
+ * sac_get_float(s, SAC_E, &e);
+ * assert_eq(e, 99.0);
+ * @endcode
  */
 void
 sac_be(sac *s) {
@@ -1140,6 +1150,19 @@ sac_be(sac *s) {
  *
  * @param      s  sac file to update
  *
+ * Create a new file and update the fields: distance, gcarc, az, and baz
+ * @code
+ * double gcarc = 0.0;
+ * sac *s = sac_new();
+ * sac_set_float(s, SAC_EVLO,  0.0);
+ * sac_set_float(s, SAC_EVLA,  0.0);
+ * sac_set_float(s, SAC_STLO, 10.0);
+ * sac_set_float(s, SAC_STLA,  0.0);
+ * update_distaz(s);
+ * sac_get_float(s, SAC_GCARC, &gcarc);
+ * printf("\n%.15e\n", gcarc);
+ * assert_eq(gcarc, 10.03364086151123);
+ * @endcode
  */
 void
 update_distaz(sac *s) {
@@ -1193,6 +1216,21 @@ void distaz(double the, double phe, float *ths, float *phs,
  * @private
  *
  * @param      s  sac file to update
+ *
+ * Create a new file and update the fields: distance, gcarc, az, and baz
+ *
+ * @code
+ * double gcarc = 0.0;
+ * sac *s = sac_new();
+ * sac_set_float(s, SAC_EVLO,  0.0);
+ * sac_set_float(s, SAC_EVLA,  0.0);
+ * sac_set_float(s, SAC_STLO, 10.0);
+ * sac_set_float(s, SAC_STLA,  0.0);
+ * update_distaz(s);
+ * sac_get_float(s, SAC_GCARC, &gcarc);
+ * printf("\n%.15e\n", gcarc);
+ * assert_eq(gcarc, 10.03364086151123);
+ * @endcode
  *
  */
 void
@@ -1251,6 +1289,30 @@ update_distaz(sac * s) {
  * @param      to     destination
  * @param      from   source
  *
+ * @code
+ * sac *new = NULL;
+ * int n_old = 0, n_new = 0;
+ * int nerr = 0;
+ *
+ * // Read in an existing file
+ * sac *old = sac_read("t/test_io_small.sac", &nerr);
+ * assert_eq(nerr, 0);
+ *
+ * // Create a new sac file
+ * new = sac_new();
+ * sac_get_int(new, SAC_NPTS, &n_new);
+ * assert_eq(n_new, SAC_INT_UNDEFINED);
+ *
+ * // Copy header from old file to new file
+ * sac_header_copy(new, old);
+ *
+ * // Compare number of points
+ * sac_get_int(new, SAC_NPTS, &n_new);
+ * sac_get_int(old, SAC_NPTS, &n_old);
+ * assert_eq(n_new, n_old);
+ *
+ * @endcode
+ *
  */
 void
 sac_header_copy(sac * to, sac * from) {
@@ -1268,6 +1330,30 @@ sac_header_copy(sac * to, sac * from) {
  * @param      to     destination
  * @param      from   source
  *
+ * @code
+ * sac *new = NULL;
+ * char f_old[256]= {0}, f_new[256] = {0};
+ * int nerr = 0;
+ *
+ * // Read in an existing file
+ * sac *old = sac_read("t/test_io_small.sac", &nerr);
+ * assert_eq(nerr, 0);
+ *
+ * // Create a new sac file
+ * new = sac_new();
+ * sac_get_string(new, SAC_FILENAME, f_new, sizeof f_new);
+ * assert_eq(strcmp(f_new, ""), 0);
+ *
+ * // Copy meta data from old file to new file
+ * sac_meta_copy(new, old);
+ *
+ * // Compare number of points
+ * sac_get_string(new, SAC_FILENAME, f_new, sizeof f_new);
+ * sac_get_string(old, SAC_FILENAME, f_old, sizeof f_old);
+ * assert_eq(strcmp(f_new, f_old), 0);
+ *
+ * @endcode
+ *
  */
 void
 sac_meta_copy(sac *to, sac *from) {
@@ -1284,7 +1370,11 @@ sac_meta_copy(sac *to, sac *from) {
 /**
  * @brief      copy sac data
  *
- * @details    copy sac data from one file to another
+ * @details    copy sac data from one file to another. For data to be successfully
+ *             copied, the following fields must match:
+ *             - SAC_NPTS
+ *             - SAC_FILE_TYPE
+ *             - SAC_EVEN
  *
  * @ingroup    sac
  * @memberof   sac
@@ -1293,11 +1383,46 @@ sac_meta_copy(sac *to, sac *from) {
  * @param      from   source
  *
  * @return     return type
+ *
+ * @code
+ * sac *new = NULL;
+ * int nerr = 0;
+ *
+ * // Read in an existing file
+ * sac *old = sac_read("t/test_io_small.sac", &nerr);
+ * assert_eq(nerr, 0);
+ * assert_ne(old->y, NULL);
+ *
+ * // Create a new sac file
+ * new = sac_new();
+ * assert_eq(new->y, NULL);
+ *
+ * // Copy header from old file to new file
+ * sac_header_copy(new, old);
+ *
+ * // Copy header from old file to new fiel
+ * sac_data_copy(new, old);
+ *
+ * assert_ne(new->y, NULL);
+ *
+ * @endcode
  */
 void
 sac_data_copy(sac *to, sac *from) {
     size_t n = 0;
     if(from->h->npts <= 0) {
+        return;
+    }
+    if(from->h->npts != to->h->npts) {
+        printf("error: sac data not copied, npts unequal\n");
+        return;
+    }
+    if(from->h->iftype != to->h->iftype) {
+        printf("error: sac data not copied, file types differ\n");
+        return;
+    }
+    if(from->h->leven != to->h->leven) {
+        printf("error: sac data not copied, evenly spaced flags differ\n");
         return;
     }
     if(from->y) {
@@ -1316,11 +1441,34 @@ sac_data_copy(sac *to, sac *from) {
  * @ingroup    sac
  * @memberof   sac
  *
- * @details    copy a sac file: header, meta, and data
+ * @details    copy a sac file: header, meta, and data. This is probably what is
+ *             usually wanted. This creates a new sac file, copieds the header,
+ *             meta data, and the actual data.
  *
  * @param      s    sac file to copy
  *
  * @return     copy of sac file
+ *
+ * @code
+ * sac *new = NULL;
+ * int n_old = 0, n_new = 0;
+ * int nerr = 0;
+ *
+ * // Read in an existing file
+ * sac *old = sac_read("t/test_io_small.sac", &nerr);
+ * assert_eq(nerr, 0);
+ * assert_ne(old->y, NULL);
+ *
+ * // Create a new sac file
+ * new = sac_copy(old);
+ * assert_ne(new->y, NULL);
+ *
+ * // Check the number of points
+ * sac_get_int(old, SAC_NPTS, &n_old);
+ * sac_get_int(new, SAC_NPTS, &n_new);
+ * assert_eq(n_old, n_new);
+ *
+ * @endcode
  */
 sac *
 sac_copy(sac *s) {
@@ -1371,6 +1519,23 @@ sac_check_npts(int npts) {
  * @param      s    sac file
  *
  * @return     size of file in bytes
+ *
+ * @code
+ * size_t n = 0;
+ * size_t sac_header_size = 632;
+ * sac *s = sac_new();
+ * n = sac_size(s);
+ * assert_eq(n, 0);
+ * sac_set_int(s, SAC_NPTS, 1);
+ * n = sac_size(s);
+ * assert_eq(n, sac_header_size + 4 * 1);
+ *
+ * // Change to v7
+ * sac_set_v7(s);
+ * n = sac_size(s);
+ * assert_eq(n, sac_header_size + 1 * 4 + 22 * 8);
+ *
+ * @endcode
  */
 off_t
 sac_size(sac *s) {
@@ -1423,6 +1588,41 @@ sac_check_lovrok(int lovrok) {
  * @memberof   sac
  *
  * @return     Number of data components
+ * 
+ * @code
+ * int n = 0;
+ * sac *s = sac_new();
+ * n = sac_comps(s);
+ * assert_eq(n, 1);
+ *
+ * // Unevenly spaced time series file
+ * sac_set_int(s, SAC_EVEN, 0);
+ * n = sac_comps(s);
+ * assert_eq(n, 2);
+ *
+ * // Evenly spaced xy file
+ * sac_set_int(s, SAC_EVEN, 1);
+ * sac_set_int(s, SAC_FILE_TYPE, IXY);
+ * n = sac_comps(s);
+ * assert_eq(n, 1);
+ *
+ * // Unevenly spaced xy file
+ * sac_set_int(s, SAC_EVEN, 0);
+ * sac_set_int(s, SAC_FILE_TYPE, IXY);
+ * n = sac_comps(s);
+ * assert_eq(n, 2);
+ *
+ * // Real - Imaginary data file
+ * sac_set_int(s, SAC_FILE_TYPE, IRLIM);
+ * n = sac_comps(s);
+ * assert_eq(n, 2);
+ *
+ * // Amplitude - Phase data file
+ * sac_set_int(s, SAC_FILE_TYPE, IAMPH);
+ * n = sac_comps(s);
+ * assert_eq(n, 2);
+ *
+ * @endcode
  */
 int
 sac_comps(sac * s) {
@@ -3137,7 +3337,11 @@ sac_get_string(sac *s, int hdr, char *v, size_t n) {
             strftime64t(v, n, "%H:%M:%S.%03f", &t);
         } break;
         case SAC_FILENAME:
-            sacio_strlcpy(v, s->m->filename, n);
+            if(s->m->filename) {
+                sacio_strlcpy(v, s->m->filename, n);
+            } else {
+                sacio_strlcpy(v, "", n);
+            }
             break;
         case SAC_AMARKER: sac_timing_mark(s, SAC_A, SAC_KA, v, n); break;
         case SAC_OMARKER: sac_timing_mark(s, SAC_O, SAC_KO, v, n); break;
