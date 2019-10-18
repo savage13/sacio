@@ -27,7 +27,7 @@ LDADD = libsacio_bsd.a -lm
 
 TESTS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim t/alpha t/snippets
 
-check_PROGRAMS = t/iotest t/compat t/dur t/time t/ver t/cut t/cutim t/alpha t/snippets
+check_PROGRAMS = t/extract t/iotest t/compat t/dur t/time t/ver t/cut t/cutim t/alpha t/snippets
 
 t_iotest_SOURCES = t/iotest.c
 t_compat_SOURCES = t/compat.c
@@ -38,9 +38,12 @@ t_cut_SOURCES = t/cut.c
 t_cutim_SOURCES = t/cutim.c
 t_alpha_SOURCES = t/alpha.c
 t_snippets_SOURCES = t/snippets.c
+t_extract_SOURCES = t/extract.c
+
+t/snippets.c: t/extract$(EXEEXT)
+	./t/extract$(EXEEXT) sacio.c t/snippets.c
 
 CLEANFILES = t/test*.tmp
-
 
 doc:
 	doxygen docs/Doxyfile

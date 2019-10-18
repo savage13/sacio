@@ -90,8 +90,9 @@ POST_UNINSTALL = :
 TESTS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
 	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
 	t/alpha$(EXEEXT) t/snippets$(EXEEXT)
-check_PROGRAMS = t/iotest$(EXEEXT) t/compat$(EXEEXT) t/dur$(EXEEXT) \
-	t/time$(EXEEXT) t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
+check_PROGRAMS = t/extract$(EXEEXT) t/iotest$(EXEEXT) \
+	t/compat$(EXEEXT) t/dur$(EXEEXT) t/time$(EXEEXT) \
+	t/ver$(EXEEXT) t/cut$(EXEEXT) t/cutim$(EXEEXT) \
 	t/alpha$(EXEEXT) t/snippets$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -168,6 +169,10 @@ am_t_dur_OBJECTS = t/dur.$(OBJEXT)
 t_dur_OBJECTS = $(am_t_dur_OBJECTS)
 t_dur_LDADD = $(LDADD)
 t_dur_DEPENDENCIES = libsacio_bsd.a
+am_t_extract_OBJECTS = t/extract.$(OBJEXT)
+t_extract_OBJECTS = $(am_t_extract_OBJECTS)
+t_extract_LDADD = $(LDADD)
+t_extract_DEPENDENCIES = libsacio_bsd.a
 am_t_iotest_OBJECTS = t/iotest.$(OBJEXT)
 t_iotest_OBJECTS = $(am_t_iotest_OBJECTS)
 t_iotest_LDADD = $(LDADD)
@@ -213,12 +218,12 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libsacio_bsd_a_SOURCES) $(t_alpha_SOURCES) \
 	$(t_compat_SOURCES) $(t_cut_SOURCES) $(t_cutim_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_snippets_SOURCES) \
-	$(t_time_SOURCES) $(t_ver_SOURCES)
+	$(t_dur_SOURCES) $(t_extract_SOURCES) $(t_iotest_SOURCES) \
+	$(t_snippets_SOURCES) $(t_time_SOURCES) $(t_ver_SOURCES)
 DIST_SOURCES = $(libsacio_bsd_a_SOURCES) $(t_alpha_SOURCES) \
 	$(t_compat_SOURCES) $(t_cut_SOURCES) $(t_cutim_SOURCES) \
-	$(t_dur_SOURCES) $(t_iotest_SOURCES) $(t_snippets_SOURCES) \
-	$(t_time_SOURCES) $(t_ver_SOURCES)
+	$(t_dur_SOURCES) $(t_extract_SOURCES) $(t_iotest_SOURCES) \
+	$(t_snippets_SOURCES) $(t_time_SOURCES) $(t_ver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -559,6 +564,7 @@ t_cut_SOURCES = t/cut.c
 t_cutim_SOURCES = t/cutim.c
 t_alpha_SOURCES = t/alpha.c
 t_snippets_SOURCES = t/snippets.c
+t_extract_SOURCES = t/extract.c
 CLEANFILES = t/test*.tmp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -680,6 +686,11 @@ t/dur.$(OBJEXT): t/$(am__dirstamp)
 t/dur$(EXEEXT): $(t_dur_OBJECTS) $(t_dur_DEPENDENCIES) $(EXTRA_t_dur_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/dur$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(t_dur_OBJECTS) $(t_dur_LDADD) $(LIBS)
+t/extract.$(OBJEXT): t/$(am__dirstamp)
+
+t/extract$(EXEEXT): $(t_extract_OBJECTS) $(t_extract_DEPENDENCIES) $(EXTRA_t_extract_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/extract$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(t_extract_OBJECTS) $(t_extract_LDADD) $(LIBS)
 t/iotest.$(OBJEXT): t/$(am__dirstamp)
 
 t/iotest$(EXEEXT): $(t_iotest_OBJECTS) $(t_iotest_DEPENDENCIES) $(EXTRA_t_iotest_DEPENDENCIES) t/$(am__dirstamp)
@@ -1317,6 +1328,9 @@ uninstall-am: uninstall-sacioincHEADERS uninstall-saciolibLIBRARIES
 
 .PRECIOUS: Makefile
 
+
+t/snippets.c: t/extract$(EXEEXT)
+	./t/extract$(EXEEXT) sacio.c t/snippets.c
 
 doc:
 	doxygen docs/Doxyfile
