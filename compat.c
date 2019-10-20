@@ -56,8 +56,30 @@ struct sac_iris {};
  * @param      nsrc   Length of src, if <= 0, assume a C string with terminator
  *                    otherwise assume a fortran string with length
  *
+ * @code
+ * void fstrcpy(char *dst, size_t ndst, char *src, int nsrc);
+ * char dst[32] = {0};
+ * char small[4] = {0};
+ * char *src = "hello there        ";
+ *
+ * fstrcpy(dst, sizeof dst, "hello", 5);
+ * assert_eq(strcmp(dst, "hello"), 0);
+ *
+ * fstrcpy(dst, sizeof dst, "hello", -1);
+ * assert_eq(strcmp(dst, "hello"), 0);
+ *
+ * fstrcpy(dst, sizeof dst, "hello", 4);
+ * assert_eq(strcmp(dst, "hell"), 0);
+ *
+ * fstrcpy(dst, sizeof dst, "hello        ", 5);
+ * assert_eq(strcmp(dst, "hello"), 0);
+ *
+ * fstrcpy(small, sizeof small, src, 11);
+ * assert_eq(strcmp(small, "hel"), 0);
+ *
+ * @endcode
  */
-static void
+void
 fstrcpy(char *dst, size_t ndst, char *src, int nsrc) {
     size_t n = 0, ns = 0;
     if(ndst == 0) {
@@ -89,8 +111,34 @@ fstrcpy(char *dst, size_t ndst, char *src, int nsrc) {
  * @param      src    Input character string
  * @param      nsrc   Length of src
  *
+ * @code
+ * void fstrput(char *dst, int ndst, char *src, size_t nsrc, int null_terminate);
+ *
+ * char dst[16] = {0};
+ * char src[32] = {0};
+ * strcpy(src, "hello there");
+ *
+ * fstrput(dst, sizeof dst, src, strlen(src), 0);
+ * assert_eq(memcmp(dst, "hello there     ", sizeof dst), 0);
+ *
+ * fstrput(dst, sizeof dst, src, strlen(src), 1);
+ * assert_eq(memcmp(dst, "hello there\0    ", sizeof dst), 0);
+ *
+ * fstrput(dst, sizeof dst, "v", 1, 0);
+ * assert_eq(memcmp(dst, "v               ", sizeof dst), 0);
+ *
+ * fstrput(dst, sizeof dst, "v", 1, 1);
+ * assert_eq(memcmp(dst, "v\0              ", sizeof dst), 0);
+ *
+ * fstrput(dst, sizeof dst, "123456789012345678901234567890", 30, 0);
+ * assert_eq(memcmp(dst, "1234567890123456", sizeof dst), 0);
+ *
+ * fstrput(dst, sizeof dst, "123456789012345678901234567890", 30, 1);
+ * assert_eq(memcmp(dst, "123456789012345\0", sizeof dst), 0);
+ *
+ * @endcode
  */
-static void
+void
 fstrput(char *dst, int ndst, char *src, size_t nsrc, int null_terminate) {
     size_t n = 0, nd = 0;
     if(ndst <= 0 || nsrc == 0) {
@@ -176,6 +224,49 @@ get_current(int *nerr) {
  * @param      nerr       Status code, 0 on success, non-zero on failure
  * @param      kname_s    Length of kname
  *
+ * @code
+ * #define MAX 2000
+ *
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX], beg = 0.0, del = 0.0;
+ *
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(beg, 0.0);
+ * assert_eq(del, 1.0);
+ * assert_eq(nlen, 100);
+ * @endcode
+ *
+ * An error occurs, -803, if the input arrays are not big enough
+ *    but the data for the first portion of the file is available
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * max = 10;
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, -803);
+ * @endcode
+ *
+ * If the file does not exist, nerr = 801
+ * @code
+ * #define MAX 2000
+ * int nerr = 0, max = MAX, nlen = 0;
+ * float y[MAX] = {0}, beg = 0.0, del = 0.0;
+ * rsac1("t/test_uneven_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 801);
+ * @endcode
+ *
+ * If the file does not exist, nerr = 108
+ * @code
+ * #define MAX 2000
+ * int nerr = 0, max = MAX, nlen = 0;
+ * float y[MAX] = {0}, beg = 0.0, del = 0.0;
+ * rsac1("t/unicorns.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 108);
+ * @endcode
  */
 void
 rsac1(char      *kname,
@@ -229,6 +320,43 @@ rsac1(char      *kname,
  * @param      nerr       Status code, 0 on success, non-zero on failure
  * @param      kname_s    Length of kname
  *
+ * @code
+ * #define MAX 2000
+ * float y[MAX] = {0}, x[MAX] = {0};
+ * int nlen = 0, nerr = 0, max = MAX;
+ * rsac2("t/test_uneven_big.sac", y, &nlen, x, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * @endcode
+ *
+ * An error occurs, -803, if the input arrays are not big enough
+ *    but the data for the first portion of the file is available
+ * @code
+ * #define MAX 2000
+ * int nerr = 0, max = MAX, nlen = 0;
+ * float y[MAX] = {0}, x[MAX] = {0};
+ * max = 10;
+ * rsac2("t/test_uneven_big.sac", y, &nlen, x, &max, &nerr, -1);
+ * assert_eq(nerr, -803);
+ * @endcode
+ *
+ * If the file read is not unevenly spaced, nerr = 802
+ * @code
+ * #define MAX 2000
+ * int nerr = 0, max = MAX, nlen = 0;
+ * float y[MAX] = {0}, x[MAX] = {0};
+ * rsac2("t/test_io_big.sac", y, &nlen, x, &max, &nerr, -1);
+ * assert_eq(nerr, 802);
+ * @endcode
+ *
+ * If the file does not exist, nerr = 108
+ * @code
+ * #define MAX 2000
+ * int nerr = 0, max = MAX, nlen = 0;
+ * float y[MAX] = {0}, x[MAX] = {0};
+ * rsac2("t/unicorns.sac", y, &nlen, x, &max, &nerr, -1);
+ * assert_eq(nerr, 108);
+ * @endcode
+ *
  */
 void
 rsac2(char  *kname,
@@ -275,6 +403,25 @@ rsac2(char  *kname,
  *             and settable from setfhv(), setihv(), setkhv(), setnhv(),
  *             setlhv(). This active header is used during writes in 
  *             wsac0(), wsac1(), wsac2(), and wsac3().
+ *
+ * @code
+ * int nerr = 0, even = 0, nvhdr = 0;
+ * float dt = 0.0;
+ * char ftype[16] = {0};
+ * newhdr();
+ * getlhv("leven", &even, &nerr, -1);
+ * assert_eq(even, 1);
+ *
+ * getihv("iftype", ftype, &nerr, -1, sizeof ftype);
+ * assert_eq(strcmp(ftype, "ITIME   "), 0);
+ *
+ * getnhv("nvhdr", &nvhdr, &nerr, -1);
+ * assert_eq(nvhdr, 6);
+ *
+ * getfhv("delta", &dt, &nerr, -1);
+ * assert_eq(dt, SAC_FLOAT_UNDEFINED);
+ *
+ * @endcode
  */
 void
 newhdr() {
@@ -299,6 +446,26 @@ newhdr() {
  * @param      kname     Name of sac file header to read
  * @param      nerr      Status code, 0 on succes, non-zero on failure
  * @param      kname_s   Length of kname
+ *
+ * @code
+ * int nerr = 0;
+ * int nvhdr = 0;
+ * char ftype[16] = {0};
+ * float dt = 0.0;
+ *
+ * rsach("t/test_io_small.sac", &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getihv("iftype", ftype, &nerr, -1, sizeof ftype);
+ * assert_eq(strcmp(ftype, "ITIME   "), 0);
+ *
+ * getnhv("nvhdr", &nvhdr, &nerr, -1);
+ * assert_eq(nvhdr, 6);
+ *
+ * getfhv("delta", &dt, &nerr, -1);
+ * assert_eq(dt, 1.0);
+ *
+ * @endcode
  *
  */
 void
@@ -329,6 +496,79 @@ rsach(char  *kname,
  * @param      nerr      Status code, 0 on success, non-zero on failue
  * @param      kname_s   Length of kname
  *
+ * Example of writing a time series file from scratch.
+ *    It is probably better to use wsac1()
+ * @code
+ * int nerr = 0, npts = 0;
+ * float x[MAX] = {0}, y[MAX] = {0}, b = 0.0, dt = 0.0;
+ * newhdr();
+ *
+ * npts = 3;
+ * setnhv("npts", &npts, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * setihv("iftype", "itime", &nerr, -1, -1);
+ * assert_eq(nerr, 0);
+ *
+ * b = 0.0;
+ * setfhv("b", &b, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * dt = 1.0;
+ * setfhv("delta", &dt, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * y[0] = 0.0;
+ * y[1] = 1.0;
+ * y[2] = 2.0;
+ *
+ * wsac0("t/test.wsac0.sac.tmp", x, y, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * @endcode
+ *
+ * Example of writing a spectral file from scratch.
+ *    It is probably better to use wsac2()
+ *    This is an 3 point impulse, otherwise known
+ *    as a triangle; y = (0, 1, 0)
+ *
+ * @code
+ * #define PI M_PI
+ * int i = 0;
+ * int nerr = 0, npts = 0;
+ * float x[MAX] = {0}, y[MAX] = {0}, b = 0.0, dt = 0.0;
+ * newhdr();
+ *
+ * npts = 8;
+ * setnhv("npts", &npts, &nerr, -1);
+ * npts = 3; // Saved NPTS
+ * setnhv("nsnpts", &npts, &nerr, -1);
+ *
+ * setihv("iftype", "iamph", &nerr, -1, -1);
+ *
+ * b = 0.0;
+ * setfhv("b", &b, &nerr, -1);
+ * setfhv("sb", &b, &nerr, -1);
+ *
+ * dt = 0.125;
+ * setfhv("delta", &dt, &nerr, -1);
+ * dt = 1.0; // Saved delta
+ * setfhv("sdelta", &dt, &nerr, -1);
+ *
+ * for(i = 0; i < 8; i++) {
+ *     y[i] = 1.0;
+ * }
+ * for(i = 1; i < 4; i++) {
+ *     x[  i] = -((double) i) * PI/4.0;
+ *     x[8-i] =  ((double) i) * PI/4.0;
+ * }
+ * x[0] = 0.0;
+ * x[4] = PI;
+ *
+ * wsac0("t/test.wsac0.sac.tmp", x, y, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * @endcode
  */
 void
 wsac0(char   *kname,
@@ -366,7 +606,7 @@ wsac0(char   *kname,
  * @param      nerr      Status code, 0 on success, non-zero on failue
  * @param      kname_s   Length of kname
  *
- * @note       This is a simple wrapper around wsac().
+ * @note       This is a simple wrapper around wsac0().
  */
 void
 wsac3(char   *kname,
@@ -393,6 +633,27 @@ wsac3(char   *kname,
  * @param      del       dependent variable sampling
  * @param      nerr      Status code, 0 on success, non-zero on failure
  * @param      kname_s   Length of kname
+ *
+ * @code
+ * int nerr = 0, npts = 0;
+ * float y[MAX] = {0}, b = 0.0, dt = 0.0;
+ * newhdr();
+ *
+ * setihv("iftype", "itime", &nerr, -1, -1);
+ * assert_eq(nerr, 0);
+ *
+ * npts = 3;
+ * b = 0.0;
+ * dt = 1.0;
+
+ * y[0] = 0.0;
+ * y[1] = 1.0;
+ * y[2] = 2.0;
+ *
+ * wsac1("t/test.wsac1.sac.tmp", y, &npts, &b, &dt, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * @endcode
  *
  */
 void
@@ -435,6 +696,44 @@ wsac1(char   *kname,
  * @param      xarray    Input independent variable
  * @param      nerr      Status code, 0 on success, non-zero on failure
  * @param      kname_s   Length of kname
+ *
+ * @code
+ * #define PI M_PI
+ * int i = 0;
+ * int nerr = 0, npts = 0;
+ * float x[MAX] = {0}, y[MAX] = {0}, b = 0.0, dt = 0.0;
+ * newhdr();
+ *
+ * npts = 3; // Saved NPTS
+ * setnhv("nsnpts", &npts, &nerr, -1);
+ * npts = 8;
+ * setnhv("npts", &npts, &nerr, -1);
+ *
+ * setihv("iftype", "iamph", &nerr, -1, -1);
+ *
+ * b = 0.0;
+ * setfhv("b", &b, &nerr, -1);
+ * setfhv("sb", &b, &nerr, -1);
+ *
+ * dt = 0.125;
+ * setfhv("delta", &dt, &nerr, -1);
+ * dt = 1.0; // Saved delta
+ * setfhv("sdelta", &dt, &nerr, -1);
+ *
+ * for(i = 0; i < 8; i++) {
+ *     y[i] = 1.0;
+ * }
+ * for(i = 1; i < 4; i++) {
+ *     x[  i] = -((double) i) * PI/4.0;
+ *     x[8-i] =  ((double) i) * PI/4.0;
+ * }
+ * x[0] = 0.0;
+ * x[4] = PI;
+ *
+ * wsac2("t/test.wsac2.sac.tmp", y, &npts, x, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * @endcode
  *
  */
 void

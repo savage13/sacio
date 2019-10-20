@@ -61,6 +61,7 @@ main(int argc, char *argv[]) {
 #include <stdio.h>\n\
 #include <stdlib.h>\n\
 #include <string.h>\n\
+#include <math.h>\n\
 \n\
 #include <assert.h>\n\
 #define assert_eq(a,b) assert((a) == (b))\n\
