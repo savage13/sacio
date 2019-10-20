@@ -246,7 +246,6 @@ timespec64_from_yjhmsf(int64_t year, int jday, int hour, int min, int sec, int64
  * timespec64 t = {0,0};
  * t = timespec64_from_ymdhmsf(2000, 3, 1, 10, 34, 59, 0);
  * timespec64_to_ymd(&t, &y, &m, &d, &j);
- * printf("%lld %d %d %d \n", y,m,d,j);
  * assert_eq(y, 2000);
  * assert_eq(m, 3);
  * assert_eq(d, 1);
