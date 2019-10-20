@@ -249,17 +249,6 @@ Functions</h2></td></tr>
 <tr class="memitem:ad2adbe42064e20dd9b2bb4c09718644b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structsac.html">sac</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#ad2adbe42064e20dd9b2bb4c09718644b">sac_read_alpha</a> (char *filename, int *nerr)</td></tr>
 <tr class="memdesc:ad2adbe42064e20dd9b2bb4c09718644b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a alpha-numeric sac file.  <a href="#ad2adbe42064e20dd9b2bb4c09718644b">More...</a><br /></td></tr>
 <tr class="separator:ad2adbe42064e20dd9b2bb4c09718644b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c9db1a3de0d30b0fcd8dcbdc0a7fc81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a9c9db1a3de0d30b0fcd8dcbdc0a7fc81">sac_header_write_v7</a> (int nun, <a class="el" href="structsac.html">sac</a> *s, int *nerr)</td></tr>
-<tr class="separator:a9c9db1a3de0d30b0fcd8dcbdc0a7fc81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a405c24abff5e195e5d37d3d1cf9f218e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a405c24abff5e195e5d37d3d1cf9f218e">sac_time_to_index</a> (<a class="el" href="structsac.html">sac</a> *s, double t)</td></tr>
-<tr class="memdesc:a405c24abff5e195e5d37d3d1cf9f218e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a time to index.  <a href="#a405c24abff5e195e5d37d3d1cf9f218e">More...</a><br /></td></tr>
-<tr class="separator:a405c24abff5e195e5d37d3d1cf9f218e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d8fe5313410fc7838a9ddb21925089"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a72d8fe5313410fc7838a9ddb21925089">sac_pick_ref_time</a> (<a class="el" href="structsac.html">sac</a> *s, char *c, int *nerr)</td></tr>
-<tr class="memdesc:a72d8fe5313410fc7838a9ddb21925089"><td class="mdescLeft">&#160;</td><td class="mdescRight">get time value  <a href="#a72d8fe5313410fc7838a9ddb21925089">More...</a><br /></td></tr>
-<tr class="separator:a72d8fe5313410fc7838a9ddb21925089"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a673d9140d22df1082cefb377850767cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structsac.html">sac</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#a673d9140d22df1082cefb377850767cd">sac_read_with_cut</a> (char *filename, char *c1, double t1, char *c2, double t2, enum <a class="el" href="group__sac.html#ga01a53f723d99c96737a9f2d9df2ca080">CutAction</a> cutact, int *nerr)</td></tr>
-<tr class="memdesc:a673d9140d22df1082cefb377850767cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">read a sac file while cutting  <a href="#a673d9140d22df1082cefb377850767cd">More...</a><br /></td></tr>
-<tr class="separator:a673d9140d22df1082cefb377850767cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af98f73895d96131a2a9627b4671b2f86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structsac.html">sac</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sacio_8c.html#af98f73895d96131a2a9627b4671b2f86">sac_cut</a> (<a class="el" href="structsac.html">sac</a> *sin, char *c1, double t1, char *c2, double t2, enum <a class="el" href="group__sac.html#ga01a53f723d99c96737a9f2d9df2ca080">CutAction</a> cutact, int *nerr)</td></tr>
 <tr class="memdesc:af98f73895d96131a2a9627b4671b2f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">cut a sac file  <a href="#af98f73895d96131a2a9627b4671b2f86">More...</a><br /></td></tr>
 <tr class="separator:af98f73895d96131a2a9627b4671b2f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -750,96 +739,18 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>newly cut sac file </dd></dl>
-
-</div>
-</div>
-<a id="a9c9db1a3de0d30b0fcd8dcbdc0a7fc81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c9db1a3de0d30b0fcd8dcbdc0a7fc81">&#9670;&nbsp;</a></span>sac_header_write_v7()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void sac_header_write_v7 </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nun</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>nerr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Write the sac header version 7</p>
-<h1>Arguments</h1>
-<ul>
-<li><code>nun</code> - Negative file id number (yes, it is negative)</li>
-<li><code>s</code> - sac file structure to write out</li>
-<li><code>nerr</code> - Error reporting value</li>
+<dl class="section return"><dt>Returns</dt><dd>newly cut sac file</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Time pick reference<ul>
+<li>"Z" - Actual time</li>
+<li>"B" - Begin time</li>
+<li>"E" - End time</li>
+<li>"O" - Origin time</li>
+<li>"A" - First arrival time</li>
+<li>"F" - Final arrival time: SAC_F value</li>
+<li>"T0" to "T9" - t0 to t9 arrival times</li>
 </ul>
-<p>V7 of the header is a additional set of data at the end of the file following the data. This routine only reads the this "footer" of metadata, the v6 header I/O routines are still required </p>
-
-</div>
-</div>
-<a id="a72d8fe5313410fc7838a9ddb21925089"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72d8fe5313410fc7838a9ddb21925089">&#9670;&nbsp;</a></span>sac_pick_ref_time()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double sac_pick_ref_time </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>nerr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>get time value </p>
-<p>get time value from the sac header</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>sac file </td></tr>
-    <tr><td class="paramname">c</td><td>time pick or "Z" Z, B, E, O, A, F, T0 ... T9 </td></tr>
-    <tr><td class="paramname">nerr</td><td>1301 on error, 0 on success</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>time value </dd></dl>
-
+</dd></dl>
+<p>Example of cutting a sac file </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><span class="keywordtype">double</span> b = 0, e = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *cut = NULL;</div><div class="line"></div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273">sac_read</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line"></div><div class="line"><span class="comment">// Cut the sac file, returning a new file</span></div><div class="line">cut = <a class="code" href="sacio_8c.html#af98f73895d96131a2a9627b4671b2f86">sac_cut</a>(s, <span class="stringliteral">&quot;Z&quot;</span>, 10.0, <span class="stringliteral">&quot;Z&quot;</span>, 30.0, <a class="code" href="sacio_8h.html#a2e8b7c03ee5dd2b3fe04feae74d670ab">CutUseBE</a>, &amp;nerr);</div><div class="line"></div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(cut, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa3b98c72464ce172697850f140351f2c1">SAC_B</a>, &amp;b);</div><div class="line"><a class="code" href="group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460">sac_get_float</a>(cut, <a class="code" href="sacio_8h.html#gac91c16838512143a982243cb00a0789fa72c3368ccef8ef6f7c11940856632613">SAC_E</a>, &amp;e);</div><div class="line">assert_eq(b, 10.0);</div><div class="line">assert_eq(e, 30.0);</div></div><!-- fragment --> 
 </div>
 </div>
 <a id="ad2adbe42064e20dd9b2bb4c09718644b"></a>
@@ -879,125 +790,6 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>sac file, NULL on error</dd></dl>
 <p>Example of reading an alpha-numeric sac file </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="sacio_8c.html#ad2adbe42064e20dd9b2bb4c09718644b">sac_read_alpha</a>(<span class="stringliteral">&quot;t/test_spec_alpha.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 0);</div><div class="line">assert_ne(s, NULL);</div></div><!-- fragment --><p>Reading a non-existant file returns a NULL pointer and nerr is set to 101 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="sacio_8c.html#ad2adbe42064e20dd9b2bb4c09718644b">sac_read_alpha</a>(<span class="stringliteral">&quot;non-existant-file&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 101);</div><div class="line">assert_eq(s, NULL);</div></div><!-- fragment --><p>Reading a file that is not a alpha-numeric file returns a NULL pointer and nerr is set to 1319 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> nerr = 0;</div><div class="line"><a class="code" href="structsac.html">sac</a> *s = <a class="code" href="sacio_8c.html#ad2adbe42064e20dd9b2bb4c09718644b">sac_read_alpha</a>(<span class="stringliteral">&quot;t/test_io_small.sac&quot;</span>, &amp;nerr);</div><div class="line">assert_eq(nerr, 1319);</div><div class="line">assert_eq(s, NULL);</div></div><!-- fragment --> 
-</div>
-</div>
-<a id="a673d9140d22df1082cefb377850767cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a673d9140d22df1082cefb377850767cd">&#9670;&nbsp;</a></span>sac_read_with_cut()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structsac.html">sac</a>* sac_read_with_cut </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>c1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>c2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">enum <a class="el" href="group__sac.html#ga01a53f723d99c96737a9f2d9df2ca080">CutAction</a>&#160;</td>
-          <td class="paramname"><em>cutact</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>nerr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>read a sac file while cutting </p>
-<p>read a sac file while cutting</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">filename</td><td>sac file to read </td></tr>
-    <tr><td class="paramname">c1</td><td>reference time pick for start </td></tr>
-    <tr><td class="paramname">t1</td><td>relative time from time pick <code>c1</code> </td></tr>
-    <tr><td class="paramname">c2</td><td>reference time pick for end </td></tr>
-    <tr><td class="paramname">t2</td><td>relative time ffrom time pick <code>c2</code> </td></tr>
-    <tr><td class="paramname">cutact</td><td>Behavior of cut<ul>
-<li>CutNone = 0</li>
-<li>CutFatal = 1</li>
-<li>CutUseBe = 2</li>
-<li>CutFillZero = 3 </li>
-</ul>
-</td></tr>
-    <tr><td class="paramname">nerr</td><td>Status code, 0 on success, non-zero on Error</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>read and cut file on success, NULL on error </dd></dl>
-
-</div>
-</div>
-<a id="a405c24abff5e195e5d37d3d1cf9f218e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a405c24abff5e195e5d37d3d1cf9f218e">&#9670;&nbsp;</a></span>sac_time_to_index()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int sac_time_to_index </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structsac.html">sac</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert a time to index. </p>
-<p>Convert a time value to a data point index. All values are relative to the <code>b</code> value</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>sac file </td></tr>
-    <tr><td class="paramname">t</td><td>time value</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>index of data point associated with the time </dd></dl>
-
 </div>
 </div>
 <a id="a8b25470706fa698e6b0914972dfea965"></a>

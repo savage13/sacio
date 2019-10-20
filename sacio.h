@@ -563,6 +563,9 @@ int sac_get_pick(sac *s, int n, double *v);
 void update_distaz(sac * s);
 /** @brief Allocate space for data, either 1 or 2 components */
 void sac_alloc(sac *s);
+/** @brief Convert a time value to an index within the data array */
+int sac_time_to_index(sac *s, double t);
+
 
 #define SAC_WRITE_HEADER_AND_DATA 1 /**< @brief Write header and data */
 #define SAC_READ_HEADER_AND_DATA  1 /**< @brief Read header and data */
