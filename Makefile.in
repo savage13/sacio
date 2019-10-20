@@ -1330,7 +1330,7 @@ uninstall-am: uninstall-sacioincHEADERS uninstall-saciolibLIBRARIES
 
 
 t/snippets.c: t/extract$(EXEEXT)
-	./t/extract$(EXEEXT) sacio.c t/snippets.c
+	./t/extract$(EXEEXT) t/snippets.c sacio.c timespec.c
 
 doc:
 	doxygen docs/Doxyfile

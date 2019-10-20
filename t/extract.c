@@ -40,20 +40,17 @@ main(int argc, char *argv[]) {
     int code = 0;
     int n = 0;
     int i = 0;
+    int k = 0;
     FILE *in = NULL;
     FILE *out = NULL;
 
     if(argc < 3) {
-        printf("Usage: %s infile.c outfile.c\n", progname);
+        printf("Usage: %s outfile.c infiles.c\n", progname);
         exit(1);
     }
-    infile  = argv[1];
-    outfile = argv[2];
+    outfile = argv[1];
+    infile  = argv[2];
 
-    if((in = fopen(infile, "r")) == NULL) {
-        printf("%s: error opening input file: %s\n", progname, infile);
-        exit(1);
-    }
     if(strcmp(outfile, "-") == 0) {
         out = stdout;
     } else if((out = fopen(outfile, "w")) == NULL) {
@@ -72,25 +69,33 @@ main(int argc, char *argv[]) {
 #include <sacio.h>\n\
 \n\
 ");
-    code = 0;
     n = 0;
-    while(fgets(buf, sizeof buf, in) != NULL) {
-        if(strstr(buf, "@code")) {
-            code = 1;
-            fprintf(out, "void test_%05d() {\n", n);
-        } else if(strstr(buf, "@endcode")) {
-            fprintf(out, "}\n");
-            code = 0;
-            n += 1;
-        } else if(code) {
-            rstrip(buf);
-            lstrip(buf,' ');
-            lstrip(buf,'*');
-            lstrip(buf,' ');
-            fprintf(out, "     %s\n", buf);
-        } else {
+    for(k = 2; k < argc; k++) {
+        infile = argv[k];
+        if((in = fopen(infile, "r")) == NULL) {
+            printf("%s: error opening input file: %s\n", progname, infile);
             continue;
         }
+        code = 0;
+        while(fgets(buf, sizeof buf, in) != NULL) {
+            if(strstr(buf, "@code")) {
+                code = 1;
+                fprintf(out, "void test_%05d() {\n", n);
+            } else if(strstr(buf, "@endcode")) {
+                fprintf(out, "}\n");
+                code = 0;
+                n += 1;
+            } else if(code) {
+                rstrip(buf);
+                lstrip(buf,' ');
+                lstrip(buf,'*');
+                lstrip(buf,' ');
+                fprintf(out, "     %s\n", buf);
+            } else {
+                continue;
+            }
+        }
+        fclose(in);
     }
 
     fprintf(out, "\nint main() {\n");
@@ -99,5 +104,7 @@ main(int argc, char *argv[]) {
     }
     fprintf(out, "}\n");
 
+    fclose(out);
+    
     return 0;
 }

@@ -41,7 +41,7 @@ t_snippets_SOURCES = t/snippets.c
 t_extract_SOURCES = t/extract.c
 
 t/snippets.c: t/extract$(EXEEXT)
-	./t/extract$(EXEEXT) sacio.c t/snippets.c
+	./t/extract$(EXEEXT) t/snippets.c sacio.c timespec.c
 
 CLEANFILES = t/test*.tmp
 
