@@ -4146,11 +4146,15 @@ sac_fmt(char *dst, size_t n, const char *fmt, sac *s) {
                 } else if(fabs(az - 270.0) < 0.1) {
                     i = (int) sac_strlcat(dst, "WEST", n);
                 } else if(sac_hdr_defined(s, SAC_CMPAZ, SAC_CMPINC, NULL)) {
-                    snprintf(dst, n, "%s %4d %4d", dst, (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
+                    char tmp[16] = {0};
+                    snprintf(tmp, sizeof tmp, " %4d %4d", (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
+                    sac_strlcat(dst, tmp, n);
                     i = (int) strlen(dst);
                 }
             } else if(sac_hdr_defined(s, SAC_CMPAZ, SAC_CMPINC, NULL)) {
-                snprintf(dst, n, "%s %4d %4d", dst, (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
+                char tmp[16] = {0};
+                snprintf(tmp, sizeof tmp, " %4d %4d", (int)round(s->h->cmpaz), (int)round(s->h->cmpinc));
+                sac_strlcat(dst, tmp, n);
                 i = (int) strlen(dst);
             }
         } break;
