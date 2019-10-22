@@ -777,6 +777,22 @@ wsac2(char   *kname,
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * double del8 = 0.0;
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getrhv("delta", &del8, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(del8, 1.0);
+ * @endcode
+ *
  */
 void
 getrhv(char *kname, double *fvalue, int *nerr, int kname_s) {
@@ -817,6 +833,21 @@ getrhv(char *kname, double *fvalue, int *nerr, int kname_s) {
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * float del4 = 0.0;
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getfhv("delta", &del4, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(del4, 1.0);
+ * assert_eq(del4, del);
+ * @endcode
  */
 void
 getfhv(char *kname, float *fvalue, int *nerr, int kname_s) {
@@ -998,6 +1029,21 @@ getihv_internal(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s,
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * char value[32] = {0};
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getihv("iftype", value, &nerr, -1, sizeof value);
+ * assert_eq(nerr, 0);
+ * assert_eq(strcmp(value, "ITIME   "), 0);
+ * @endcode
+ *
  */
 void
 getihv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
@@ -1038,6 +1084,7 @@ getihv__(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
  */
 void
 getkhv_internal(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s, int null_terminate) {
@@ -1086,6 +1133,25 @@ getkhv_internal(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s,
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * char value[32] = {0};
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getkhv("kcmpnm", value, &nerr, -1, sizeof value);
+ * assert_eq(nerr, 0);
+ * assert_eq(strcmp(value, "Q       "), 0);
+ *
+ * getkhv("knetwk", value, &nerr, -1, sizeof value);
+ * assert_eq(nerr, 1336);
+ * assert_eq(strcmp(value, "-12345  "), 0);
+ * @endcode
+ *
  */
 void
 getkhv(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
@@ -1123,6 +1189,28 @@ getkhv__(char *kname, char *kvalue, int *nerr, int kname_s, int kvalue_s) {
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * int value = 0;
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getnhv("npts", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(value, 100);
+ *
+ * getnhv("nvhdr", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(value, 6);
+ *
+ * getnhv("nzyear", &value, &nerr, -1);
+ * assert_eq(nerr, 1336);
+ * assert_eq(value, -12345);
+ * @endcode
  */
 void
 getnhv(char *kname, int *nvalue, int *nerr, int kname_s) {
@@ -1163,6 +1251,25 @@ getnhv(char *kname, int *nvalue, int *nerr, int kname_s) {
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * int value = 0;
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * getlhv("leven", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(value, 1);
+ *
+ * getlhv("lcalda", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(value, 1);
+ *
+ * @endcode
  */
 void
 getlhv(char *kname, int *nvalue, int *nerr, int kname_s) {
@@ -1203,6 +1310,34 @@ getlhv(char *kname, int *nvalue, int *nerr, int kname_s) {
  *
  * @note This routine requires an internal, global sac file from
  *       rsac1(), rsac2() or newhdr()
+ *
+ * @code
+ * #define MAX 2000
+ * int nlen = 0, max = MAX, nerr = 0, nvhdr = 0;
+ * float y[MAX];
+ * float beg = 0.0, del = 0.0;
+ * double value = 0.0;
+ * rsac1("t/test_io_small.sac", y, &nlen, &beg, &del, &max, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * value = 1.0/3.0;
+ * setrhv("t0", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ *
+ * value = 0.0;
+ * getrhv("t0", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(value, (float)(1.0/3.0));
+ *
+ * nvhdr = 7;
+ * setnhv("nvhdr", &nvhdr, &nerr, -1);
+ *
+ * value = 0.0;
+ * getrhv("t0", &value, &nerr, -1);
+ * assert_eq(nerr, 0);
+ * assert_eq(value, (double)(1.0/3.0));
+ *
+ * @endcode
  */
 void
 setrhv(char *kname, double *fvalue, int *nerr, int kname_s) {
