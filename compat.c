@@ -588,6 +588,7 @@ wsac0(char   *kname,
     y = s->y;
     s->x = xarray;
     s->y = yarray;
+    sac_be(s);
     sac_write(s, name, nerr);
     s->x = x;
     s->y = y;
@@ -622,6 +623,7 @@ wsac3(char   *kname,
  * @brief      Write an evenly spaced sac file
  *
  * @details    Write an evenly spaced sac file using the header in memory
+ *             A new header is created just before writing.
  *
  * @ingroup    sac-iris
  * @memberof   sac_iris
@@ -667,6 +669,8 @@ wsac1(char   *kname,
     char name[4096] = {0};
     float *y = NULL;
     sac *s = NULL;
+
+    newhdr();
     if((s = get_current(nerr)) == NULL) {
         return;
     }
@@ -686,6 +690,7 @@ wsac1(char   *kname,
  * @brief      Write an unevenly spaced sac file
  *
  * @details    Write an unevenly spaced sac file using the header in memory
+ *             A new header is created just before writing.
  *
  * @ingroup    sac-iris
  * @memberof   sac_iris
@@ -746,6 +751,8 @@ wsac2(char   *kname,
     char name[4096] = {0};
     float *y = NULL, *x = NULL;
     sac *s = NULL;
+
+    newhdr();
     if((s = get_current(nerr)) == NULL) {
         return;
     }
