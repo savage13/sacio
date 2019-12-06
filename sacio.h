@@ -45,8 +45,8 @@ enum CutAction {
  * @ingroup sac
  *
  */
-typedef enum CheckByteOrder CheckByteOrder;
-enum CheckByteOrder {
+typedef enum CheckByteOrderFlag CheckByteOrderFlag;
+enum CheckByteOrderFlag {
     CheckByteOrderOff = FALSE, /**< @brief Do not check byte order on comparison, aliases to 0 */
     CheckByteOrderOn  = TRUE,  /**< @brief Check byte order on comparison, aliases to 1 */
 };
@@ -591,7 +591,7 @@ void sac_alloc(sac *s);
 /** @brief Convert a time value to an index within the data array */
 int sac_time_to_index(sac *s, double t);
 
-int sac_compare(sac *s1, sac *s2, double tolerance, CheckByteOrder byte_check, Verbose verbose);
+int sac_compare(sac *s1, sac *s2, double tolerance, CheckByteOrderFlag byte_check, Verbose verbose);
 
 
 #define SAC_WRITE_HEADER_AND_DATA 1 /**< @brief Write header and data */

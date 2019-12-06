@@ -4432,7 +4432,7 @@ static char *SacHeaderName[] = {
  *
  */
 int
-sac_compare(sac *s1, sac *s2, double tolerance, CheckByteOrder byte_check, Verbose verbose) {
+sac_compare(sac *s1, sac *s2, double tolerance, CheckByteOrderFlag byte_check, Verbose verbose) {
     int i  = 0;
     int j  = 0;
     int n1 = 0;
