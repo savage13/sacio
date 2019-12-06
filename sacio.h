@@ -592,6 +592,7 @@ void sac_alloc(sac *s);
 int sac_time_to_index(sac *s, double t);
 
 int sac_compare(sac *s1, sac *s2, double tolerance, CheckByteOrderFlag byte_check, Verbose verbose);
+int sac_compare_to_file(char *file, float *y, double tolerance, int byte_order, int verbose);
 
 
 #define SAC_WRITE_HEADER_AND_DATA 1 /**< @brief Write header and data */
