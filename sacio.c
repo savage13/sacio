@@ -1140,13 +1140,13 @@ sac_be(sac *s) {
 
 static Spheroid spheroids[] =
     {
-     { "sac historical", "",                 6378160.0, 1.0/0.00335293,     -12345 },
-     { "WGS 84",         "EPSG:4326",        6378137.0, 298.257223563,      IEARTH },
+     { "sac historical", "",                 6378160.0, 0.00335293,     -12345 },
+     { "WGS 84",         "EPSG:4326",        6378137.0, 1.0 / 298.257223563,      IEARTH },
      { "Mercury",        "IAU2000:19900",    2439700.0, 0.0,                IMERCURY },
      { "Venus",          "IAU2000:29900",    6051800.0, 0.0,                IVENUS },
-     { "Mars",           "IAU2000:49900",    3396190.0, 169.89444722361179, IMARS },
+     { "Mars",           "IAU2000:49900",    3396190.0, 1.0 / 169.89444722361179, IMARS },
      { "Moon",           "IAU2000:30100",    1737400.0, 0.0,                IMOON },
-     { "Sun    ",        "IAU2000:19900",  696000000.0, 1.0 / 8.189e-6,               ISUN },
+     { "Sun    ",        "IAU2000:19900",  696000000.0, 8.189e-6,               ISUN },
 };
 
 
@@ -1154,41 +1154,41 @@ static Spheroid spheroids[] =
  * @brief      Get a Spheroid based on sac code
  * 
  * @details    Get a Spheriod from a sac code saved in the IBODY header variable
- *             - ISUN     ( 98)     => 696,000,000.0     1.0 / 8.189e-6      Meftah et al. (2015), 
+ *             - ISUN     ( 98)     => 696,000,000.0     8.189e-6            Meftah et al. (2015), 
  *             - IMERCURY ( 99)     =>     439,700.0,    0.0                 IAU2000
  *             - IVENUS   (100)     =>   6,051,800.0,    0.0                 IAU2000
- *             - IEARTH   (101)     =>   6,378,137.0,  298.257223563         WGS 84
+ *             - IEARTH   (101)     =>   6,378,137.0, 1.0/298.257223563      WGS 84
  *             - IMOON    (102)     =>   1,737,400.0,    0.0                 IAU2000
- *             - IMARS    (103)     =>   3,396,190.0,  169.89444722361179    IAU2000
- *             - undef    (-12345)  =>   6,378,160.0,    1.0 / 0.00335293    SAC Historical
+ *             - IMARS    (103)     =>   3,396,190.0, 1.0/169.89444722361179 IAU2000
+ *             - undef    (-12345)  =>   6,378,160.0,    0.00335293          SAC Historical
  *
  * @return Spherioid
  *
  * @code
  *  Spheroid s = spheroid(-12345);
  *  assert_eq(s.a, 6378160.0);
- *  assert_eq(s.invf, 1.0 / 0.00335293);
+ *  assert_eq(s.f, 0.00335293);
  *
  *  s = spheroid(-1);
  *  assert_eq(s.ibody, -12345);
  *  s = spheroid( ISUN );
  *  assert_eq(s.a, 696000000.0);
- *  assert_eq(s.invf, 1.0/8.189e-6);
+ *  assert_eq(s.f, 8.189e-6);
  *  s = spheroid( IEARTH );
  *  assert_eq(s.a, 6378137.0);
- *  assert_eq(s.invf, 298.257223563);
+ *  assert_eq(s.f, 1.0/298.257223563);
  *  s = spheroid( IMARS );
  *  assert_eq(s.a, 3396190.0);
- *  assert_eq(s.invf, 169.89444722361179);
+ *  assert_eq(s.f, 1.0/169.89444722361179);
  *  s = spheroid( IMOON );
  *  assert_eq(s.a, 1737400.0);
- *  assert_eq(s.invf, 0.0);
+ *  assert_eq(s.f, 0.0);
  *  s = spheroid( IVENUS );
  *  assert_eq(s.a, 6051800.0);
- *  assert_eq(s.invf, 0.0);
+ *  assert_eq(s.f, 0.0);
  *  s = spheroid( IMERCURY );
  *  assert_eq(s.a, 2439700.0);
- *  assert_eq(s.invf, 0.0);
+ *  assert_eq(s.f, 0.0);
  * @endcode
  *
  * @references 
@@ -1267,7 +1267,7 @@ update_distaz(sac *s) {
         return;
     }
 
-    geod_init(&g, sph.a, 1.0/sph.invf);
+    geod_init(&g, sph.a, sph.f);
     sac_get_float(s, SAC_EVLA, &lat1);
     sac_get_float(s, SAC_EVLO, &lon1);
     sac_get_float(s, SAC_STLA, &lat2);
@@ -1345,6 +1345,7 @@ update_distaz(sac * s) {
         d = a = b = g = 0;
         fsx = (float) sx;
         fsy = (float) sy;
+        ndaerr = s->h->ibody;  // Hack as to not change the function call
         distaz(ey, ex,
                (float *) &fsy, (float *) &fsx,
                1,

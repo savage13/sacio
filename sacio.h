@@ -43,7 +43,7 @@ struct Spherioid {
     char name[32]; // Descriptive name of the Spheroid
     char code[32]; // EPGS or IAU code including prefix
     double a;      // Semi-major axis in meters
-    double invf;   // Inverse flattening
+    double f;      // flattening (a-b)/a ; where a = semi-major axis, b = semi-minor axis
     int ibody;     // Sac Code for Spherioid
 };
 
