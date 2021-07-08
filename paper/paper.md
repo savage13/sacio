@@ -1,5 +1,5 @@
 ---
-title: 'sacio: A library for reading and writing sac files'
+title: 'sacio: A library for Seismic Analysis Code data files'
 tags:
   - C
   - Fortran
