@@ -82,6 +82,8 @@ Downloading and installing
 This library can be downloaded directly by either going to **Code->Download Zip** or by using git as:
 
     git clone https://github.com/savage13/sacio.git
+
+This library is self contained and does not require any additional dependencies. 
  
 ### Compiling
 
