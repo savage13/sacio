@@ -77,6 +77,41 @@ sac_write(s, "output.sac", &nerr);
 Downloading and installing
 --------------------------
 
+### Downloading 
+
+This library can be downloaded directly by either going to **Code->Download Zip** or by using git as:
+
+    git clone https://github.com/savage13/sacio.git
+ 
+### Compiling
+
+Once downloaded, the library can be compiled from within the `sacio` or `sacio-master` directory using:
+  
+    ./configure
+    make 
+    
+### Installation
+
+Installation to the default location `/usr/local` can be completed using:
+
+    make install
+
+This will install `libsacio_bsd.a` into `/usr/local/lib/libsacio_bsd.a` and 
+`sacio.h` and `timespec.h` into the `/usr/local/inclucde/sacio` directory.  Creating 
+a symbolic link to this library will assist in existing programs that require
+the sacio library, e.g.:
+
+    ln -s /usr/local/lib/libsacio_bsd.a /usr/local/lib/libsacio.a
+
+Passing the `--prefix` option to the configure command allows a different installation location.  
+
+### Testing
+
+Tests for the library can be run if desired using
+
+    make test
+  
+
 Please report issues to the project.
 
 If you would like to contribute to the project please file Pull Requests and/or create issues for discussion at the libsacio project.
