@@ -8,6 +8,11 @@ Overview
 
 The sacio library, libsacio, provides an interface to read and write sac files and manipulate their contents.
 
+SAC Files
+---------
+SAC (Seismic Analysis Code) files are binary or alphanumeric data files for storing time series data, primarily ground motion recorded by seismometers. Format of the SAC file consists of a metadata header followed by the ground motion stored as equally or unequally spaced in time. The data section may also be the Fourier Transform of an input ground motion or a 2D data set.
+
+
 Documentation
 -------------
 
