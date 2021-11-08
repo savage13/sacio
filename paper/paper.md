@@ -19,7 +19,7 @@ bibliography: paper.bib
 
 # Summary
 
-Since nearly the inception of digital seismological data, the Seismic Analysis Code (SAC) has been utilized as processing software and a file format [@goldstein1995status; @goldstein2003sac2000; @goldstein2005sac]. Having a well-defined format is essential for the distribution and processing of seismological data.  Easy and quick access to seismological data over the internet or within local networks is important for the development of seismological tools that impact hazards (earthquakes, volcanoes, and tsunami), national security, and geophysical imaging on a variety of length scales. Here we implement an improved and open source version with backwards compatibility.
+Since nearly the inception of digital seismological data, the Seismic Analysis Code (SAC) has been utilized as processing software and a file format [@goldstein1995status; @goldstein2003sac2000; @goldstein2005sac]. Having a well-defined format is essential for the distribution and processing of seismological data.  Easy and quick access to seismological data over the internet or within local networks is important for the development of seismological tools that impact hazards (earthquakes, volcanoes, and tsunami), national security, and geophysical imaging on a variety of length scales. Here we implement an improved and open source version of the sac format with backwards compatibility.
 
 # Statement of need
 
