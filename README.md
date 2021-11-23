@@ -47,12 +47,21 @@ Within the test directory `t` are a set of example programs that use the library
 
 ### Read, Change and Write a sac file
 
-Compile and run the example below using:
+Compile and run the example below using (assuming you have compiled the library):
 
-   gcc -I. -o example example.c libsacio_bsd.a
-   ./example t/imp.sac
+    gcc -I. -o example example.c libsacio_bsd.a
+    ./example t/imp.sac
 
 The file `t/imp.sac` is an impulse function and distributed with `sacio`.
+
+If you have not compiled the library yet, see the [Compiling](#compiling) section below. 
+The library does not need to be installed to compile/run the example code, it only needs 
+to know where the header file `sacio.h` is.
+
+If you have compiled and installed the library, the example below can be compiled using:
+
+    gcc -I/usr/local/include/sacio -o example  example.c -L/usr/local/lib -lsacio_bsd
+    ./example t/imp.sac
 
 ```c
 
