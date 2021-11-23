@@ -167,10 +167,21 @@ Tests for the library can be run if desired using
 
     make test
   
+Community Guidelines
+--------------------
 
-Please report issues to the project.
+### Issues / Bugs
+
+Please report issues, possible bugs, inconsistencies, and improvements to the project in the Issue Tracker or using a Pull Request.
+
+### Contributions
 
 If you would like to contribute to the project please file Pull Requests and/or create issues for discussion at the libsacio project.
+
+### Support
+
+The best place to find support for this library and the IRIS version of SAC (and where you can find me), 
+is on the [sac-help mailing list](http://ds.iris.edu/message-center/topic/sac-help/).
 
 Included Libraries
 ------------------
