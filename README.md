@@ -39,11 +39,11 @@ Documentation for each function includes a selection of example usage (these als
 
 Within the test directory `t` are a set of example programs that use the library.  The best programs to get started are:
 
-   - t/iotest.c - Reading of all data files and accessing header and data values
-   - t/cut.c    - Reading data files with a imposed time window (cut)
-   - t/cutim.c  - Windowing data within memory (cut)
-   - t/compat.c - Usage of the library with original sacio library function names
-   - t/ver.c    - Examples of behavior differences between v6 and v7 SAC header files
+   - [t/iotest.c](t/iotest.c) - Reading of all data files and accessing header and data values
+   - [t/cut.c](t/cut.c)    - Reading data files with a imposed time window (cut)
+   - [t/cutim.c](cutim.c)  - Windowing data within memory (cut)
+   - [t/compat.c](t/compat.c) - Usage of the library with original sacio library function names
+   - [t/ver.c](t/ver.c)    - Examples of behavior differences between v6 and v7 SAC header files
 
 ### Read, Change and Write a sac file
 
