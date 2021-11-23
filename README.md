@@ -27,6 +27,24 @@ The code and library here was originally written and licensed under the [2-Claus
 Examples
 --------
 
+Examples of using the library can be found within the [documenation](https://savage13.github.io/sacio/). Of particular note are:
+
+   - [sac_read()](https://savage13.github.io/sacio/html/group__sac.html#gab2623928ccd5cac1a4cc94be5dd89273)
+   - [sac_write()](https://savage13.github.io/sacio/html/group__sac.html#gafe8cd1cadc546ea9d67a5ca14fd3886d)
+   - [sac_get_string()](https://savage13.github.io/sacio/html/group__sac.html#ga58de657b18177e79b5fa001b21c55e32) / [sac_set_string()](https://savage13.github.io/sacio/html/group__sac.html#ga9acd9d129945c8fdf5a21434ce1d3359)
+   - [sac_get_int()](https://savage13.github.io/sacio/html/group__sac.html#ga65ddb9d01a8d1ea66bc7ad1024b30534) / [sac_set_int()](https://savage13.github.io/sacio/html/group__sac.html#ga65ddb9d01a8d1ea66bc7ad1024b30534)
+   - [sac_get_float()](https://savage13.github.io/sacio/html/group__sac.html#ga94ddfd21929cd9cb6faa508d8b6d1460) / [sac_set_float()](https://savage13.github.io/sacio/html/group__sac.html#gaa5cd583512409156b09d6a4b0ec4b683)
+
+Documentation for each function includes a selection of example usage (these also function as tests).
+
+Within the test directory `t` are a set of example programs that use the library.  The best programs to get started are:
+
+   - t/iotest.c - Reading of all data files and accessing header and data values
+   - t/cut.c    - Reading data files with a imposed time window (cut)
+   - t/cutim.c  - Windowing data within memory (cut)
+   - t/compat.c - Usage of the library with original sacio library function names
+   - t/ver.c    - Examples of behavior differences between v6 and v7 SAC header files
+
 ### Read, Change and Write a sac file
 
 Compile and run the example below using:
