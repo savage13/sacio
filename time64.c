@@ -875,7 +875,7 @@ void
 yd_from_ymd(struct TM *tm) {
     int i = 0;
     const int year = (int) tm->tm_year + 1900;
-		const int *dim = days_in_month[IS_LEAP(year)];
+		const int *dim = days_in_month[IS_LEAP_ABS(year)];
     tm->tm_yday = tm->tm_mday - 1;
     for (i = 0; i < tm->tm_mon; i++) {
 				tm->tm_yday += dim[i];
@@ -902,7 +902,7 @@ leaps_thru_end_of(const int y) {
 void
 ymd_from_yd(struct TM *tm) {
 		const int year = (int) tm->tm_year + 1900;
-		const int *dim = days_in_month[IS_LEAP(year)];
+		const int *dim = days_in_month[IS_LEAP_ABS(year)];
     int days = tm->tm_yday;
     // Week Day
     tm->tm_wday = EPOCH_WDAY +
