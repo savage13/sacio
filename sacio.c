@@ -4083,6 +4083,7 @@ sac_get_time_ref(sac *s, timespec64 *t) {
  */
 int
 sac_get_time(sac *s, int hdr, timespec64 *t) {
+#define ONE_SEC_NS 1000000000;
     double v = 0.0;
     double fract = 0.0, ipart = 0.0;
     if(!sac_get_time_ref(s, t)) {
@@ -4094,6 +4095,14 @@ sac_get_time(sac *s, int hdr, timespec64 *t) {
     fract = modf(v, &ipart);
     t->tv_sec +=  (int64_t) ipart;
     t->tv_nsec += (int) (fract * 1e9);
+    while(t->tv_nsec >= 1e9) {
+        t->tv_nsec -= ONE_SEC_NS;
+        t->tv_sec += 1;
+    }
+    while(t->tv_nsec < 0) {
+        t->tv_nsec += ONE_SEC_NS;
+        t->tv_sec -= 1;
+    }
     return 1;
 }
 
